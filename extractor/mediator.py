@@ -22,7 +22,7 @@ class Mediator:
         self.marp_exporter = MarpExporter()
         self.output_format = output_format
     
-    def process_epub(self, epub_path: str, generate_summaries: bool = True) -> Dict[str, Any]:
+    def process_epub(self, epub_path: str, json_output: str, generate_summaries: bool = True) -> Dict[str, Any]:
         """
         Process EPUB file: extract structure and optionally generate summaries
         
@@ -53,6 +53,9 @@ class Mediator:
             # Add summaries recursively
             self._add_summaries_recursive(structure)
             print("\n✓ All summaries generated successfully")
+        
+
+        self.save_to_json(structure, json_output)
         
         return structure
     
@@ -189,8 +192,9 @@ if __name__ == "__main__":
     mediator = Mediator(ollama_host="http://ollama:11434", output_format="markdown")
     
     # # Process EPUB with summaries
+    json_output = os.path.join("output", "book_with_summaries.json")
     epub_path = "my_book.epub"
-    structure = mediator.process_epub(epub_path, generate_summaries=True)
+    mediator.process_epub(epub_path,json_output, generate_summaries=True)
     
     # # Display structure with summaries
     # print("\n" + "="*80)
@@ -205,11 +209,7 @@ if __name__ == "__main__":
     # stats = mediator.get_statistics(structure)
     # for key, value in stats.items():
     #     print(f"{key}: {value}")
-    
-    # Save structure to JSON
-    json_output = os.path.join("output", "book_with_summaries.json")
-    mediator.save_to_json(structure, json_output)
-    
+     
     # Export to Marp presentation
     print("\n" + "="*80)
     print("EXPORTING TO MARP PRESENTATION")
@@ -223,6 +223,6 @@ if __name__ == "__main__":
         title="Book Summary Presentation",
         include_summaries=True,
         include_content=False,
-        max_depth=3,
+        max_depth=4,
     )
     

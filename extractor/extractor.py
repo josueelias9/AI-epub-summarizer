@@ -2,10 +2,48 @@ from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
 from typing import Dict, Any
 import html2text
+import re
 
 
 class EPUBExtractor:
     """Extractor for EPUB files that creates hierarchical structure"""
+    
+    def __init__(self):
+        """Initialize the extractor with ID tracking"""
+        self.section_counters = {}  # Track numbering by level
+    
+    def _generate_section_id(self, level: int) -> str:
+        """
+        Generate a hierarchical ID for a section based on level numbering
+        
+        Args:
+            level: Header level (1-6)
+            
+        Returns:
+            str: Hierarchical section ID (e.g., "1", "1.1", "2.1.1")
+        """
+        # Initialize counter for this level if not exists
+        if level not in self.section_counters:
+            self.section_counters[level] = 0
+        
+        # Reset counters for deeper levels when we encounter a higher level
+        levels_to_reset = [l for l in self.section_counters.keys() if l > level]
+        for reset_level in levels_to_reset:
+            self.section_counters[reset_level] = 0
+        
+        # Increment counter for current level
+        self.section_counters[level] += 1
+        
+        # Create hierarchical numbering by collecting all levels up to current
+        numbering_parts = []
+        for l in range(1, level + 1):
+            if l in self.section_counters and self.section_counters[l] > 0:
+                numbering_parts.append(str(self.section_counters[l]))
+        
+        # Join with dots to create hierarchical ID
+        section_id = '.'.join(numbering_parts)
+        
+        return section_id
     
     def extract_structure(self, epub_path: str) -> Dict[str, Any]:
         """
@@ -20,6 +58,9 @@ class EPUBExtractor:
         print(f"📖 Reading EPUB file: {epub_path}")
         book = epub.read_epub(epub_path)
         structure = {}
+        
+        # Reset counters for new extraction
+        self.section_counters = {}
 
         for item in book.get_items():
             if item.get_type() == ITEM_DOCUMENT:
@@ -58,8 +99,12 @@ class EPUBExtractor:
                     # Parse HTML to clean text
                     content_text = self._parse_html_to_text(content_html)
                     
+                    # Generate unique ID for this section
+                    section_id = self._generate_section_id(level)
+                    
                     # Create entry for this header
                     entry = {
+                        "id": section_id,
                         "content": content_text,
                         "subsections": {}
                     }
@@ -146,10 +191,12 @@ class EPUBExtractor:
             prefix = "  " * indent
             subsection_count = len(info.get("subsections", {}))
             content_length = len(info.get("content", ""))
-            print(f"{prefix}→ {title} ({subsection_count} subsections, {content_length} chars)")
+            section_id = info.get("id", "no-id")
+            print(f"{prefix}→ [{section_id}] {title} ({subsection_count} subsections, {content_length} chars)")
             
             if info.get("subsections"):
                 self.print_structure(info["subsections"], indent + 1)
+  
 
 
 # Usage example
