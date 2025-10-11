@@ -7,10 +7,23 @@ style: |
   section {
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg');
     background-size: 250px;
-    background-position: 95% 90%; /* esquina inferior derecha */
+    background-position: 95% 5%;
     background-repeat: no-repeat;
     opacity: 1;
   }
+
+---
+
+<style>
+section.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+}
+</style>
 
 ---
 
@@ -65,6 +78,30 @@ style: |
 
 ---
 
+*Supervised, Unsupervised, and Semi‐supervised Learning*
+Name | Data Type | Supervised/Unsupervised
+---|---|---
+Regression – Tables | Tabular | Supervised
+Classification – Tables | Tabular | Supervised
+Forecasting | Series | Supervised
+Image classification | Image | Supervised
+Image segmentation | Image | Supervised
+Object detection | Image | Supervised
+Video classification | Video | Supervised
+Video object tracking | Video | Supervised
+Video action recognition | Video | Supervised
+Sentiment analysis | Text | Supervised
+Entity extraction | Text | Supervised
+Translation | Text | Supervised
+K‐means clustering | Tabular | Unsupervised
+Principal component analysis | Tabular | Unsupervised
+Topic modeling | Text | Unsupervised
+Collaborative filtering/recommendations | Mixed | Supervised/Unsupervised
+
+<!-- _class: centered -->
+
+---
+
 ### 7.2.2. Classification, Regression, Forecasting, and Clustering
 
 * **Classification**: predicting labels or classes from input data (e.g., dogs vs. cats) 
@@ -76,6 +113,30 @@ style: |
 
 ---
 
+*Classification, Regression, Forecasting, and Clustering*
+Student ID | Age | Exam Scores (Out of 100)
+---|---|---
+1 | 34 | 75
+2 | 23 | 59
+3 | 36 | 92
+4 | 31 | 67
+
+<!-- _class: centered -->
+
+---
+
+*Classification, Regression, Forecasting, and Clustering*
+****|  Temperature
+---|---
+Series 1 | 29, 30, 40, 39, 23, 20
+Series 2 | 10, 11, 13, 23, 43, 34
+Series 2 | 19, 18, 19, 20, 38, 20
+Series 4 | 14, 17, 34, 34, 12, 43
+
+<!-- _class: centered -->
+
+---
+
 ## 7.3. ML Success Metrics
 
 * **Choosing an ML Metric**: To determine if a trained model is accurate enough, use an _ML metric_ (or a suite of metrics) to evaluate its performance.
@@ -83,6 +144,28 @@ style: |
 	* **Recall** for low false negative rates
 	* **Precision** for reducing false positives
 	* **F1 score** as the harmonic mean of precision and recall
+
+---
+
+*ML Success Metrics*
+****|  Predicted
+---|---
+**Actual** |  | **Positive Prediction** | **Negative Prediction**
+**Positive Class** | 5 | 2
+**Negative Class** | 3 | 990
+
+<!-- _class: centered -->
+
+---
+
+*ML Success Metrics*
+****|  Scenario | Formula
+---|---|---
+Precision | Lower false positive |
+Recall | Lower false negative |
+F1 | Lower false positive and false negative together |
+
+<!-- _class: centered -->
 
 ---
 
@@ -229,6 +312,17 @@ Mean is the accurate measure to describe the data when we do not have any outlie
 * **Effect of outliers on mean**: The presence of an outlier can significantly impact the mean, making it less representative of the dataset's central tendency.
     * _Outliers_ have a large influence on the mean, making it more susceptible to changes in data.
         + Adding an outlier like 210 skews the mean from 29.16 (without outlier) to 12.72 (with outlier).
+
+---
+
+*Outlier Detection*
+With Outlier | Without Outlier
+---|---
+Mean: 12.72 | Mean: 29.16
+Median: 13 | Median: 14
+Mode: 15 | Mode: 15
+
+<!-- _class: centered -->
 
 ---
 
@@ -531,6 +625,16 @@ _bucketing simplifies numeric data into categories_
 
 ---
 
+*One‐Hot Encoding*
+Categorical Value | Integer Encoding or Creating a Vocabulary Mapping | One‐Hot Encoding
+---|---|---
+Red | 0 | 00
+Blue | 1 | 01
+
+<!-- _class: centered -->
+
+---
+
 #### 9.2.3.3. Out of Vocab (OOV)
 
 * **Handling Outliers**: Create a single category `_out of vocabulary_` to group rare outliers together, reducing unnecessary training on individual outliers.
@@ -663,6 +767,19 @@ A **classification threshold** is a chosen value that maps logistic regression o
     * **Model Training & Tuning**
         * TensorFlow Estimators/TF Keras
         * Vertex AI Training
+
+---
+
+*TensorFlow Transform*
+Step | TFX library | GCP service
+---|---|---
+Data extraction & validation | TensorFlow Data Validation | Cloud Dataflow
+Data transformation | TensorFlow Transform | Cloud Dataflow
+Model training & tuning | TensorFlow (tf.Estimators and tf.Keras) | Vertex AI Training
+Model evaluation & validation | TensorFlow Model Analysis | Cloud Dataflow
+Model serving for prediction | TensorFlow Serving | Vertex AI Prediction
+
+<!-- _class: centered -->
 
 ---
 
@@ -812,11 +929,37 @@ A **classification threshold** is a chosen value that maps logistic regression o
 
 ---
 
+*AutoML for Tables or Structured Data*
+Data Type | ML Problem | Metrics
+---|---|---
+Table (IID) | Classification | AUC ROC, AUC ROC, Logloss, Precision at Recall, Recall at Precision
+Table (IID) | Regression | RMSE, RMSLE, MAE
+Time‐series data | Forecasting | RMSE, RMSLE, MAPE, Quantile loss
+
+<!-- _class: centered -->
+
+---
+
 ### 10.3.2. AutoML for Images and Video
 
 * **Vertex AI AutoML**: Simplifies building machine learning models for image and video data
     * Supports various tasks: image classification, multiclass classification, object detection, image segmentation, video classification, action recognition, and object tracking
         * *AutoML Edge model*: Optimized for edge devices, using less memory and low latency for iPhones, Android phones, and Edge TPU devices
+
+---
+
+*AutoML for Images and Video*
+Data Type | ML Problem | AutoML Details
+---|---|---
+Image | Image classification (single) | Predict one correct label from a list of labels provided by user during training.
+Image | Multiclass classification | Predict all the correct labels that you want assigned to an image.
+Image | Object detection | Predict all the locations of objects that you're interested in.
+Image | Image segmentation | Predict per‐pixel areas of an image with a label.
+Video | Classification | Get label predictions for entire videos, shots, and frames.
+Video | Action recognition | Identify the action moments in video.
+Video | Object tracking | Get labels, tracks, and time stamps for objects you want to track in a video.
+
+<!-- _class: centered -->
 
 ---
 
@@ -831,6 +974,18 @@ A **classification threshold** is a chosen value that maps logistic regression o
 
 ---
 
+*AutoML for Text*
+Data Type | ML Problem | AutoML Details
+---|---|---
+Text | Text classification | Predict the one correct label that you want assigned to a document.
+Text | Multi‐label classification | Predict all the correct labels that you want assigned to a document.
+Text | Entity extraction | Identify entities within your text items.
+Text to text | Translation | Convert text from source language to target language.
+
+<!-- _class: centered -->
+
+---
+
 ### 10.3.4. Recommendations AI/Retail AI
 
 ### Google Cloud Retail AI Solution
@@ -840,6 +995,18 @@ A **classification threshold** is a chosen value that maps logistic regression o
 	+ _Retail Search_: customizes Google's understanding of user intent and context
 	+ _Vision API Product Search_: trains on product images for image-based searching
 	+ _Recommendations AI_: drives engagement through relevant recommendations based on customer behavior and product metadata
+
+---
+
+*Recommendations AI/Retail AI*
+Recommendation Type | What Does It Predict? | Usage | Data Used | Optimization Objective
+---|---|---|---|---
+Others you may like | The next product the user is likely to buy | Product page | Customer behavior and product relevance | Click‐through rate
+Frequently bought together (shopping cart expansion) | Items frequently bought together for a specific product within the same shopping session | Checkout page | User behavior in shopping cart | Revenue per order
+Recommended for you | The next product the user likely will buy | Home page | User viewing history and context | Click‐through rate
+Similar items | Other products with similar attributes | Product page | Product catalog | Click‐through rate
+
+<!-- _class: centered -->
 
 ---
 
@@ -1059,6 +1226,21 @@ GPUs bring additional firepower to Vertex AI, accelerating data processing and i
 
 ---
 
+*Designing Reliable, Scalable, and Highly Available ML Solutions*
+ML Workflow | Google Cloud Service
+---|---
+Data collection | Google Cloud storage, Pub/Sub (streaming data), BigQuery
+Data transformation | Dataflow
+Model training | Custom models (Vertex AI Training and Vertex AutoML)
+Tuning and experiment tracking | Vertex AI hyperparameter tuning and Vertex AI Experiments
+Deployment and monitoring | Vertex AI Prediction and Vertex AI Model Monitoring
+Orchestration and CI/CD | Vertex AI Pipelines
+Explanations and responsible AI | Vertex Explainable AI, model cards
+
+<!-- _class: centered -->
+
+---
+
 ## 11.2. Choosing an Appropriate ML Service
 
 * **Google Cloud ML Services Layers**
@@ -1070,6 +1252,16 @@ GPUs bring additional firepower to Vertex AI, accelerating data processing and i
     * Workbench for custom model development
   * _Bottom Layer: Infrastructure (Managed by User)_
     * Compute instance and containers
+
+---
+
+*Choosing an Appropriate ML Service*
+GCP Service | When to Use
+---|---
+BigQuery ML | You have structured data stored in a BigQuery data warehouse because BigQuery ML requires a tabular dataset. You are comfortable with SQL and the models available in BigQuery ML match the problem you are trying to solve. We are going to cover all the models in Chapter 14.
+AutoML (in the context of Vertex AI) | Your problem fits into one of the types that AutoML supports, such as classification, object detection, sentiment analysis, and translation.
+
+<!-- _class: centered -->
 
 ---
 
@@ -1103,6 +1295,15 @@ GPUs bring additional firepower to Vertex AI, accelerating data processing and i
 
 ---
 
+*BigQuery*
+Framework | Google Cloud tool to read data from BigQuery
+---|---
+TensorFlow or Keras | `tf.data.dataset reader for BigQuery` and tfio.BigQuery.BigQueryClient()
+
+<!-- _class: centered -->
+
+---
+
 ### 11.3.3. Vertex AI Managed Datasets
 
 * **Use managed datasets for custom models**
@@ -1131,6 +1332,17 @@ For static feature lookup during prediction, use:
 * **NoSQL database**: Optimized for singleton lookup operations
 * * _Use Memorystore_, *_Datastore_ or *_Bigtable_* *
 * _Avoid block storage_ such as NFS or VM hard disk, and _avoid reading from databases directly_
+
+---
+
+*NoSQL Data Store*
+****|  Memorystore | Datastore | Bigtable
+---|---|---|---
+Description | Memorystore is a managed in‐memory database. When you use its Redis offering, you can store intermediate data for submillisecond read access. Keys are binary‐safe strings, and values can be of different data structures. | Datastore is a fully managed, scalable NoSQL document database built for automatic scaling, high performance, and ease of application development. Data objects in Datastore are known as entities. An entity has one or more named properties in which you store the feature values required by your model or models. | Bigtable is a massively scalable NoSQL database service engineered for high throughput and for low‐latency workloads. It can handle petabytes of data, with millions of reads and writes per second at a latency that's on the order of milliseconds. The data is structured as a sorted key‐value map. Bigtable scales linearly with the number of nodes.
+Retrieval | Submillisecond retrieval latency on a limited amount of quickly changing data, retrieved by a few thousand clients. | Millisecond retrieval latency on slowly changing data where storage scales automatically. | Millisecond retrieval latency on dynamically changing data, using a store that can scale linearly with heavy reads and writes.
+Use cases | User‐feature lookup in real‐time bidding that requires submillisecond retrieval time.
+
+<!-- _class: centered -->
 
 ---
 
@@ -1278,6 +1490,16 @@ Managed service for automating, monitoring, and governing ML systems
 
 * **Encryption Key Management**
     * Customer-managed keys can be used with Google Cloud Key Management Service
+
+---
+
+*Encryption at Rest*
+Server‐Side Encryption | Client‐Side Encryption
+---|---
+Encryption that occurs after the cloud storage receives your data, but before the data is written to disk and stored. | Encryption that occurs before data is sent to Cloud Storage and BigQuery. Such data arrives at Cloud Storage and BigQuery already encrypted but also undergoes server‐side encryption.
+You can create and manage your encryption keys using a Google Cloud Key Management Service. |  You are responsible for the client‐side keys and cryptographic operations.
+
+<!-- _class: centered -->
 
 ---
 
@@ -1457,6 +1679,29 @@ Managed service for automating, monitoring, and governing ML systems
 
 ---
 
+*Best Practices for Removing Sensitive Data*
+Type of Data | Strategy Used
+---|---
+Data is restricted to specific columns in structured datasets. | You can create a view that doesn't provide access to the columns in question. The data engineers cannot view the data, but at the same time the data is live and doesn't require human intervention to de‐identify it for continuous training.
+Sensitive data is part of unstructured content, but it's identifiable using known patterns or regex. | You can use Cloud DLP to address this type of data.
+Sensitive data exists within images, videos, audio, or unstructured free‐form data. | Use NLP API, Cloud Speech API, and Vision AI and Video Intelligence API to identify the sensitive data such as email and location out of box and then mask or remove it.
+
+<!-- _class: centered -->
+
+---
+
+*Best Practices for Removing Sensitive Data*
+Field | Description
+---|---
+IP addresses | Zero out the last octet of IPv4 addresses (the last 80 bits if using IPv6).
+Numeric quantities | Numbers can be binned to make them less likely to identify an individual; for example, age and birthdays can be changed into ranges.
+Zip codes | Can be coarsened to include just the first three digits.
+Location | Use location identifiers such as city, state, or zip code, or use a large range to obfuscate the unique characteristics of one row.
+
+<!-- _class: centered -->
+
+---
+
 ## 12.4. Summary
 
 * *_Security Best Practices for Machine Learning_*: encryption at rest, encryption in transit, IAM access management
@@ -1524,6 +1769,19 @@ Managed service for automating, monitoring, and governing ML systems
 
 ---
 
+*Model Parallelism*
+Strategy | Description
+---|---
+MirroredStrategy | Synchronous distributed training on multiple GPUs on one machine.
+CentralStorageStrategy | Synchronous training but no mirroring.
+MultiWorkerMirroredStrategy | Synchronous distributed training across multiple workers, each with potentially multiple GPUs or multiple machines.
+TPUStrategy | Synchronous distributed training on multiple TPU cores.
+ParameterServerStrategy | Some machines are designated as workers and some as parameter servers.
+
+<!-- _class: centered -->
+
+---
+
 ## 13.2. Modeling Techniques
 
 Let's go over some basic terminology in neural networks that you might see in exam questions.
@@ -1572,6 +1830,17 @@ Let's go over some basic terminology in neural networks that you might see in ex
   * Multiclass classification:
     * Softmax activation, categorical cross-entropy on one-hot encoded data
     * Sparse categorical cross-entropy on integer encoded data
+
+---
+
+*What Loss Function to Use*
+****|  Output | Output Layer Configuration or Activation Function | Loss Functions
+---|---|---|---
+Regression problem | Numerical output | One node with a linear activation unit | Mean squared error (MSE)
+Binary classification problem | Binary outcome | Sigmoid activation unit | Binary cross‐entropy, categorical hinge loss, and squared hinge loss (Keras)
+Multiclass classification problem | Single label multiclass | Softmax activation function | Categorical cross‐entropy (on one‐hot encoded data) and sparse categorical cross‐entropy (apply on integers)
+
+<!-- _class: centered -->
 
 ---
 
@@ -1781,6 +2050,19 @@ Let's go over some basic terminology in neural networks that you might see in ex
     * Using dropout regularization: randomly dropping out unit activations
 
 ---
+*Regularization*
+L1 Regularization | L2 Regularization
+---|---
+L1 regularization, also known as L1 norm or lasso (in regression problems), combats overfitting by shrinking the parameters toward 0. This makes some features obsolete. So, this works well for feature selection in case you have a huge number of features. | L2 regularization, or the L2 norm or ridge (in regression problems), combats overfitting by forcing weights to be small but not making them exactly 0.
+L1 regularization penalizes the sum of absolute values of the weights. | L2 regularization penalizes the sum of squares of the weights.
+L1 regularization has built‐in feature selection. | L2 regularization doesn't perform feature selection.
+L1 regularization is robust to outliers. | L2 regularization is not robust to outliers.
+L1 regularization helps with feature selection and reducing model size or leading to smaller models. | L2 regularization always improves generalization in linear models.
+
+<!-- _class: centered -->
+
+---
+
 ## 13.7. Summary
 
 * **Training Neural Networks**: Overview of key concepts including loss function, gradient descent, learning rate, batch size, epoch, and hyperparameters.
@@ -1878,6 +2160,19 @@ Let's go over some basic terminology in neural networks that you might see in ex
 
 ---
 
+*Cloud Dataproc*
+Connector | Description
+---|---
+Cloud Storage connector | This is by default available on Dataproc and this connector helps run Apache Hadoop or Apache Spark jobs directly on data in Cloud Storage. Store your data in Cloud Storage and access it directly with Cloud Storage connector. You do not need to transfer it into HDFS first.
+BigQuery connector | You can use BigQuery connector to enable programmatic read/write access to BigQuery. This is an ideal way to process data that is stored in BigQuery as command‐line access is not exposed. The BigQuery connector is a library that enables Spark and Hadoop applications to process data from BigQuery and write data to BigQuery. BigQuery Spark connector is used for Spark and BigQuery Hadoop connector is used for Hadoop.
+BigQuery Spark connector | Apache Spark SQL connector for Google BigQuery. The connector supports reading Google BigQuery tables into Spark's DataFrames, and writing DataFrames back into BigQuery. This is done by using the Spark SQL Data Source API to communicate with BigQuery.
+Cloud Bigtable with Dataproc | Bigtable is an excellent option for any Apache Spark or Hadoop uses that require Apache HBase. Bigtable supports the Apache HBase APIs so it is easy to use Bigtable with Dataproc.
+Pub/Sub Lite Spark connector | The Pub/Sub Lite Spark connector supports Pub/Sub Lite as an input source to Apache Spark Structured Streaming in the default micro‐batch processing and experimental continuous processing modes.
+
+<!-- _class: centered -->
+
+---
+
 #### 14.1.2.4. Cloud Composer
 
 * *_Cloud Composer_* is a managed workflow orchestration service that simplifies creating, running, and managing workflows with minimal management overhead
@@ -1915,6 +2210,19 @@ Let's go over some basic terminology in neural networks that you might see in ex
 
 ---
 
+*Store and Analyze*
+Type of Data | Product
+---|---
+Tabular data | BigQuery, BigQuery ML
+Image, video, audio, and unstructured data | Google Cloud Storage
+Unstructured data | Vertex Data Labeling
+Structured data |  Vertex AI Feature Store
+For AutoML image, video, text | Vertex AI Managed Datasets
+
+<!-- _class: centered -->
+
+---
+
 ## 14.2. Developing Models in Vertex AI Workbench by Using Common Frameworks
 
 * **Vertex AI Workbench Overview**
@@ -1923,6 +2231,16 @@ Let's go over some basic terminology in neural networks that you might see in ex
   * Two types of notebooks: Managed and User-managed
     * _Managed notebook_: Automated shutdown, UI integration with Cloud Storage and BigQuery, automated notebook runs, custom containers, and frameworks preinstalled.
     * _User-managed notebook_: More control and fewer features compared to managed notebooks.
+
+---
+
+*Developing Models in Vertex AI Workbench by Using Common Frameworks*
+Managed notebook | User‐managed notebook
+---|---
+**Automated shutdown for idle instances:** Choosing a managed notebook will shut down your Jupyter Notebooks when not in use. This feature helps save costs because the instances will shut down when not in use automatically. | **Automated shutdown for idle instances:** This feature is not supported out of the box. However, you can create a monitor to see when instances are idle using Cloud Monitoring and Cloud Functions and shut them down when not in use.
+**UI integration with Cloud Storage and BigQuery:** From within JupyterLab's navigation menu on a managed notebooks instance, you can use the Cloud Storage and BigQuery integration to browse data and other files that you have access to and load data into your notebook. | **UI integration with Cloud Storage and BigQuery:** There is no UI integration. However, you can use the BigQuery connector to connect to BigQuery data using code or you can also use the BigQuery magic (`%%`) command to run BigQuery SQLl commands on a Jupyter Notebook.
+
+<!-- _class: centered -->
 
 ---
 
@@ -2089,6 +2407,16 @@ docker push ${IMAGE_URI}
 
 ---
 
+*Distributed Training*
+Position in workerPoolSpecs[] | Task Performed in Cluster
+---|---
+First (`workerPoolSpecs[0]`) | Primary, chief, scheduler, or “master.” Exactly ‐one replica is designated the _primary replica_. This task manages the others and reports status for the job as a whole.
+Second (`workerPoolSpecs[1]`) | Secondary, replicas, workers.
+
+<!-- _class: centered -->
+
+---
+
 ## 14.4. Hyperparameter Tuning
 
 * **Hyperparameters vs Model Parameters**: 
@@ -2178,6 +2506,15 @@ docker push ${IMAGE_URI}
 
 ---
 
+*Interactive Shell*
+Visualize Python Execution with py‐spy | Retrieve Information about GPU Usage | Analyze Performance with Perf
+---|---|---
+py‐spy is a sampling profiler for Python programs. It lets you visualize what your Python program is spending time on without restarting the program or modifying the code in any way. | GPU‐enabled containers running on nodes with GPUs typically have several command‐line tools preinstalled that can help you monitor GPU usage. You can use `nvidia‐smi` to monitor GPU utilization of various processes or use `nvprof` to collect a variety of GPU profiling information. | Perf lets you analyze the performance of your training node. It's a way to do Linux profiling with performance counters.
+
+<!-- _class: centered -->
+
+---
+
 ### 14.5.2. TensorFlow Profiler
 
 * **Vertex AI TensorBoard Profiler**: monitors and optimizes model training performance
@@ -2246,6 +2583,17 @@ docker push ${IMAGE_URI}
   * **Periodic Training**: Retrain based on a fixed interval (e.g., weekly, monthly, yearly) when training data updates.
   * **Performance-based Trigger**: Automatically trigger retraining when model performance falls below a set threshold.
   * *_Data Changes Trigger_*: Trigger build for model retraining upon data drift or changes in production.
+
+---
+
+*When Should a Model Be Retrained?*
+Periodic training | You can choose an interval such as weekly, monthly, or yearly for retraining your model. It depends on how frequently your training data gets updated. Retraining your model based on an interval only makes sense if it aligns with your business use case. The selection of a random period for model retraining can give you a worse model than the previous model.
+---|---
+Performance‐based trigger |  If your model performance falls below your set threshold, which is the ground truth or baseline data, this automatically triggers the retraining pipeline. This approach assumes that you have implemented a sophisticated monitoring system in production.
+Data changes trigger | If data drift happens, that should trigger a build for model retraining. Usually model performance changes in production, which can lead to data drift.
+Retraining on demand | This is a manual and traditional way of retraining your models that employs traditional techniques.
+
+<!-- _class: centered -->
 
 ---
 
@@ -2378,6 +2726,15 @@ docker push ${IMAGE_URI}
 **Model Types and Use Cases:**
 
 ---
+*Feature Attribution*
+Method | Supported Data Types | Model Types | Use Case | Vertex AI–Equivalent Model
+---|---|---|---|---
+Sampled Shapley | Tabular | Nondifferentiable models (explained after the table), such as ensembles of trees and neural networks. | Classification and regression on tabular data | Custom‐trained models (any prediction container)
+
+<!-- _class: centered -->
+
+---
+
 #### 15.1.4.2. Vertex AI Example–Based Explanations
 
 * **Example-Based Explanations**: enable selective data labeling and are not limited to images
@@ -2564,6 +2921,19 @@ name: dnn/head/predictions/probabilities:0
 
 ---
 
+*Real‐Time Static and Dynamic Reference Features*
+Static Reference Features | Dynamic Real‐Time Features
+---|---
+Their values do not change in real time. Instead, the values are usually updated in a batch. | Real‐time features are computed on the fly in an event‐stream processing pipeline.
+These types of features are usually available in a data warehouse—for example, customer ID and movie ID. | For real‐time features, you need a list of aggregated values for a particular window (fixed, sliding, or session) in a certain period of time and not an overall aggregation of values within that period of time.
+Use cases are estimating the price of a house based on the location of the house or recommending similar products given the attributes of the products that a customer is currently viewing. | Use cases can be predicting whether an engine will fail in the next hour given real‐time sensor data. Another use case can be in recommending the next news article to read based on the list of last N viewed articles by the user during the current session.
+These types of static reference features are stored in a NoSQL database that _is_ optimized for singleton lookup operations, such as Firestore. BigQuery is not optimized for singleton reads, for example, a query like "Select 100 columns from several tables for a specific customer ID,” where the result is a single row with many columns. | You can use a Dataflow streaming pipeline to implement this use case for dynamic feature read. For dynamic feature creation, the pipeline captures and aggregates (sum, mean, and so on) the events in real time and stores them in a low‐latency read/write database. Cloud Bigtable is a good option for a low‐latency read/write database for feature values.
+Static reference architecture (see Figure 10.2). | Dynamic reference architecture (see Figure 10.3).
+
+<!-- _class: centered -->
+
+---
+
 ### 16.2.2. Pre‐computing and Caching Prediction
 
 * **Pre-computing predictions**: Store pre-computed predictions in a low-latency data store for online serving.
@@ -2660,6 +3030,19 @@ Create batch prediction job through Vertex AI APIs or Google Cloud console.
 
 ---
 
+*Batch Predictions*
+Input | Description
+---|---
+JSON Lines | Use a JSON Lines file to specify a list of input instances to make predictions about. Store the JSON Lines file in a Cloud Storage bucket.
+TFRecord | You can optionally compress the TFRecord files with gzip. Store the TFRecord files in a Cloud Storage bucket. Vertex AI reads each instance in your TFRecord files as binary, then base64‐encodes the instance as a JSON object with a single key named b64.
+CSV files | Specify one input instance per row in a CSV file. The first row must be a header row. You must enclose all strings in double quotation marks (").
+File list | Create a text file where each row is the Cloud Storage URI to a file. Example: `gs://path/to/image/image1.jpg`.
+BigQuery | Specify a BigQuery table as projectId.datasetId.tableId. Vertex AI transforms each row from the table to a JSON instance.
+
+<!-- _class: centered -->
+
+---
+
 ## 16.4. Hosting Third‐Party Pipelines (MLflow) on Google Cloud
 
 * **MLflow Overview**
@@ -2691,6 +3074,16 @@ Create batch prediction job through Vertex AI APIs or Google Cloud console.
     * Cloud Scheduler can set up a cron job schedule to trigger jobs.
     * Managed Notebooks allow execution and scheduling of training and prediction jobs using Jupyter Notebook.
     * Cloud Build, Cloud Run, event-driven Cloud Functions, and Pub/Sub are also used for triggering and scheduling jobs.
+
+---
+
+*Configuring Triggers and Pipeline Schedules*
+Option | Description
+---|---
+Vertex AI Pipelines | Vertex AI Pipelines helps you to automate, monitor, and govern your ML systems by orchestrating your ML workflow in a serverless manner and storing your workflow's artifacts using Vertex ML Metadata. By storing the artifacts of your ML workflow in Vertex ML Metadata, you can analyze the lineage of your workflow's artifact.
+Cloud Composer | Cloud Composer is designed to orchestrate data‐driven workflows (particularly ETL/ELT). It's built on the Apache Airflow project, but Cloud Composer is fully managed. Cloud Composer supports your pipelines wherever they are, including on‐premises or across multiple cloud platforms. All logic in Cloud Composer, including tasks and scheduling, is expressed in Python as directed acyclic graph (DAG) definition files.
+
+<!-- _class: centered -->
 
 ---
 
@@ -2801,6 +3194,16 @@ Kubeflow Pipelines is a platform for building, deploying, and managing multistep
         + Kubeflow: Handle failures manually with metrics
         + Vertex AI Pipelines: Leverage Kubeflow failure management on metrics
         + Cloud Composer: Built-in GCP metrics for action on failure or success
+
+---
+
+*Comparison of Tools*
+****|  Kubeflow Pipelines | Vertex AI Pipelines | Cloud Composer
+---|---|---|---
+**Management and support for frameworks** | Kubeflow Pipelines is used to orchestrate ML workflows in any supported framework such as TensorFlow, PyTorch, or MXNet using Kubernetes.
+It can be set up on‐premises or in any cloud. | Managed serverless pipeline to orchestrate either Kubeflow Pipelines or TFX Pipeline. No need to manage the infrastructure. | Managed way to orchestrate ETL/ELT pipelines using Apache Airflow. It's a Python‐based implementation.
+
+<!-- _class: centered -->
 
 ---
 
@@ -3341,6 +3744,17 @@ Note: In CSV format, skip optional input features by providing empty fields.
 
 ---
 
+*Data Model*
+Row | player_id | Team | Batting_avg | Age
+---|---|---|---|---
+1 | player_1 | RedSox | 0.289 | 29
+2 | player_2 | Giants | 0.301 | 32
+3 | player_3 | Yankees | 0.241 | 35
+
+<!-- _class: centered -->
+
+---
+
 ### 19.3.3. Ingestion and Serving
 
 * **Feature Ingestion**: Vertex AI Feature Store supports both batch and streaming ingestion from BigQuery
@@ -3492,6 +3906,23 @@ Note: In CSV format, skip optional input features by providing empty fields.
 
 ---
 
+*Model Training*
+Category | Model Type | Description
+---|---|---
+Regression | LINEAR_REG, BOOSTED_TREE_REGRESSOR, DNN_REGRESSOR, AUTOML_REGRESSION | To predict a real value
+Classification | LOGISTIC_REG, BOOSTED_TREE_CLASSIFIER, DNN_CLASSIFIER, DNN_LINEAR_COMBINED_CLASSIFIER, AUTOML_CLASSIFIER | To predict either a binary label or multiple labels
+Deep and wide models | DNN_LINEAR_COMBINED_REGRESSOR,
+DNN_LINEAR_COMBINED_CLASSIFIER | Deep and wide models used for recommendation systems and personalization
+Clustering | KMEANS | Unsupervised clustering models
+Collaborative filtering | MATRIX_FACTORIZATION | For recommendations
+Dimensionality reduction | PCA, AUTOENCODER | Unsupervised preprocessing step
+Time‐series forecasting | ARIMA_PLUS | Forecasting
+General | TENSORFLOW | Generic TensorFlow model
+
+<!-- _class: centered -->
+
+---
+
 ### 20.2.2. Model Evaluation
 
 * To evaluate a model, use `ML.EVALUATE` with a separate unseen dataset.
@@ -3525,6 +3956,18 @@ OPTIONS(model_type='logistic_reg', enable_global_explain=TRUE, input_label_cols=
   * Linear and logistic regression: Shapley values and standard errors, p-values
   * Boosted Trees: Tree SHAP, Gini-based feature importance
   * Deep Neural Network and Wide-and-Deep: Integrated gradients
+
+---
+
+*Explainability in BigQuery ML*
+Model Type | Explainability Method | Description
+---|---|---
+Linear and logistic regression | Shapley values and standard errors, p‐values | This is the average of all the marginal contributions to all possible coalitions.
+Boosted Trees | Tree SHAP, Gini‐based feature importance | Shapley values optimized for decision tree–based models.
+Deep Neural Network and Wide‐and‐Deep | Integrated gradients | A gradients‐based method to efficiently compute feature attributions with same axiomatic properties as Shapley.
+Arima_PLUS | Time‐series decomposition | Decompose into multiple components if present in the time series.
+
+<!-- _class: centered -->
 
 ---
 

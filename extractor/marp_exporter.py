@@ -91,10 +91,23 @@ style: |
   section {
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg');
     background-size: 250px;
-    background-position: 95% 90%; /* esquina inferior derecha */
+    background-position: 95% 5%;
     background-repeat: no-repeat;
     opacity: 1;
   }
+
+---
+
+<style>
+section.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+}
+</style>
 
 ---
 
@@ -177,6 +190,9 @@ style: |
         
         for idx, (title, info) in enumerate(structure.items(), 1):
 
+            if "Supervised, Unsupervised, and Semi‐supervised Learning" in title:
+                print("Found it!")
+
 
             # Skip excluded titles
             if self._should_skip_title(title):
@@ -192,9 +208,11 @@ style: |
             if include_summaries and info.get("summary"):
                 slides.append(self._generate_summary_slide(info["summary"]))
             
-            # Add content slide if requested
-            if include_content and info.get("content"):
-                slides.append(self._generate_content_slide(title, info["content"], section_number))
+
+            tables = self._extract_tables_from_content(info["content"])
+            for table_idx, table in enumerate(tables, 1):
+                slides.append(self._generate_table_slide(table, table_idx, title))
+            
             
             # Process subsections recursively
             if info.get("subsections"):
@@ -274,16 +292,59 @@ style: |
             
             return '\n'.join(slides)
     
-    def _generate_content_slide(self, title: str, content: str, section_number: str) -> str:
-        """Generate a content slide"""
-        # Limit content length
-        max_chars = 1000
+    def _extract_tables_from_content(self, content: str) -> list:
+        """
+        Extract Markdown tables from content
         
-        if len(content) > max_chars:
-            content = content[:max_chars] + "..."
+        Args:
+            content: Content string in Markdown format
+            
+        Returns:
+            List of table strings
+        """
+        if not content:
+            return []
         
-        return f"""### {section_number} Content: {title}
+        import re
+        
+        # Improved pattern to match Markdown tables
+        # Matches: header line with |, separator line with dashes, then data lines
+        table_pattern = r'([^\n]*\|[^\n]*\n[-|\s]+\n(?:[^\n]*\|[^\n]*\n?)+)'
+        
+        tables = []
+        matches = re.finditer(table_pattern, content, re.MULTILINE)
+        
+        for match in matches:
+            table_text = match.group(1).strip()
+            lines = table_text.split('\n')
+            
+            # Validate it's a proper table (has at least 3 lines: header, separator, data)
+            if len(lines) >= 3:
+                # Check if second line looks like a separator (contains - and |)
+                second_line = lines[1].strip()
+                if '-' in second_line and ('|' in second_line or '---' in second_line):
+                    tables.append(table_text)
+        
+        return tables
+    
+    def _generate_table_slide(self, table: str, table_number: int, section_title: str) -> str:
+        """
+        Generate a slide for a table
+        
+        Args:
+            table: Markdown table string
+            table_number: Table number within the section
+            section_title: Title of the section containing the table
+            
+        Returns:
+            Formatted slide string
+        """
+        return f"""*{section_title}*
+{table}
 
-{content}
+<!-- _class: centered -->
+
+---
 
 """
+
