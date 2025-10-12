@@ -28,6 +28,7 @@ services:
   
   db:
     image: postgres
+    container_name: db-container
     restart: always
     # set shared memory limit when using docker compose
     shm_size: 128mb
@@ -38,18 +39,23 @@ services:
     #    tmpfs:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
-      POSTGRES_PASSWORD: example
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
 
   pgadmin4:
     image: dpage/pgadmin4
-    networks: ['demo']
-    # restart: always
     ports:
       - 80:80
-    container_name: pgadmin4_container
+    container_name: pgadmin4-container
     volumes:
       # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
       - pgadmin_storage:/var/lib/pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL
       - PGADMIN_DEFAULT_PASSWORD
+
+
+volumes:
+  pgadmin_storage:
