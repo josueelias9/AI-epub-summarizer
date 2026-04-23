@@ -7,7 +7,7 @@ from typing import List, Optional
 from datetime import datetime
 
 from database import get_db
-from models import Book, Chapter, Metadata, ProcessingJob
+from app.models import Book, Chapter, Metadata, ProcessingJob
 
 router = APIRouter()
 

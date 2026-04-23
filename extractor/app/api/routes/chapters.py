@@ -5,19 +5,19 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List, Optional
 
-from application.use_cases.chapter_use_cases import (
+from app.application.use_cases.chapter_use_cases import (
     GetChaptersUseCase,
     GetChapterUseCase,
     GetMetadataUseCase,
     SearchChaptersUseCase,
 )
-from infrastructure.database.session import get_session
-from infrastructure.repositories.sqlmodel_repositories import (
+from app.infrastructure.database.session import get_session
+from app.infrastructure.repositories.sqlmodel_repositories import (
     SQLModelBookRepository,
     SQLModelChapterRepository,
     SQLModelMetadataRepository,
 )
-from interfaces.api.schemas.schemas import ChapterResponse, MetadataResponse
+from app.api.schemas.schemas import ChapterResponse, MetadataResponse
 
 router = APIRouter(tags=["chapters"])
 

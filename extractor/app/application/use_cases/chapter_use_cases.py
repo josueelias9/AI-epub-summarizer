@@ -3,8 +3,8 @@ Use cases for chapters, metadata, and search.
 """
 from typing import List, Optional
 
-from domain.entities.book import Chapter, BookMetadata
-from domain.repositories.interfaces import (
+from app.domain.entities.book import Chapter, BookMetadata
+from app.domain.repositories.interfaces import (
     BookRepository,
     ChapterRepository,
     MetadataRepository,

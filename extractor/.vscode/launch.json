@@ -7,7 +7,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "main:app",
+                "app.main:app",
                 "--host", "0.0.0.0",
                 "--port", "8000",
                 "--reload"
@@ -19,10 +19,30 @@
             "jinja": true
         },
         {
-            "name": "EPUB: process (mediator)",
+            "name": "EPUB: process (service)",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/application/services/epub_processing_service.py",
+            "program": "${workspaceFolder}/app/application/services/epub_processing_service.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "python": "${command:python.interpreterPath}",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "EPUB: extract structure",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/infrastructure/epub/epub_extractor.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "python": "${command:python.interpreterPath}",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "EPUB: generate Marp",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/infrastructure/export/marp_exporter.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "python": "${command:python.interpreterPath}",

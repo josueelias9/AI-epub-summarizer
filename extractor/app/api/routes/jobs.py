@@ -5,16 +5,16 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List, Optional
 
-from application.use_cases.job_use_cases import GetJobsUseCase, GetJobUseCase, GetStatsUseCase
-from application.use_cases.book_use_cases import SearchBooksUseCase
-from application.use_cases.chapter_use_cases import SearchChaptersUseCase
-from infrastructure.database.session import get_session
-from infrastructure.repositories.sqlmodel_repositories import (
+from app.application.use_cases.job_use_cases import GetJobsUseCase, GetJobUseCase, GetStatsUseCase
+from app.application.use_cases.book_use_cases import SearchBooksUseCase
+from app.application.use_cases.chapter_use_cases import SearchChaptersUseCase
+from app.infrastructure.database.session import get_session
+from app.infrastructure.repositories.sqlmodel_repositories import (
     SQLModelBookRepository,
     SQLModelChapterRepository,
     SQLModelJobRepository,
 )
-from interfaces.api.schemas.schemas import BookResponse, ChapterResponse, JobResponse
+from app.api.schemas.schemas import BookResponse, ChapterResponse, JobResponse
 
 router = APIRouter(tags=["jobs"])
 

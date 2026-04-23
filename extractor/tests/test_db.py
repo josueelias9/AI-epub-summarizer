@@ -5,7 +5,7 @@ Database connection test script
 import sys
 import os
 from sqlmodel import create_engine, text
-from config import settings
+from app.core.config import settings
 
 def test_database_connection():
     """Test the database connection"""

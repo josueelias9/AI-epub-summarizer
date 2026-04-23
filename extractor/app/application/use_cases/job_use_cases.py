@@ -3,9 +3,9 @@ Use cases for processing jobs and statistics.
 """
 from typing import List, Optional
 
-from domain.entities.book import ProcessingJob
-from domain.repositories.interfaces import BookRepository, ChapterRepository, JobRepository
-from infrastructure.database.models import ProcessingJobORM
+from app.domain.entities.book import ProcessingJob
+from app.domain.repositories.interfaces import BookRepository, ChapterRepository, JobRepository
+from app.infrastructure.database.models import ProcessingJobORM
 
 
 class GetJobsUseCase:

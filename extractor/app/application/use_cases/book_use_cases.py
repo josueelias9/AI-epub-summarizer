@@ -4,8 +4,8 @@ Depends only on domain abstractions.
 """
 from typing import List, Optional
 
-from domain.entities.book import Book
-from domain.repositories.interfaces import BookRepository, ChapterRepository
+from app.domain.entities.book import Book
+from app.domain.repositories.interfaces import BookRepository, ChapterRepository
 
 
 class GetBooksUseCase:

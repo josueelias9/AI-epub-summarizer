@@ -5,7 +5,7 @@ Following the Dependency Inversion Principle - high-level modules depend on abst
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from domain.entities.book import Book, Chapter, BookMetadata, ProcessingJob
+from app.domain.entities.book import Book, Chapter, BookMetadata, ProcessingJob
 
 
 class BookRepository(ABC):

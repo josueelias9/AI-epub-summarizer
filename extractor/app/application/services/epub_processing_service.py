@@ -6,9 +6,9 @@ from typing import Dict, Any, Optional
 import json
 import os
 
-from infrastructure.epub.epub_extractor import EPUBExtractor
-from infrastructure.ai.ollama_agent import AIAgent
-from infrastructure.export.marp_exporter import MarpExporter
+from app.infrastructure.epub.epub_extractor import EPUBExtractor
+from app.infrastructure.ai.ollama_agent import AIAgent
+from app.infrastructure.export.marp_exporter import MarpExporter
 
 
 class EpubProcessingService:

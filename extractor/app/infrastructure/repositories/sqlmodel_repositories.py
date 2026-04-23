@@ -4,14 +4,14 @@ SQLModel implementations of the domain repository interfaces.
 from typing import List, Optional
 from sqlmodel import Session, select, func
 
-from domain.entities.book import Book, Chapter, BookMetadata, ProcessingJob
-from domain.repositories.interfaces import (
+from app.domain.entities.book import Book, Chapter, BookMetadata, ProcessingJob
+from app.domain.repositories.interfaces import (
     BookRepository,
     ChapterRepository,
     MetadataRepository,
     JobRepository,
 )
-from infrastructure.database.models import (
+from app.infrastructure.database.models import (
     BookORM,
     ChapterORM,
     MetadataORM,

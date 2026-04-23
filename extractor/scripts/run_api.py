@@ -6,10 +6,10 @@ import uvicorn
 import sys
 import os
 
-# Add the current directory to the Python path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add the project root to the Python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import settings
+from app.core.config import settings
 
 if __name__ == "__main__":
     print("Starting EPUB Structure Extractor API...")
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     
     try:
         uvicorn.run(
-            "main:app",
+            "app.main:app",
             host=settings.API_HOST,
             port=settings.API_PORT,
             reload=settings.DEBUG,

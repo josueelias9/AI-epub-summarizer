@@ -5,16 +5,16 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List
 
-from domain.entities.book import Book
-from application.use_cases.book_use_cases import (
+from app.domain.entities.book import Book
+from app.application.use_cases.book_use_cases import (
     GetBooksUseCase,
     GetBookUseCase,
     CreateBookUseCase,
     DeleteBookUseCase,
 )
-from infrastructure.database.session import get_session
-from infrastructure.repositories.sqlmodel_repositories import SQLModelBookRepository
-from interfaces.api.schemas.schemas import BookCreate, BookResponse
+from app.infrastructure.database.session import get_session
+from app.infrastructure.repositories.sqlmodel_repositories import SQLModelBookRepository
+from app.api.schemas.schemas import BookCreate, BookResponse
 
 router = APIRouter(prefix="/books", tags=["books"])
 

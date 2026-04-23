@@ -2,7 +2,7 @@
 Database configuration and session management
 """
 from sqlmodel import SQLModel, create_engine, Session
-from models import Book, Chapter, Metadata, ProcessingJob
+from app.models import Book, Chapter, Metadata, ProcessingJob
 from config import settings
 from datetime import datetime
 import os
