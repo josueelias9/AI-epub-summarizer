@@ -21,6 +21,6 @@ def get_session() -> Session:
 def init_db() -> None:
     """Create all tables."""
     # Import ORM models so SQLModel registers them before create_all
-    import infrastructure.database.models  # noqa: F401
+    import app.infrastructure.database.models  # noqa: F401
     SQLModel.metadata.create_all(engine)
     print("Database tables created successfully.")

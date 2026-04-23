@@ -16,7 +16,7 @@ class Settings:
     
     # API settings
     API_HOST: str = os.getenv("API_HOST")
-    API_PORT: int = int(os.getenv("API_PORT"))
+    API_PORT: int = os.getenv("API_PORT")
     API_V1_STR: str = "/api/v1"
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     

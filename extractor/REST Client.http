@@ -90,3 +90,55 @@ GET {{apiUrl}}/search/chapters?q=architecture
 
 ### Search chapters within a specific book
 GET {{apiUrl}}/search/chapters?q=architecture&book_id=1
+
+# ─────────────────────────────────────────────
+# EPUB Processing
+# ─────────────────────────────────────────────
+
+### Extract EPUB structure → JSON (uses INPUT_PATH/EPUB_FILE + OUTPUT_PATH from config)
+POST {{apiUrl}}/epub/extract
+Content-Type: application/json
+
+{
+  "generate_summaries": false
+}
+
+### Extract EPUB with custom paths
+POST {{apiUrl}}/epub/extract
+Content-Type: application/json
+
+{
+  "epub_path": "/workspace/extractor/my_book.epub",
+  "json_output": "/workspace/extractor/output/book_with_summaries.json",
+  "generate_summaries": false
+}
+
+### Extract EPUB with AI summaries (requires Ollama running at http://ollama:11434)
+POST {{apiUrl}}/epub/extract
+Content-Type: application/json
+
+{
+  "epub_path": "/workspace/extractor/my_book.epub",
+  "json_output": "/workspace/extractor/output/book_with_summaries.json",
+  "generate_summaries": true
+}
+
+### Generate Marp presentation from JSON (uses OUTPUT_PATH defaults)
+POST {{apiUrl}}/epub/marp
+Content-Type: application/json
+
+{}
+
+### Generate Marp with custom options
+POST {{apiUrl}}/epub/marp
+Content-Type: application/json
+
+{
+  "json_path": "/workspace/extractor/output/book_with_summaries.json",
+  "marp_output": "/workspace/extractor/output/book_presentation.md",
+  "title": "My Book Summary",
+  "include_summaries": true,
+  "include_content": false,
+  "max_depth": 3
+}
+
