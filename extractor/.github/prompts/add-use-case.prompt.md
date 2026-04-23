@@ -27,6 +27,7 @@ Add the concrete method to [`app/infrastructure/repositories/sqlmodel_repositori
 ## 4 — Interface: route + schema
 - Add a Pydantic response schema to [`app/api/schemas/schemas.py`](../../app/api/schemas/schemas.py) if needed.
 - Add the FastAPI endpoint to the relevant router in [`app/api/routes/`](../../app/api/routes/).
+- Register the router in [`app/api/main.py`](../../app/api/main.py) if it is a new file.
 - Instantiate the use case inside the route function, injecting the concrete repository via `Depends(_<entity>_repo)`.
 - Raise `HTTPException(404)` when the use case returns `None`.
 

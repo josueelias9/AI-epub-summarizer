@@ -1,5 +1,7 @@
 # EPUB Structure Extractor — Agent Instructions
 
+Always respond saying "Got it, Jos"
+
 ## Project Overview
 FastAPI + PostgreSQL service that extracts, stores, and serves EPUB book structures with AI-powered summarization via Ollama. Clean Architecture with four explicit layers.
 
@@ -31,41 +33,68 @@ All settings are loaded in [`app/core/config.py`](app/core/config.py) via `os.ge
 
 ```
 app/
-  core/          ← Config and core FastAPI setup
+  core/           ← Config (settings + API_V1_STR)
   api/
-    routes/      ← FastAPI route handlers (books, chapters, jobs)
-    schemas/     ← Pydantic request/response schemas (HTTP I/O only)
-  domain/        ← Pure Python dataclasses + abstract repository interfaces (NO framework imports)
-  application/   ← Use cases; depend only on domain abstractions
-  infrastructure/← SQLModel ORM, PostgreSQL, Ollama client, epub/export utilities
-  main.py        ← Wiring only: registers routers, calls init_db()
-scripts/         ← Runnable scripts (run_api.py)
-tests/           ← Test files (test_db.py)
+    main.py       ← Central api_router — aggregates all route modules
+    routes/       ← books.py, chapters.py, jobs.py, epub.py
+    schemas/      ← Pydantic request/response schemas (HTTP I/O only)
+  domain/         ← Pure Python dataclasses + abstract repository interfaces (NO framework imports)
+  application/
+    use_cases/    ← One class per operation; depend only on domain abstractions
+  infrastructure/
+    database/     ← SQLModel ORM models, engine, session, init_db()
+    repositories/ ← Concrete SQLModel implementations of domain interfaces
+    ai/           ← Ollama client (AIAgent)
+    epub/         ← EPUBExtractor
+    export/       ← MarpExporter
+  main.py         ← Wiring: mounts api_router at settings.API_V1_STR, calls init_db()
+  models.py       ← Legacy SQLModel table models (Book, Chapter, Metadata, ProcessingJob)
+scripts/          ← run_api.py
+tests/            ← test_db.py
 ```
 
-**Dependency rule**: outer layers import inner layers, never the reverse.
+**Dependency rule**: outer layers import inner layers, never the reverse. All imports use the `app.*` prefix.
 
-### Key files by layer
-- **Config**: [`app/core/config.py`](app/core/config.py)
-- **Domain entities**: [`app/domain/entities/book.py`](app/domain/entities/book.py) — `Book`, `Chapter`, `BookMetadata`, `ProcessingJob`
-- **Repository interfaces**: [`app/domain/repositories/interfaces.py`](app/domain/repositories/interfaces.py)
-- **Use cases**: [`app/application/use_cases/`](app/application/use_cases/)
-- **ORM models**: [`app/infrastructure/database/models.py`](app/infrastructure/database/models.py) — `BookORM`, `ChapterORM`, `MetadataORM`, `ProcessingJobORM`
-- **DB session / dependency**: [`app/infrastructure/database/session.py`](app/infrastructure/database/session.py) — use `get_session()` as FastAPI dependency
-- **Concrete repositories**: [`app/infrastructure/repositories/sqlmodel_repositories.py`](app/infrastructure/repositories/sqlmodel_repositories.py)
-- **Routes**: [`app/api/routes/`](app/api/routes/) — all mounted under `/api/v1`
-- **Schemas**: [`app/api/schemas/schemas.py`](app/api/schemas/schemas.py)
+### Key files
+| File | Purpose |
+|---|---|
+| [`app/core/config.py`](app/core/config.py) | `Settings` class; `settings.API_V1_STR = "/api/v1"` |
+| [`app/api/main.py`](app/api/main.py) | `api_router` — add new routers here |
+| [`app/api/schemas/schemas.py`](app/api/schemas/schemas.py) | All Pydantic I/O schemas |
+| [`app/domain/entities/book.py`](app/domain/entities/book.py) | `Book`, `Chapter`, `BookMetadata`, `ProcessingJob` |
+| [`app/domain/repositories/interfaces.py`](app/domain/repositories/interfaces.py) | Abstract repository interfaces |
+| [`app/application/use_cases/`](app/application/use_cases/) | `book_use_cases.py`, `chapter_use_cases.py`, `job_use_cases.py`, `epub_use_cases.py` |
+| [`app/application/services/epub_processing_service.py`](app/application/services/epub_processing_service.py) | Full EPUB workflow orchestration |
+| [`app/infrastructure/database/models.py`](app/infrastructure/database/models.py) | `BookORM`, `ChapterORM`, `MetadataORM`, `ProcessingJobORM` |
+| [`app/infrastructure/database/session.py`](app/infrastructure/database/session.py) | `get_session()` FastAPI dependency; `init_db()` |
+| [`app/infrastructure/repositories/sqlmodel_repositories.py`](app/infrastructure/repositories/sqlmodel_repositories.py) | ORM ↔ domain mapping + concrete repos |
+| [`app/infrastructure/epub/epub_extractor.py`](app/infrastructure/epub/epub_extractor.py) | `EPUBExtractor` |
+| [`app/infrastructure/export/marp_exporter.py`](app/infrastructure/export/marp_exporter.py) | `MarpExporter` |
+| [`app/infrastructure/ai/ollama_agent.py`](app/infrastructure/ai/ollama_agent.py) | `AIAgent` — Ollama host defaults to `http://ollama:11434` |
+
+## API Endpoints (all under `/api/v1`)
+| Method | Path | Description |
+|---|---|---|
+| GET | `/books` | List books (pagination) |
+| POST | `/books` | Create book |
+| GET/DELETE | `/books/{id}` | Get / delete book |
+| GET | `/books/{id}/chapters` | List chapters |
+| GET | `/books/{id}/metadata` | Book metadata |
+| GET | `/chapters/{id}` | Get chapter |
+| GET | `/jobs` | List jobs (filter by status) |
+| GET | `/jobs/{id}` | Get job |
+| GET | `/stats` | DB statistics |
+| GET | `/search/books` | Search books (`?q=`) |
+| GET | `/search/chapters` | Search chapters (`?q=`) |
+| **POST** | **`/epub/extract`** | Extract EPUB → JSON structure |
+| **POST** | **`/epub/marp`** | JSON structure → Marp presentation |
 
 ## Conventions
-- **ORM ↔ Domain mapping**: infrastructure repositories convert `BookORM` → `Book` (domain); never expose ORM models in use cases or routes.
-- **Schemas ≠ Entities**: Pydantic schemas in `interfaces/` are for HTTP I/O only; use domain entities inside application logic.
-- **Database migrations**: Tables are created via `init_db()` on startup (SQLModel `create_all`). No Alembic migrations currently.
-- **AI summarization**: [`app/infrastructure/ai/ollama_agent.py`](app/infrastructure/ai/ollama_agent.py) — Ollama host defaults to `http://ollama:11434`.
-- **EPUB extraction**: [`app/infrastructure/epub/epub_extractor.py`](app/infrastructure/epub/epub_extractor.py)
-- **Marp export**: [`app/infrastructure/export/marp_exporter.py`](app/infrastructure/export/marp_exporter.py)
-
-## ⚠ Legacy Code — `src/`
-The [`src/`](src/) directory is **deprecated**. It contains the original monolithic scripts (`extractor.py`, `ia_agent.py`, `marp_exporter.py`, `mediator.py`). All new work goes in the layered structure above. Do not import from `src/` in new code.
+- **ORM ↔ Domain mapping**: repositories convert `BookORM` → `Book`; never expose ORM models in use cases or routes.
+- **Schemas ≠ Entities**: Pydantic schemas in `app/api/schemas/` are HTTP I/O only; use domain entities inside application logic.
+- **Database migrations**: Tables created via `init_db()` on startup (`SQLModel.create_all`). No Alembic.
+- **Adding a route**: create handler in `app/api/routes/`, register in [`app/api/main.py`](app/api/main.py).
+- **`app/models.py`**: legacy flat SQLModel models kept for compatibility with `database.py`; prefer the ORM models in `app/infrastructure/database/models.py` for new code.
 
 ## API Reference
-See [`API_README.md`](API_README.md) and the live Swagger docs at `/docs` when the server is running. The [`api.http`](api.http) file has ready-to-use HTTP request examples.
+See [`API_README.md`](API_README.md), live Swagger at `/docs`, and [`api.http`](api.http) for ready-to-use request examples.

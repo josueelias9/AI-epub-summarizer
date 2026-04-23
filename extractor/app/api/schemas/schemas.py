@@ -87,3 +87,31 @@ class JobResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ---- EPUB processing schemas ----
+
+class ExtractRequest(BaseModel):
+    epub_path: Optional[str] = None        # defaults to INPUT_PATH/EPUB_FILE from config
+    json_output: Optional[str] = None      # defaults to OUTPUT_PATH/book_with_summaries.json
+    generate_summaries: bool = False
+
+
+class ExtractResponse(BaseModel):
+    json_output: str
+    total_sections: int
+    total_content_chars: int
+    sections_with_summaries: int
+
+
+class MarpRequest(BaseModel):
+    json_path: Optional[str] = None        # defaults to OUTPUT_PATH/book_with_summaries.json
+    marp_output: Optional[str] = None      # defaults to OUTPUT_PATH/book_presentation.md
+    title: Optional[str] = None
+    include_summaries: bool = True
+    include_content: bool = False
+    max_depth: int = 3
+
+
+class MarpResponse(BaseModel):
+    marp_output: str
