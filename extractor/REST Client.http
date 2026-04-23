@@ -3,6 +3,9 @@
 
 @baseUrl = http://localhost:8000
 @apiUrl = {{baseUrl}}/api/v1
+@epubPath = /workspace/extractor/my_book.epub
+@jsonOutput = /workspace/extractor/output/book_with_summaries.json
+@marpOutput = /workspace/extractor/output/book_presentation.md
 
 # ─────────────────────────────────────────────
 # Health
@@ -95,47 +98,33 @@ GET {{apiUrl}}/search/chapters?q=architecture&book_id=1
 # EPUB Processing
 # ─────────────────────────────────────────────
 
-### Extract EPUB structure → JSON (uses INPUT_PATH/EPUB_FILE + OUTPUT_PATH from config)
+### 1. Check LLM connectivity (Ollama)
+GET {{apiUrl}}/epub/llm/status
+
+### 2. Extract EPUB structure → JSON
 POST {{apiUrl}}/epub/extract
 Content-Type: application/json
 
 {
-  "generate_summaries": false
+  "epub_path": "{{epubPath}}",
+  "json_output": "{{jsonOutput}}"
 }
 
-### Extract EPUB with custom paths
-POST {{apiUrl}}/epub/extract
+### 3. Generate AI summaries (requires Ollama — run step 2 first)
+POST {{apiUrl}}/epub/summarize
 Content-Type: application/json
 
 {
-  "epub_path": "/workspace/extractor/my_book.epub",
-  "json_output": "/workspace/extractor/output/book_with_summaries.json",
-  "generate_summaries": false
+  "json_path": "{{jsonOutput}}"
 }
 
-### Extract EPUB with AI summaries (requires Ollama running at http://ollama:11434)
-POST {{apiUrl}}/epub/extract
-Content-Type: application/json
-
-{
-  "epub_path": "/workspace/extractor/my_book.epub",
-  "json_output": "/workspace/extractor/output/book_with_summaries.json",
-  "generate_summaries": true
-}
-
-### Generate Marp presentation from JSON (uses OUTPUT_PATH defaults)
-POST {{apiUrl}}/epub/marp
-Content-Type: application/json
-
-{}
-
-### Generate Marp with custom options
+### 4. Generate Marp presentation (run step 2 first)
 POST {{apiUrl}}/epub/marp
 Content-Type: application/json
 
 {
-  "json_path": "/workspace/extractor/output/book_with_summaries.json",
-  "marp_output": "/workspace/extractor/output/book_presentation.md",
+  "json_path": "{{jsonOutput}}",
+  "marp_output": "{{marpOutput}}",
   "title": "My Book Summary",
   "include_summaries": true,
   "include_content": false,

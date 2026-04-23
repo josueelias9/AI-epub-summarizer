@@ -8,7 +8,7 @@ class AIAgent:
     
     def __init__(self, ollama_host: str = "http://ollama:11434"):
         self.ollama_host = ollama_host
-        self.endpoint = f"{ollama_host}/api/chat"
+        self.endpoint = f"{ollama_host}/api/generate"
         self.model = "llama3.2"
         
         self.system_prompt = """# Entity
@@ -56,16 +56,8 @@ formatting
 
         payload = {
             "model": self.model,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": self.system_prompt
-                },
-                {
-                    "role": "user",
-                    "content": f"Summarize the following content concisely:\n\n{content}"
-                }
-            ],
+            "system": self.system_prompt,
+            "prompt": f"Summarize the following content concisely:\n\n{content}",
             "stream": False
         }
         
@@ -79,7 +71,7 @@ formatting
             response.raise_for_status()
             
             result = response.json()
-            summary = result.get("message", {}).get("content", "")
+            summary = result.get("response", "")
             
             return summary.strip()
             

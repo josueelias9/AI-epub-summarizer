@@ -92,9 +92,8 @@ class JobResponse(BaseModel):
 # ---- EPUB processing schemas ----
 
 class ExtractRequest(BaseModel):
-    epub_path: Optional[str] = None        # defaults to INPUT_PATH/EPUB_FILE from config
-    json_output: Optional[str] = None      # defaults to OUTPUT_PATH/book_with_summaries.json
-    generate_summaries: bool = False
+    epub_path: str
+    json_output: str
 
 
 class ExtractResponse(BaseModel):
@@ -104,9 +103,18 @@ class ExtractResponse(BaseModel):
     sections_with_summaries: int
 
 
+class SummarizeRequest(BaseModel):
+    json_path: str
+
+
+class SummarizeResponse(BaseModel):
+    json_path: str
+    sections_summarized: int
+
+
 class MarpRequest(BaseModel):
-    json_path: Optional[str] = None        # defaults to OUTPUT_PATH/book_with_summaries.json
-    marp_output: Optional[str] = None      # defaults to OUTPUT_PATH/book_presentation.md
+    json_path: str
+    marp_output: str
     title: Optional[str] = None
     include_summaries: bool = True
     include_content: bool = False
@@ -115,3 +123,9 @@ class MarpRequest(BaseModel):
 
 class MarpResponse(BaseModel):
     marp_output: str
+
+
+class LLMStatusResponse(BaseModel):
+    connected: bool
+    host: str
+    model: str
