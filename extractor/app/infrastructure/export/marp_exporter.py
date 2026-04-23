@@ -95,6 +95,13 @@ style: |
     background-repeat: no-repeat;
     opacity: 1;
   }
+  section img {
+    max-height: 65vh;
+    max-width: 85%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
 
 ---
 
@@ -207,7 +214,11 @@ section.centered {
             # Add summary slide if available
             if include_summaries and info.get("summary"):
                 slides.append(self._generate_summary_slide(info["summary"]))
-            
+
+            # Add one full-background slide per image found in this section
+            for img_path in info.get("images") or []:
+                slides.append(self._generate_image_slide(img_path))
+
 
             tables = self._extract_tables_from_content(info["content"])
             for table_idx, table in enumerate(tables, 1):
@@ -292,6 +303,15 @@ section.centered {
             
             return '\n'.join(slides)
     
+    def _generate_image_slide(self, image_path: str) -> str:
+        """Generate a dedicated slide for an image"""
+        return f"""
+![center w:85%]({image_path})
+
+---
+
+"""
+
     def _extract_tables_from_content(self, content: str) -> list:
         """
         Extract Markdown tables from content

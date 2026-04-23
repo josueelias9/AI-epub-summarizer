@@ -1,8 +1,9 @@
 from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
-from typing import Dict, Any
+from typing import Dict, Any, List
 import html2text
 import re
+import os
 
 
 class EPUBExtractor:
@@ -45,15 +46,18 @@ class EPUBExtractor:
         
         return section_id
     
-    def extract_structure(self, epub_path: str) -> Dict[str, Any]:
+    def extract_structure(self, epub_path: str, images_output_dir: str = None) -> Dict[str, Any]:
         """
         Extract hierarchical structure from EPUB file
         
         Args:
             epub_path: Path to EPUB file
+            images_output_dir: Optional directory where EPUB images will be saved.
+                               When provided, each section will include an ``images``
+                               list with relative paths (e.g. ``images/fig1.png``).
             
         Returns:
-            Dict with book structure (content and subsections)
+            Dict with book structure (content, images, and subsections)
         """
         print(f"📖 Reading EPUB file: {epub_path}")
         book = epub.read_epub(epub_path)
@@ -61,6 +65,26 @@ class EPUBExtractor:
         
         # Reset counters for new extraction
         self.section_counters = {}
+
+        # --- Extract all EPUB images and build lookup map ---
+        image_map: Dict[str, str] = {}  # epub_name -> relative output path
+        if images_output_dir:
+            os.makedirs(images_output_dir, exist_ok=True)
+            images_subdir = os.path.basename(images_output_dir)
+            for item in book.get_items():
+                media_type = getattr(item, 'media_type', '') or ''
+                if media_type.startswith('image/'):
+                    img_filename = os.path.basename(item.get_name())
+                    if not img_filename:
+                        continue
+                    img_save_path = os.path.join(images_output_dir, img_filename)
+                    with open(img_save_path, 'wb') as f:
+                        f.write(item.get_content())
+                    rel_path = f"{images_subdir}/{img_filename}"
+                    # Map by full epub path and by basename for flexible lookup
+                    image_map[item.get_name()] = rel_path
+                    image_map[img_filename] = rel_path
+            print(f"  📷 Extracted {len(image_map) // 2} images to: {images_output_dir}")
 
         for item in book.get_items():
             if item.get_type() == ITEM_DOCUMENT:
@@ -70,6 +94,9 @@ class EPUBExtractor:
                 headers = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
                 if not headers:
                     continue
+
+                # Base directory of this HTML item inside the EPUB (for resolving relative img srcs)
+                item_dir = os.path.dirname(item.get_name())
 
                 # Stack to maintain current hierarchy
                 hierarchy = {}  # {level: (title, dict_reference)}
@@ -98,6 +125,11 @@ class EPUBExtractor:
                     
                     # Parse HTML to clean text
                     content_text = self._parse_html_to_text(content_html)
+
+                    # Extract image references for this section
+                    images: List[str] = []
+                    if image_map:
+                        images = self._extract_image_refs(content_html, image_map, item_dir)
                     
                     # Generate unique ID for this section
                     section_id = self._generate_section_id(level)
@@ -106,6 +138,7 @@ class EPUBExtractor:
                     entry = {
                         "id": section_id,
                         "content": content_text,
+                        "images": images,
                         "subsections": {}
                     }
                     
@@ -179,6 +212,40 @@ class EPUBExtractor:
         
         return result.strip()
     
+    def _extract_image_refs(self, html_content: str, image_map: Dict[str, str], item_dir: str) -> List[str]:
+        """
+        Find <img> tags in HTML and resolve them to saved output paths.
+
+        Args:
+            html_content: Raw HTML for a section
+            image_map: Mapping of epub paths / basenames → relative output paths
+            item_dir: Directory of the HTML item within the EPUB (for resolving relative srcs)
+
+        Returns:
+            Ordered, deduplicated list of relative image output paths
+        """
+        if not html_content:
+            return []
+        soup = BeautifulSoup(html_content, 'lxml')
+        seen = set()
+        refs: List[str] = []
+        for img in soup.find_all('img'):
+            src = img.get('src', '').strip()
+            if not src:
+                continue
+            basename = os.path.basename(src)
+            # Try basename lookup first (fastest)
+            if basename in image_map:
+                path = image_map[basename]
+            else:
+                # Try resolving full epub-relative path
+                resolved = os.path.normpath(os.path.join(item_dir, src)).replace('\\', '/')
+                path = image_map.get(resolved) or image_map.get(basename)
+            if path and path not in seen:
+                seen.add(path)
+                refs.append(path)
+        return refs
+
     def print_structure(self, structure: Dict[str, Any], indent: int = 0) -> None:
         """
         Print book structure in readable format

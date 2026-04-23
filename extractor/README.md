@@ -185,3 +185,6 @@ Las contribuciones son bienvenidas. Por favor:
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+
+TODO: check if it is possible to extract the image name without using LLM

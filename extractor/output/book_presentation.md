@@ -11,6 +11,13 @@ style: |
     background-repeat: no-repeat;
     opacity: 1;
   }
+  section img {
+    max-height: 65vh;
+    max-width: 85%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
 
 ---
 
@@ -33,7 +40,7 @@ section.centered {
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
-# Book Summary Presentation
+# My Book Summary
 
 ### AI-Generated Book Summary
 
@@ -47,37 +54,37 @@ section.centered {
 
 ## 7.1. Translating Business Use Cases
 
-* **Identify impact**: Understand the benefits of the use case for the company and end user.
-  * _Business impact_
-  * _Data privacy and security_
-  * _Timeline_
+**Impact**: Key factor; determines success criteria (e.g., increasing profit, reducing fraud).
+**Success Criteria**: Identified through stakeholder discussions; varies by role (executives: business impact; CFOs: budget; managers: timelines; data managers: privacy/security).
+**Use Case**: Match to ML approach (e.g., regression for house price prediction); ensure fit with business needs and stakeholders.
+* **Stakeholders**: Key people influencing project approval;各有不同的关注点（如业务影响、预算、时间线和数据隐私/安全）。
+* **机器学习方法匹配**：根据用例选择合适的算法和评估指标；确保与业务需求相符。
 
-* **Match with machine learning approach**: Select an algorithm and metric to solve the problem.
-  * _Analyze data availability_
-  * _Understand the ML model's limitations_
+---
 
-* **Evaluate feasibility**: Determine if the problem can be solved using machine learning, considering existing technology, available data, and budget.
+
+![center w:85%](images/c01f001.png)
 
 ---
 
 ## 7.2. Machine Learning Approaches
 
-**Overview of Machine Learning Approaches**
+**Machine Learning Approaches**: Diverse methods tailored for specific problem types.
+* **Problem-Specific Categories**: Defined by data type and prediction goals.
+* **Comprehensive Knowledge Needed**: For identifying appropriate ML approach based on use case.
 
-* There are hundreds of ways to apply machine learning techniques
-* Approaches are categorized into specific classes of problems
-* Understanding the landscape of ML methods is crucial for solving use cases
-* Wide knowledge of machine learning approaches is necessary to find the correct solution
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 7.2.1. Supervised, Unsupervised, and Semi‐supervised Learning
 
-* **Machine Learning Approaches**: Classification based on type of learning
-    * _Supervised Learning_: Using labeled dataset to train models, e.g., image classification.
-        + Examples: Regression, Classification, Sentiment Analysis.
-    * _Unsupervised Learning_: Using unlabeled data, e.g., clustering and topic modeling.
-        + Examples: K-means Clustering, Principal Component Analysis, Topic Modeling.
+**Supervised Learning**: Uses labeled datasets to train models, e.g., classifying images of dogs or cats.
+**Unsupervised Learning**: Deals with unlabeled data, like clustering algorithms (e.g., K-means clustering) and autoencoders for dimensionality reduction.
+* **Topic Modeling**: A type of unsupervised learning that groups documents into topics based on common words and sentences.
 
 ---
 
@@ -107,12 +114,15 @@ Collaborative filtering/recommendations | Mixed | Supervised/Unsupervised
 
 ### 7.2.2. Classification, Regression, Forecasting, and Clustering
 
-* **Classification**: predicts "labels" or categories (e.g., dogs vs. cats), with binary classification having 2 labels and multiclass classification having more.
-    * Can have thousands of labels, e.g., object detection with millions of classes
-* **Regression**: predicts a number (e.g., house price, rainfall amount)
-    * Predicted value's range depends on use case
-* _Forecasting_: uses time-series data to predict future values
-    * Input is indexed in time order, e.g., temperature readings taken every hour
+**Classification**: Predicting categorical labels or categories (e.g., dogs vs. cats).
+* **Binary Classification**: Two labels (e.g., yes/no, true/false).
+    * **Multiclass Classification**: More than two labels (e.g., Cloud Vision API categorizing objects).
+
+**Regression**: Predicting a continuous value (e.g., house price, rainfall amount) using structured data.
+
+**Forecasting**: Predicting future values based on time-series data (e.g., temperature readings over time).
+
+**Clustering**: Grouping data points based on inherent similarities (e.g., city clusters from latitude and longitude).
 
 ---
 
@@ -142,10 +152,45 @@ Series 4 | 14, 17, 34, 34, 12, 43
 
 ## 7.3. ML Success Metrics
 
-* **Classification Metric**: There are various metrics to evaluate a classification model, such as precision, recall, and F1 score.
-    * *_Precision_*: measures the percentage of correct positive predictions, lower false positives. Formula: `True Positives / (True Positives + False Positives)`
-    * *_Recall_*: measures the percentage of correctly predicted positive data points, lower false negatives. Formula: `True Positives / (True Positives + False Negatives)`
-    * *_F1 score_*: harmonic mean of precision and recall, lowers both false positives and false negatives together. Formula: `(2 x Precision x Recall) / (Precision + Recall)`
+**Machine Learning Metric**: Used to determine if the trained model is accurate enough.
+
+* **Classification Problem**: Choose metrics based on business needs (e.g., accuracy, recall, precision, F1 score).
+    * **Recall**: Measures true positives relative to actual positives (low false negatives preferred).
+        * Example: Recall = 5 / (5 + 2) = 0.714
+    * **Precision**: Measures true positives relative to predicted positives (low false positives preferred).
+        * Example: Precision = 5 / (5 + 3) = 0.625
+    * **F1 Score**: Harmonic mean of precision and recall, balancing both types of errors.
+        * Example: F1 = 2 x (0.625 x 0.714) / (0.625 + 0.714) = 0.666
+
+---
+
+
+![center w:85%](images/c01-disp-0014.png)
+
+---
+
+
+![center w:85%](images/c01-disp-1014.png)
+
+---
+
+
+![center w:85%](images/c01-disp-2014.png)
+
+---
+
+
+![center w:85%](images/c01-disp-1814.png)
+
+---
+
+
+![center w:85%](images/c01-disp-4014.png)
+
+---
+
+
+![center w:85%](images/c01-disp-3014.png)
 
 ---
 
@@ -173,66 +218,77 @@ F1 | Lower false positive and false negative together |
 
 ### 7.3.1. Area Under the Curve Receiver Operating Characteristic (AUC ROC)
 
-**ROC Curve**
-* Receiver operating characteristic curve (ROC) plots binary classification model performance
-	+ False positive rate on x-axis, true positive rate on y-axis
-* Ideal point: top-left corner (100% TP, 0% FP)
-* A diagonal line is the worst case; goal is to stretch curve away from it
+**ROC Curve**: Graphical plot summarizing binary classification model performance with true positive rate on y-axis, false positive rate on x-axis, and different thresholds.
 
-**AUC**
-* Area under ROC curve (AUC) compares two models
-	+ Measures ranking quality not absolute values
-* Helps choose model regardless of threshold choice
-* Advantages:
-	+ **Scale-invariant:** No dependence on scale
-	+ **Classification threshold-invariant:** Irrespective of chosen threshold
+**AUC (Area Under the Curve)**: Measures model performance by calculating the area under the ROC curve, with a higher value indicating better performance; diagonal line represents worst case.
+
+**Advantages of AUC**: Scale-invariant and classification threshold-invariant, ranking predictions without relying on absolute values.
+
+---
+
+
+![center w:85%](images/c01f002.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 7.3.2. The Area Under the Precision‐Recall (AUC PR) Curve
 
-* The area under the precision-recall (AUC-PR) curve measures the relationship between recall and precision.
-* The best AUC-PR curve is horizontal at the top-right corner, representing 100% precision and recall.
-* A highly imbalanced dataset favors AUC-PR as it helps to mitigate skewed results.
+**Precision-Recall Curve (AUC PR)**: Graphically illustrates precision-recall pairs; x-axis is recall, y-axis is precision.
+
+**Best AUC PR Curve**: Horizontal line at top; optimal point is 100% precision and 100% recall, unattainable in practice but the target.
+
+**Preference for AUC PR in Imbalanced Datasets**: High true negatives can skew traditional ROC curves, making AUC PR more reliable.
+
+---
+
+
+![center w:85%](images/c01f003.png)
 
 ---
 
 ### 7.3.3. Regression
 
-**Regression Metrics**
+**Regression Metrics**: Evaluate prediction accuracy
 
-* *_Mean Absolute Error_*: average absolute difference between actual and predicted values
-* *_Root-Mean-Squared Error_*: square root of average squared difference, penalizes large predictions
-    * *_RMSLE_*: similar to RMSE, uses natural logarithm, penalizes under prediction
-* *_Mean Absolute Percentage Error_*: average percentage difference between labels and predicted values
-* *_R-squared_*: square of Pearson correlation coefficient, measures fit (0-1 range)
+- **MAE**: Average absolute difference between actual and predicted values.
+- **RMSE**: Square root of the average squared difference, penalizes large errors more.
+    * **RMSLE**: Similar to RMSE but uses logarithm to handle skewed data, penalizes underpredictions more.
+- **MAPE**: Average absolute percentage difference, measures proportional differences.
+- **R²**: Squared correlation coefficient, ranges from 0 to 1, higher values indicate better fit.
 
 ---
 
 ## 7.4. Responsible AI Practices
 
-* **Key Considerations for AI and Machine Learning**
-    * Fairness: Avoid biases in models by measuring bias in datasets and testing for bias
-    * Interpretability: Use model explanations to gain insights into complex models like neural networks
-    * Privacy and Security: Protect sensitive data, minimize leakage during training and deployment phases
+**Fairness**: Ensuring ML models do not reflect unfair biases; use statistical methods to measure bias.
+
+**Interpretability**: Understanding model predictions, especially for complex models like neural networks; use model explanations to quantify feature contributions.
+
+**Privacy**: Protecting sensitive data from exposure in the model; employ techniques to minimize data leakage during training and deployment.
+
+**Security**: Addressing cybersecurity threats unique to ML, including data poisoning and model theft; stay vigilant and develop countermeasures.
 
 ---
 
 ## 7.5. Summary
 
-* *Taking a Business Use Case: Framing a Machine Learning Problem Statement*
-  * Understanding the ask
-  * Identifying key dimensions of a business use case
+**Business Use Case**: Identify the problem and define the machine learning question.
+* **Dimensions of an Ask**: Understand the scope and requirements.
+**Machine Learning Problem Statement**: Frame the business use case into a clear, actionable ML question.
 
 ---
 
 ## 7.6. Exam Essentials
 
-* **Machine Learning for Business Challenges**
-  * Identify business use cases that involve machine learning
-    * _Problem type_: regression, classification, forecasting
-    * _Key metrics_: precision, recall, F1, AUC ROC, RMSE, MAPE
-  * Understand Google's Responsible AI principles for fairness, interpretability, privacy, and security
+* **Translate business challenges to machine learning**: Identify the problem, data availability, expected outcomes, stakeholders, budget, and timelines.
+    * **Problem types**: Differentiate between regression, classification, and forecasting; know relevant algorithms for each.
+* **Use ML metrics**: Understand metrics like precision, recall, F1, AUC ROC, RMSE, and MAPE to match with use cases.
+* **Google's Responsible AI principles**: Adhere to fairness, interpretability, privacy, and security practices.
 
 ---
 
@@ -242,49 +298,62 @@ F1 | Lower false positive and false negative together |
 
 ## 8.1. Visualization
 
-* Data visualization is a technique to find trends and outliers in data, aiding data cleaning and feature engineering.
-    * Univariate Analysis: analyzes each feature independently (e.g., box plots, distribution plots)
-        * Examines range, outliers, and distributions of individual features
-    * Bivariate Analysis: compares two features to identify correlations (e.g., line plots, bar plots, scatterplots)
+* Data visualization helps identify trends, outliers, imbalanced data, and feature impacts on models.
+    * Univariate Analysis: Analyzes each feature independently (box plots, distribution plots).
+    * Bivariate Analysis: Compares two features to find correlations (line plots, bar plots, scatterplots).
 
 ---
 
 ### 8.1.1. Box Plot
 
-* A box plot visualizes data with 25th, 50th (median), and 75th quartiles.
-* The body represents the interquartile range with maximum observations.
-* Outliers are points outside the whiskers or straight lines representing max/min values.
+* **Box plot**: Visualizes data divided into quartiles, highlighting the interquartile range and outliers.
+    * **Interquartile range (body)**: Represents the middle 50% of observations.
+    * **Whiskers**: Extend to the minimum and maximum values, excluding outliers.
+* **Outliers**: Points lying outside the whiskers.
+
+---
+
+
+![center w:85%](images/c02f001.png)
 
 ---
 
 ### 8.1.2. Line Plot
 
-* A line plot displays relationships between two variables over time, showing trends in data changes.
-* It helps analyze data patterns and identify trends.
-* Used to visualize data changes over time.
+* Line plot: Visualizes relationships between two variables, showing trends in data over time.
+* **Figure 2.2**: Illustrates a line plot.
+
+---
+
+
+![center w:85%](images/c02f002.png)
 
 ---
 
 ### 8.1.3. Bar Plot
 
-* **What is a bar plot?**: A graph used to analyze trends in data and compare categorical values.
-* **Common uses**: Analyzing sales figures, website traffic, or revenue over time.
-* *_Visualizes categorical data_*, making it easy to identify patterns and trends.
+* **Bar Plot**: Used for analyzing trends and comparing categorical data.
+* **Example Uses**: Sales figures weekly, website visitors monthly, product revenue monthly.
+* **Figure 2.3**: Bar plot shown.
+
+---
+
+
+![center w:85%](images/c02f003.png)
 
 ---
 
 ### 8.1.4. Scatterplot
 
-* A **scatterplot** is a common data visualization tool used to *visualize relationships between two variables* and *identify clusters in datasets*.
+**Scatterplot**: Visualizes relationships between two variables, showing clusters in datasets.
 
 ---
 
 ## 8.2. Statistics Fundamentals
 
-* Three measures of central tendency in statistics are:
-  * **Mean**: average value
-  * **Median**: middle value when data is sorted
-  * **Mode**: most frequently occurring value
+- **Mean**: Average value of a dataset.
+- **Median**: Middle value when data is ordered.
+- **Mode**: Most frequently occurring value in a dataset.
 
 ---
 
@@ -296,25 +365,25 @@ Mean is the accurate measure to describe the data when we do not have any outlie
 
 ### 8.2.2. Median
 
-* **Median calculation**: Find the middle value(s) in a dataset arranged from lowest to highest.
-    * _If even numbers_: Calculate the average of the two middle values.
-    * _If odd numbers_: The median is the single middle value.
+**Median**: Used when there are outliers in the dataset.
+- **Calculation**: Arrange data values from lowest to highest; for even counts, take the average of the two middle numbers; for odd counts, use the middle number as the median.
 
 ---
 
 ### 8.2.3. Mode
 
-* **Mode**: the value(s) that appear most frequently in a dataset.
+**Mode**: Used when there's an outlier and most data points are the same; it represents the most frequent value(s) in a dataset.
+* **Example**: In the dataset 1, 1, 2, 5, 5, 5, 9, the mode is 5.
 
 ---
 
 ### 8.2.4. Outlier Detection
 
-* **Mean and Outliers**: The mean is affected by outliers, which can significantly change its value.
-    * _Effect on Measures_: Adding an outlier changes the mean, median, and mode values.
-        - Mean: 12.72 (without outlier) vs. 29.16 (with outlier)
-        - Median: 13 (without outlier) vs. 14 (with outlier)
-        - Mode: 15 (both with and without outlier)
+**Mean**: Affected by outliers; changes significantly with the addition of an outlier like 210.
+* **Variance**: Measures spread as the average squared difference from the mean.
+
+**Median**: Less affected by outliers, remains stable at 13 and 14.
+**Mode**: Unchanged, stays at 15 in both cases.
 
 ---
 
@@ -331,218 +400,286 @@ Mode: 15 | Mode: 15
 
 ### 8.2.5. Standard Deviation
 
-* **Key Statistics**:
-  * _Standard Deviation_: Square root of variance, identifies outliers (data points > 1 SD from mean)
-  * _Covariance_: Measure of variation between two random variables
+**Standard deviation**: Measures the spread of data around the mean; identifies unusual data points.
+* **Outliers**: Data points more than one standard deviation from the mean are considered unusual.
+**Covariance**: Quantifies the relationship between two variables' variances.
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 8.2.6. Correlation
 
-* **Correlation Basics**
-  * Correlation is normalized covariance with a value range of -1 to +1.
-  * Pearson's correlation coefficient measures the strength and direction of linear relationships between two variables.
+**Correlation**: Normalized form of covariance ranging from –1 to +1.
 
-* **Types of Correlation**
-  * _Positive Correlation_: Increase in one variable leads to increase in another.
-  * _Negative Correlation_: Increase in one variable leads to decrease in another.
-  * _Zero Correlation_: No substantial impact from change in one variable on the other.
+**Positive Correlation**: Increase in one variable leads to an increase in another.
 
-* **Detecting Label Leakage with Correlation**
-  Highly correlated labels can cause models to learn irrelevant features, such as hospital names, instead of target variables.
+**Negative Correlation**: Increase in one variable leads to a decrease in another.
+
+**Zero Correlation**: Change in one variable does not significantly affect the other.
+
+* **Correlation Helps Detect Label Leakage**: Highly correlated features like hospital names can cause models to learn on labels, leading to poor generalization.
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ## 8.3. Data Quality and Reliability
 
-* **Data Quality**: The reliability of your model depends on the quality and consistency of the training data.
-	* _Key Data Quality Checks_:
-		+ Check for label errors
-		+ Detect noise in features
-		+ Identify outliers and data skew
+**Data Quality**: Determines model reliability and performance based on training data size and cleanliness.
+- **Reliability**: Degree of trustworthiness; ensure no missing, duplicate values, or bad features (unclean data).
+    * Check for label errors and noise in features like GPS measurements.
+    * Identify and handle outliers and data skew.
+- **Data Quality Parameters**: Defined during collection and discussed further.
 
 ---
 
 ### 8.3.1. Data Skew
 
-* **Data Skew**: Data that follows a non-symmetric normal distribution curve.
-* *Causes:* Outliers and uneven data distribution.
-* **Characteristics:** 
-    * Right-skewed: income data with extreme outliers
-    * Left-skewed: data with few high values and many low values
+**Data Skew**: When data is not normally distributed, indicating the presence of outliers.
+
+* **Right-Skewed Data**: Characterized by a long tail on the right; examples include income distributions.
+* **Implications for Models**: Extreme outliers can affect model prediction accuracy; transformations like log transformation or normalization can help normalize the distribution.
+    * **SMOTE, Undersampling, Oversampling**: Techniques to handle skewed target variables.
+
+---
+
+
+![center w:85%](images/c02f004.png)
 
 ---
 
 ### 8.3.2. Data Cleaning
 
-* **Normalization**: transforms features to a consistent scale
-    * Improves model performance and training stability
-    * Enhances data preparation (_[see Google Machine Learning documentation](https://developers.google.com/machine-learning/data-prep/transform/normalization))_)
+* **Normalization**: Transforms features to similar scales for better model performance and training stability.
+* **Goal**: Improves model training by standardizing feature ranges.
 
 ---
 
 ### 8.3.3. Scaling
 
-### **Scaling Benefits**
+**Scaling**: Converts feature values into a standard range (e.g., 0 to 1 or –1 to +1) for better model training.
+    * **Benefits**: Improves gradient descent convergence, prevents "NaN traps," and ensures features are equally weighted.
+**Use Cases**: Suitable for uniformly distributed data with no skew or outliers.
 
-* Improves gradient descent convergence in deep neural networks
-* Removes "NaN traps" by scaling all numbers to a standard range
-* Prevents features with wide ranges from dominating the model
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 8.3.4. Log Scaling
 
-* **Log Scaling**: used for _large data samples_ that follow a power-law distribution, e.g., 10,000 vs. 100.
-* **Purpose**: scales data to a common range (e.g., 0-100) by taking the logarithm of values.
+* Log scaling is used for data with a wide range.
+    * It brings very large values into a more manageable scale.
+* For instance, it converts a value of 100,000 to 5 and 100 to 2 using logarithms.
+* This helps in visualizing data within the same range.
 
 ---
 
 ### 8.3.5. Z‐score
 
-* **Scaling by Z-score**: Scales values as standard deviations away from the mean
-* _Formula_: `Scaled value = (value - mean) / stddev`
-* **Example**: Given mean 100 and stddev 20, a value of 130 results in a z-score of 1.5
+**Z-score**: Measures the number of standard deviations a value is from the mean.
+
+* **Outlier detection**: Values with z-scores outside -3 to +3 are considered outliers.
 
 ---
 
 ### 8.3.6. Clipping
 
-* *_Feature Clipping_*: Capping extreme outlier values (above/below) to a fixed value
-* Can be performed *_before_* or *_after_* normalization techniques
-* Affects data by limiting extreme values, but may lose information
+* Feature clipping: Capping extreme outliers at a fixed value.
+* Timing: Can be applied before or after other normalization techniques.
 
 ---
 
 ### 8.3.7. Handling Outliers
 
-* **Outlier Detection**: Values that deviate significantly from the rest of the data
-  * Use visualization techniques like box plots and Z-score to detect outliers
-  * Other methods include clipping and IQR analysis
-* **Handling Outliers**: Remove or replace detected outliers
-  * Replace with mean, median, mode, or boundary values
+**Outlier**: A value significantly deviating from others due to error or skew.
+
+**Visualization Techniques**:
+- *Box plots*: Graphical representation of statistical data based on a five-number summary.
+- *Clipping*: Method for capping extreme values at a certain threshold.
+
+**Statistical Techniques**:
+- *Z-score*: Measures how many standard deviations an element is from the mean.
+- *Interquartile range (IQR)*: Difference between 75th and 25th percentiles, used to identify outliers.
+
+**Handling Outliers**:
+- Remove them to avoid model bias.
+- Replace with mean, median, mode, or boundary values.
 
 ---
 
 ## 8.4. Establishing Data Constraints
 
-* **Defining Data Schema**: Establishing a schema for ML pipelines ensures consistent and reproducible data handling, capturing key characteristics like data type, range, and distribution.
-    * **Advantages**:
-        * Enables metadata-driven preprocessing for feature engineering and data transformation
-        * Validates new data, catching anomalies like skewness and outliers during training and prediction.
+**Data Schema**: Describes data properties (type, range, format) for ML pipeline consistency.
+
+**Key Insights**: Identifies quality issues like missing values, outliers.
+
+**Schema Benefits**:
+* Enables metadata-driven preprocessing for feature engineering.
+* Facilitates validation of new data, catching anomalies during training and prediction.
 
 ---
 
 ### 8.4.1. Exploration and Validation at Big‐Data Scale
 
-* _TensorFlow Data Validation (TFDV)_ helps validate ML data at scale by detecting anomalies and schema issues.
-* TFDV is part of the _TensorFlow Extended (TFX)_ platform, providing libraries for data validation, schema validation, and more.
-* Key uses include:
-  * **Exploratory Data Analysis**: produces a data schema to understand the data and define a contract between the ML pipeline and data.
-  * **Production Pipeline Phase**: defines a baseline to detect new data skew or drift in the model during training and serving.
+**TensorFlow Data Validation (TFDV)**: A tool for detecting data and schema anomalies at scale.
+
+**TensorFlow Extended (TFX) Platform**: Includes TFDV, along with libraries for preprocessing (`TensorFlow Transform`), model evaluation (`TensorFlow Model Analysis`), and serving models (`TensorFlow Serving`).
+
+- **Exploratory Data Analysis Phase**: Helps create a data schema to ensure consistency between your ML pipeline and input data.
+- **Production Pipeline Phase**: Uses the schema to detect data skew or drift, ensuring model performance remains stable.
+
+---
+
+
+![center w:85%](images/c02f005.png)
 
 ---
 
 ## 8.5. Running TFDV on Google Cloud Platform
 
-* _Apache Beam SDK_ powers TFDV APIs for batch and streaming pipelines
-* Dataflow is a managed service that runs Apache Beam pipelines at scale
-    * Integrates with **BigQuery** and **data lakes (GCS)** for data warehousing and storage
-    * Supports `Vertex AI Pipelines` for machine learning
+* **Apache Beam SDK**: Foundation for building batch and streaming pipelines in TFDV.
+* **Dataflow**: Managed service running Apache Beam pipelines at scale.
+    * **Integration**: Native with BigQuery, Google Cloud Storage, and Vertex AI Pipelines.
 
 ---
 
 ## 8.6. Organizing and Optimizing Training Datasets
 
-* **Data Splitting**
-  * Training Dataset: used to train the model
-  * Validation Dataset: used for hyperparameter tuning and evaluating the model's behavior during training
-  * Test Dataset: used to evaluate the model's performance after training and validation, without leaking data from other sets.
+**Training Dataset**: Used to train the model; model learns from this data.
+**Validation Dataset**: Used for evaluation and hyperparameter tuning; model does not learn from this data.
+**Test Dataset**: Used after training to evaluate model performance; must be distinct from training and validation sets.
+
+---
+
+
+![center w:85%](images/c02f006.png)
 
 ---
 
 ### 8.6.1. Imbalanced Data
 
-* **Imbalanced Data**: occurs when two classes in a dataset are not equal, affecting model training
-    * _oversampling_ ( duplicating minority samples) and _undersampling_ (deleting majority samples) can introduce bias and are less effective
-    * downsampling the majority class and upweighting the downsampled class is an effective approach to balance data
-* **Downsampling and Upweighting**: balances dataset by reducing majority class samples and increasing importance of minority class examples
-    * faster model convergence due to increased minority class examples
+**Imbalanced Data**: When classes are not equally represented, e.g., 995 non-fraud vs 5 fraud transactions.
+
+* **Oversampling/Undersampling**: Balancing by duplicating minority or removing majority samples introduces bias.
+
+**Downsampling and Upweighting**: 
+    * Downsample majority class (e.g., no-fraud) to balance data.
+    * Increase example weight of downsampled class during training, e.g., 10x importance.
+
+---
+
+
+![center w:85%](images/c02f007.png)
+
+---
+
+
+![center w:85%](images/note.png)
+
+---
+
+
+![center w:85%](images/c02f008.png)
 
 ---
 
 ### 8.6.2. Data Splitting
 
-* **Splitting Data**: Random splitting can cause skew if it separates similar topics or time-based constraints.
-    * **Time-based Split**: Split data based on publication timeline to avoid separating stories with same topic.
-        * **Overlapping Concerns**: Using June and July as training/testing sets would still allow some overlap.
+**Random splitting**: Can cause a skew in time-sensitive datasets.
+
+**Time-based splitting**: Helps by dividing data based on publication date, ensuring topics are not overrepresented in both training and testing sets.
+
+* **Example**: Train with April stories, test with May stories to avoid overlap.
 
 ---
 
 ### 8.6.3. Data Splitting Strategy for Online Systems
 
-* **Splitting Data by Time**
-  * Ensures validation set mirrors the lag of time between training and prediction
-  * Recommended for online systems with large datasets (e.g., millions of examples)
-  * Use domain knowledge to decide whether a random or time-based split is appropriate
+**Time-based data splitting**: Ensures the validation set reflects the lag between training and prediction.
+
+* **Steps for online systems**:
+    * Collect 30 days of data.
+    * Train on days 1-29, validate on day 30.
+
+**Advantages**: Works best with large datasets (e.g., millions of examples).
 
 ---
 
 ## 8.7. Handling Missing Data
 
-* **Handling Missing Data**: There are several ways to handle missing data in datasets, including:
-  * Deleting rows or columns with missing values
-  * Replacing missing values with mean, median, or mode of remaining values
-    * _**Pros: prevents loss of data, works well with small datasets. Cons: doesn't factor in covariance between features and can cause data leakage.**
-  * Imputing missing values with the most frequent category or a new category
+**Handling Missing Data**: Techniques to manage incomplete data in datasets.
+
+  * **Data Deletion**: Remove rows or columns with null or NaN values. Loss of information; poor model performance if much data is missing.
+  * **Imputation**: Replace missing values with statistical measures (mean, median) for continuous features and the most frequent category for categorical ones. Prevents data loss but may cause data leakage.
+  * **LOCF**: Use last valid observation to fill gaps in time-series data. Reduces bias.
+  * **Algorithmic Methods**: Some algorithms like k-NN and Naive Bayes can handle missing values. Random Forest adapts well to nonlinear and categorical data.
 
 ---
 
+  * **Predictive Imputation**: Use machine learning models to predict missing values based on correlations with other variables. Effective for complex datasets.
+
+---
 ## 8.8. Data Leakage
 
-* **Data Leakage**: exposing model to test data during training causes underperformance when exposed to unseen data.
-    * *Causes overfitting as model has learned from both training and test data.*
-    * *Can occur due to incorrect feature selection, poor data splitting, or preprocessing techniques.*
-    * *Can be prevented by selecting uncorrelated features, splitting data into separate sets for training, validation, and testing, and pre-processing data separately.*
+**Data leakage**: Exposing model to test data during training leads to overfitting, poor performance on unseen data.
+
+- **Incorrect feature inclusion**: Mistakenly including target variable as a feature.
+- **Improper data splitting**: Including test data in the training dataset.
+    * **Label leakage**: Correlation between target variable and features not available after deployment.
+- **Preprocessing issues**: Applying techniques to the entire dataset instead of separately.
+
+**Classic example (time-series)**: Using future data for current predictions leads to leaked models due to random splits.
+
+**Detection and prevention**:
+
+- Avoid correlated features with the target.
 
 ---
 
+- Use separate test, train, and validation sets; validation set mimics real-life scenarios.
+- Preprocess training and test data independently.
+- For time-series data, apply cutoffs based on prediction time.
+- Employ cross-validation for limited data, computing parameters separately per fold.
+
+**Key**: Reflect differences between production and training data in splits.
+
+---
 ## 8.9. Summary
 
-* **Data Visualization**: Understanding why visualization is necessary and various techniques such as box plots, line plots, and scatterplots.
-    * **Statistical Fundamentals**: Mean, median, mode, standard deviation, and their relevance in detecting outliers and checking data correlation.
-    * _Data Preprocessing_: Techniques like log scaling, scaling, clipping, and z-score to improve data quality.
-* _Data Validation_:
-  - Establishing data constraints
-  - Validating data schema using TFDV for large-scale deep learning systems
-* _Data Splitting_:
-  - Strategies for splitting data, including time-based split for online systems and clustered data
+**Data Visualization**: Use box plots, line plots, and scatterplots  
+**Statistical Fundamentals**: Mean, median, mode, standard deviation for outlier detection  
+**Data Cleaning & Normalizing Techniques**: Log scaling, scaling, clipping, z-score
+
+**Data Constraints & Validation**: Define data schema in ML pipelines; use TFDV for large-scale validation
+
+**Data Splitting Strategy**: Time-based splitting for online systems and clustered data
+
+**Missing Data & Leakage Handling**: Strategies to manage them effectively
 
 ---
 
-    * _Dealing with Missing Data_: Approaches to handle missing values, including imputation and interpolation.
-    * _Data Leakage Prevention_: Measures to prevent data leakage in machine learning pipelines.
-
----
 ## 8.10. Exam Essentials
 
-* **Data Analysis Fundamentals**
-    * Understanding statistical terms such as mean, median, mode, and standard deviation
-    + Identifying outliers and checking data correlation using line plots
-    * Ensuring data quality through cleaning, normalizing, and validating datasets
-        - Removing skew, applying log scaling, scaling, clipping, and z-score techniques
-    * Defining a data schema and validating data for machine learning pipelines
-* **Data Management**
-    * Splitting datasets into training, test, and validation data
-    + Handling clustered and online data with appropriate splitting techniques
-    * Applying sampling strategies for imbalanced data
+* **Visualize data**: Use box plots, line plots, and scatterplots for understanding distributions and relationships.
+* **Statistical fundamentals**: Describe mean, median, mode, standard deviation; check correlations using line plots.
+* **Data quality & reliability**: Remove outliers, understand skewness; apply techniques like log scaling, z-score normalization.
+* **Define data constraints**: Set up a data schema in ML pipelines; validate data using TFDV for large datasets.
+* **Optimize training data**: Split data into training, test, and validation sets; handle imbalanced data with appropriate sampling strategies.
 
 ---
 
-        - Using techniques such as undersampling, oversampling, or generating synthetic samples
-* **Handling Challenges**
-    * Dealing with missing data through removal, replacement, or machine learning-based methods
-    + Avoiding data leaks and label leakage by implementing data anonymization and protection measures
+* **Handle missing data**: Remove, replace, or use ML to fill missing values.
+* **Avoid data leaks**: Prevent leakage in features and labels by carefully managing data splits.
 
 ---
 # 9. Chapter 3Feature Engineering
@@ -551,215 +688,146 @@ Mode: 15 | Mode: 15
 
 ## 9.1. Consistent Data Preprocessing
 
-* **Data Transformation Approaches**
-  * Pretraining Data Transformation: Perform transformations before model training, advantages include efficient computation and dataset analysis.
-    * Disadvantages include needing to reproduce transformation at prediction time and updating can be slow.
-  * Inside Model Data Transformation: Transform data within the model during training, decouples data from transformation and allows easy changes.
-    * Disadvantage includes potential increase in model latency due to heavy computations.
+**Pretraining Data Transformation**: Perform transformations before model training on a complete dataset; computation is performed only once but requires rerunning for updates, leading to slow iterations.
+
+* **Inside Model Data Transformation**: Transformations are part of the model code, making it easier to use the same transformation during training and serving. However, large or computation-heavy transformations can increase model latency.
 
 ---
 
 ## 9.2. Encoding Structured Data Types
 
-* A good feature should relate to business objectives, be predictable at prediction time, numeric with magnitude, and have sufficient examples.
-* Feature engineering categories include:
-  * *_Categorical Data_*: defines a limited set of distinct values (e.g., yes/no, male/female)
-  * *_Numeric Data_*: represents scalar or continuous values (e.g., observations, measurements)
+**Feature**: Should align with business objectives, be known at prediction time, numeric, and have sufficient examples.
+
+* **Categorical Data**: Represents categories with discrete values (e.g., yes/no, male/female).
+
+* **Numeric Data**: Consists of scalar or continuous values from observations or measurements.
 
 ---
 
 ### 9.2.1. Why Transform Categorical Data?
 
-* **Categorical Data Limitation**: Most ML algorithms require numeric input and output variables.
-* _Conversion Needed_
-* * Categorical data must be converted to numeric data for algorithm use.
+**Categorical Data Handling**: Decision trees can process categorical data directly; other ML algorithms need it converted to numeric.
+* **Conversion Requirement**: Categorical variables must be transformed into numeric formats for most ML algorithms, then reversed if used as output.
+**Prediction Process**: Convert numeric outputs back to categorical labels for final predictions.
 
 ---
 
 ### 9.2.2. Mapping Numeric Values
 
-* *_Numeric Data Transformation_* 
-    * Normalization: scales values to a common range
-    * Bucketing: groups values into categories or bins
-
----
-
-#### 9.2.2.1. Normalizing
-
-* Normalization techniques are used to handle numeric features with different ranges or extreme values.
-    * Scaling (e.g. age, income) to prevent slow convergence for models like ADAM
-    * Clipping or log scaling to prevent NaN errors from large values (e.g. city data)
-
----
-
-#### 9.2.2.2. Bucketing
-
-**Bucketing: Transforming Numeric Data to Categorical**
-* Converts floating-point values into categorical data
-* Used for predicting variables like house price based on location
-* Two methods:
-  * **Equal-Spaced Buckets**: Creates buckets with fixed boundaries, varying data points
-  * **Quantile Buckets**: Each bucket has equal points, variable boundaries
+* Integer and floating-point data require no special encoding.
+* Numeric data may need normalizing or bucketing transformations.
+    * Normalizing scales values to a standard range.
+    * Bucketing categorizes continuous values into discrete bins.
 
 ---
 
 ### 9.2.3. Mapping Categorical Values
 
-* **Converting Categorical Data**: Methods to transform categorical data into numerical data for model understanding
-    * _One-hot encoding_
-    * _Label encoding_
-    * _Ordinal encoding_
-
----
-
-#### 9.2.3.1. Label Encoding or Integer Encoding
-
-* **Label Encoding**: assigning unique integers to categories using a vocabulary.
-    * Can be applied when categories have limited ranges (e.g., breeds of dog) or ordinal values (e.g., days of the week).
-        * Example: mapping ratings to integers like 1 for "satisfactory", 2 for "good", and 3 for "best".
-
----
-
-#### 9.2.3.2. One‐Hot Encoding
-
-* **One-Hot Encoding**: technique for categorical variables where order does not matter, used when features are nominal.
-    * Creates a new variable for each categorical feature by converting it into a binary representation (e.g., Red = 00, Blue = 01).
-    * Used to convert categorical variables into integer values or binary representation.
-
----
-
-*One‐Hot Encoding*
-Categorical Value | Integer Encoding or Creating a Vocabulary Mapping | One‐Hot Encoding
----|---|---
-Red | 0 | 00
-Blue | 1 | 01
-
-<!-- _class: centered -->
-
----
-
-#### 9.2.3.3. Out of Vocab (OOV)
-
-* Creating an "out of vocabulary" category for outliers reduces training time by eliminating the need to give them unique representation. 
-* This single category groups together extremely rare data points that are unlikely to influence model performance.
-* By doing so, the machine learning system can focus on more representative and frequent data points.
-
----
-
-#### 9.2.3.4. Feature Hashing
-
-* **Hashing**: Applying a `hash function` to categorical features to create indices
-*   _Advantages_:
-    * Does not require assembling a vocabulary
-    * Can handle changing feature distributions without retraining
-*   _Disadvantage_: May cause collisions due to the nature of hashing
-
----
-
-#### 9.2.3.5. Hybrid of Hashing and Vocabulary
-
-* *_Hashing Approach_*: Replace out-of-bucket categories with hashed categories using a predefined vocabulary.
-* *_Advantages_*:
-  * Out-of-box categories are represented by hashing
-  * Model can learn categories outside the predefined vocabulary
-
----
-
-#### 9.2.3.6. Embedding
-
-* **Embeddings in DL Models**: Embeddings are categorical features converted into continuous-valued representations.
-* *Main Applications*: Text classification and document classification using bag-of-words or documents.
-*  Used to capture semantic relationships between words.
+**Categorical Data Transformation**: Convert categories into numbers for model understanding.
 
 ---
 
 ### 9.2.4. Feature Selection
 
-* **Feature Selection**: Selecting a subset of most useful input variables for model prediction
-* **Dimensionality Reduction**:
-	+ Reduces noise, overfitting problems, and computational resources
-	+ Increases model performance
-	+ Can be achieved through:
-		- Keeping only the most important features (e.g. backward selection, Random Forest)
-		- Combining new features (e.g. PCA, t-SNE)
+**Feature selection**: Selecting useful input variables for prediction.
+
+**Dimensionality reduction**: Reducing data dimensions to improve performance, with methods like PCA and t-SNE.
+
+    * **Backward selection and Random Forest**: Techniques for keeping important features only.
 
 ---
 
 ## 9.3. Class Imbalance
 
-* **Class Imbalance in Classification Models**: Classification models suffer from class imbalance issues due to incorrect predictions of positive and negative classes.
-    * A **false negative** is a critical issue, where a sick patient is misclassified as not sick, leading to poor outcomes.
-    * False negatives are often more problematic than false positives, as they can lead to missed diagnoses and harm.
+**Class imbalance**: Focuses on outcomes specific to classification models.
+- **True positive**: Correctly predicting the positive class (e.g., identifying sick patients).
+- **True negative**: Correctly predicting the negative class (e.g., identifying healthy patients as not sick).
+- **False positive**: Incorrectly predicting the positive class (e.g., labeling healthy patients as sick).
+- **False negative**: Incorrectly predicting the negative class (e.g., labeling sick patients as not sick); critical to minimize for medical tests.
+    * **Minimize false negatives**: Essential to avoid misidentifying sick patients as healthy.
 
 ---
 
 ### 9.3.1. Classification Threshold with Precision and Recall
 
-**Classification Threshold**
-A value chosen by humans to map logistic regression output to a binary category.
+**Classification Threshold**: A value chosen by a human to map logistic regression outputs to binary categories; typically 0.5 but can be adjusted based on specific needs.
 
-* **Definition**: A value between 0 and 1 that determines when a prediction is classified as positive.
-* **Importance**: Strongly influences number of false positives and false negatives, with different thresholds emphasizing precision or recall.
+**Precision and Recall**:
+- **Precision**: The ratio of true positives to the total number of positive predictions.
+- **Recall (True Positive Rate)**: The percentage of actual positives that are correctly identified by the model.
+
+**Threshold Adjustment**:
+- Raising the threshold reduces false positives, increasing precision; useful when minimizing false alarms is crucial.
+- Lowering the threshold reduces false negatives, increasing recall; beneficial when missing positive cases is undesirable.
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 9.3.2. Area under the Curve (AUC)
 
-* **Classification AUC Metrics**: 
-    * _AUC-ROC_ measures balanced datasets.
-        + Equal number of examples per class.
-    * _AUC-PR_ measures imbalanced datasets.
-        + Most classes have a small number of instances (e.g., fraud vs. non-fraud).
+**AUC ROC**: Used for balanced datasets with equal class examples.
 
----
-
-#### 9.3.2.1. AUC ROC
-
-* **Definition**: A graph showing a classification model's performance at all thresholds, plotting true positive rate and false positive rate.
-* **AUC-ROC**: Measures the 2D area under the ROC curve, ranging from 0.0 to 1.0, representing a binary model's ability to separate classes.
-    * **Interpretation**: A closer AUC value indicates better class separation.
-
----
-
-#### 9.3.2.2. AUC PR
-
-* **Precision-Recall Curve**: a graph showing Precision values on y-axis and Recall values on x-axis
-* **AUC PR**: measures the 2D area under the curve, giving more weight to minority class
-* *_Key advantage_*: provides attention to minority class in imbalanced binary classification models
+**AUC PR**: Used for imbalanced datasets, like identifying fraud in credit card transactions.
 
 ---
 
 ## 9.4. Feature Crosses
 
-* **Feature Cross**: a synthetic feature created by multiplying two or more features
-* **Why Use Feature Cross**: to increase predictive ability when single features are not sufficient, and to represent nonlinearity in linear models by multiplying features
-    * Example: combining `location (market, curbside)` and `time of day` to improve prediction accuracy
+* **Feature Cross**: Multiplies two or more features to create a synthetic feature, often used in machine learning.
+    * **Use Case 1**: Enhances predictive ability when individual features are not sufficient; e.g., [location × time of day] improves prediction of crowd levels.
+* **Nonlinearity Representation**: Used in linear models to handle complex patterns by multiplying features; e.g., AB = A * B, making it easier to separate classes that cannot be linearly divided.
+* **Summary**: Feature crosses are essential for converting numerical and categorical data into more predictive features, improving model complexity handling and classification accuracy.
+
+---
+
+
+![center w:85%](images/c03f001.png)
+
+---
+
+
+![center w:85%](images/c03f002.png)
+
+---
+
+
+![center w:85%](images/c03f003.png)
 
 ---
 
 ## 9.5. TensorFlow Transform
 
-* **Efficient Input Pipeline for TensorFlow**
-  * _Improves model performance by reducing data loading time_
-  * _Increases scalability and reduces computational overhead_
+**Efficient Input Pipeline**: Essential for improving TensorFlow model performance.
+
+* **TF Data API**: Enables building complex input pipelines efficiently.
+* **TensorFlow Transform**: Used for data preprocessing to ensure consistency and quality in training data.
 
 ---
 
 ### 9.5.1. TensorFlow Data API (tf.data)
 
-* **Improving Model Execution Speed**: Efficient data input pipeline can reduce device idle time
-* **Key Transformations**:
-    * `_tf.data.Dataset.prefetch_` decouples data production and consumption
-    * `_tf.data.Dataset.interleave_` parallelizes data reading to mitigate extraction overhead
-    * `_tf.data.Dataset.cache_` caches data in memory during the first epoch
+* Prefetch transformation overlaps preprocessing and model execution using `tf.data.Dataset.prefetch`.
+* Interleave transformation parallelizes data reading with `tf.data.Dataset.interleave` to mitigate extraction overhead.
+* Cache transformation stores data in memory during the first epoch via `tf.data.Dataset.cache` to reduce file opening and reading operations.
 
 ---
 
 ### 9.5.2. TensorFlow Transform
 
-* **TensorFlow Transform**: allows transformations prior to training model, reducing training-serving skew.
-    * _Uses TFX_ and enables data analysis, transformation, metadata production, and model feeding.
-    * _Supported on Google Cloud using Cloud Dataflow_, reading data from BigQuery, writing to Cloud Storage as TFRecords.
+**TensorFlow Transform**: Performs data transformations before model training to avoid skew between training and serving.
+
+**TFX Pipelines**: Utilize Google Cloud services like Cloud Dataflow and BigQuery for transforming and storing data as TFRecords, with artifacts saved in Cloud Storage.
+
+* **GCP Services Integration**: Steps 1-6 use Cloud Dataflow for transformation; steps involve BigQuery data extraction and Cloud Storage for artifact storage.
+
+---
+
+
+![center w:85%](images/c03f004.png)
 
 ---
 
@@ -778,45 +846,41 @@ Model serving for prediction | TensorFlow Serving | Vertex AI Prediction
 
 ## 9.6. GCP Data and ETL Tools
 
-* **Chapter 8**: Covers the complete data analytics ecosystem from collecting to storing data
-* 
-  * **Cloud Data Fusion**
-    * A web-based, managed service for building and managing ETL/ELT pipelines
-    * Supports Cloud Dataproc for Hadoop and Spark workloads
-  * 
-  * **Dataprep by Trifacta**
-    * A serverless tool for visually exploring, cleaning, and preparing data for analysis and machine learning
+**Cloud Data Fusion**: Code-free web UI for building ETL/ELT pipelines from various sources; supports Cloud Dataproc for Hadoop and Spark workloads.
+
+**Dataprep by Trifacta**: Serverless tool for visual data exploration, cleaning, and preparation; suggests transformations and predicts outcomes without writing code.
 
 ---
 
 ## 9.7. Summary
 
-* **Feature Engineering**: Transforming numerical and categorical features for model training and serving
-    * Numerical features: bucketing, normalization, PCA (for dimensionality reduction)
-    * Categorical features: linear encoding, one-hot encoding, out of vocabulary, hashing, embedding
-        * For imbalanced classes, use AUC PR instead of AUC ROC
-* **Feature Importance**: Selecting relevant features and feature crossing for improved performance
+**Feature Engineering**: Transforming numerical and categorical features for model training and serving.
+
+* **Numerical Features**: Techniques include bucketing and normalization.
+* **Categorical Features**: Techniques encompass linear encoding, one-hot encoding, out-of-vocabulary, hashing, and embedding.
+* **Dimensionality Reduction**: Importance of feature selection; techniques like PCA.
+* **Class Imbalance**: Impact on precision and recall; AUC PR over AUC ROC for imbalanced classes.
+* **Feature Crosses**: Benefits in capturing interactions between features.
+* **TensorFlow Data Representation**: Using `tf.data` for data representation.
 
 ---
 
+    * **tf.Transform**: Processing pipelines with `tf.Transform`, applicable on Google Cloud.
+        * **Google Cloud Tools**: Overview of Cloud Data Fusion and Cloud Dataprep for ETL processes.
+
+---
 ## 9.8. Exam Essentials
 
-* **Data Transformation** 
-  * Understand when to transform data before or during model training.
-  * Techniques: bucketing, normalization, hashing, one-hot encoding for numeric and categorical data.
-  * Benefits and limitations of transforming data before training.
-
-* **Feature Engineering**
-  * Feature selection: dimensionality reduction, techniques like PCA.
-  * Class imbalance: true positives, false positives, accuracy, AUC, precision, recall.
-  * Feature cross: important in certain scenarios, use with caution.
-
-* **TensorFlow Transform and GCP Tools**
-  * TensorFlow Transform: pipeline architecture on Google Cloud using BigQuery and Cloud Data Fusion.
+* **Data Processing**: Transform data before or during training; understand benefits and limitations.
+    * **Encoding Structured Data**: Use techniques like bucketing, normalization, hashing, and one-hot encoding for numeric and categorical data.
+* **Feature Selection**: Needed to reduce dimensionality; use methods such as dimensionality reduction.
+* **Class Imbalance**: Understand metrics like true positive, false positive, accuracy, AUC, precision, recall; measure accuracy effectively in imbalanced classes.
+    * **Feature Cross**: Important for interactions; use in specific scenarios.
 
 ---
 
-  * GCP data and ETL tools: Cloud Data Fusion for no-code ETL, Cloud Dataprep for data cleaning.
+* **TensorFlow Transform**: Know TensorFlow Data and Transform; architect pipelines on Google Cloud with BigQuery and Cloud Data Fusion.
+* **GCP Tools**: Use Cloud Data Fusion and Dataprep for ETL and data processing, respectively.
 
 ---
 # 10. Chapter 4Choosing the Right ML Infrastructure
@@ -825,124 +889,151 @@ Model serving for prediction | TensorFlow Serving | Vertex AI Prediction
 
 ## 10.1. Pretrained vs. AutoML vs. Custom Models
 
-* **Pretrained Models**: 
-  * Models already trained on large datasets by Google
-  * Easy to use and fast integration into applications
-  * Ideal first choice, but may not meet specific requirements
+**Pretrained Models**: Ready-to-use models trained by Google; easy to integrate via APIs.
 
-* *_Serverless_** method: 
-  * No provisioning of cloud resources required
-  * Charges based on API request frequency
-  * Free tier available for some APIs
+**AutoML**: Builds custom models using your data; requires cloud resources but no ML expertise needed.
 
-* **AutoML**: 
-  * Chooses best ML algorithm and only requires data
-  * Second level in the pyramid, used when pretrained models don't work
-  * Requires provisioning of cloud resources during training and deployment
+* **Custom Models**: Offers flexibility in algorithm choice and hardware provisioning; suitable for unique use cases, requiring ML expertise.
+
+---
+
+
+![center w:85%](images/c04f001.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ## 10.2. Pretrained Models
 
-* **Pretrained Models**: machine learning models trained on large datasets, performing well in benchmark tests.
-    * _Key benefits:_ supported by large teams, frequently retrained for improved performance.
-        * **Access:** available through web console, CLI, SDKs (Python, Java, Node.js), and Google Cloud platform.
+**Pretrained Models**: Machine learning models trained on large datasets and available for quick use.
+
+**Google Cloud Pretrained Models**: 
+* Vision AI, Video AI, Natural Language AI, Translation AI, Speech-to-Text, and Text-to-Speech.
+
+**Google Cloud Platforms**: Offer solutions with integrated pretrained models and uptrain capabilities:
+* Document AI
+* Contact Center AI
 
 ---
 
 ### 10.2.1. Vision AI
 
-* **Vision AI** provides image analysis capabilities through Google Cloud
-    * Performs tasks like object detection, facial recognition, and handwriting reading
-        + _Image classification_: labels for objects in the photo (e.g. Table, Furniture)
-        + _Object detection_: identifies specific objects in the image
-        + _Optical Character Recognition_ (_OCR_): reads handwritten text
+**Vision AI**: Provides access to ML algorithms for image processing without building a complete infrastructure.
+
+- **Functions**: Image classification, object and face detection, optical character recognition (OCR)
+- **Usage**: Quick browser-based try at `https://cloud.google.com/vision`; production uses uploaded images or URLs
+    * **Predictions**:
+        - Detected objects
+        - Image labels (e.g., Table, Furniture, Plant)
+        - Dominant colors for organization
+        - Safe Search classification (Adult, Spoof, Medical, Violence, Racy)
+
+---
+
+
+![center w:85%](images/c04f002.png)
 
 ---
 
 ### 10.2.2. Video AI
 
-* **Video AI API**: recognizes objects, places, and actions in videos
-    * _Applies to stored or streaming videos with real-time results_
-    * Recognizes over 20,000 different objects, places, and actions
-* **Use Cases**
-    * **Building Video Recommendation Systems**: uses labels and user history for personalized recommendations
-    * **Indexing Video Archives**: creates metadata index for large video collections
-    * **Improving User Experience**: compares video content with advertisements for relevance
+**Object, place, and action recognition**: Identifies over 20,000 elements in videos for metadata tagging.
+
+**Real-time processing**: Analyzes stored or streaming videos with instant results.
+
+**Metadata application**: Enhances searchability and categorization of video catalogs.
+
+* **Video recommendation system**: Utilizes API labels and viewing history to personalize recommendations.
+* **Video archive indexing**: Creates an index from unindexed archives, benefiting mass media companies.
+* **Advertising relevance**: Matches ad content with video labels in real time to ensure relevance.
 
 ---
 
 ### 10.2.3. Natural Language AI
 
-* **Summary of Natural Language AI**: Provides insights from unstructured text using pretrained machine learning models for entity extraction, sentiment analysis, syntax analysis, and general categorization.
-* **Key Services**:
-  * Entity Extraction: Identifies entities with additional context (e.g., Wikipedia links)
-  * Sentiment Analysis: Assigns positive, negative, or neutral scores to sentences, entities, and text
-  * Syntax Analysis: Analyzes part of speech, dependency, lemma, and morphology
-* **Use Cases**:
-  * Customer Sentiment Analysis
-    * Use entity analysis for important details from documents (e.g., emails, chat, social media)
+**Natural Language AI**: Provides insights from unstructured text through entity extraction, sentiment analysis, syntax analysis, and categorization.
+
+* **Entity Extraction**: Identifies people, organizations, products, events, locations, etc., with optional Wikipedia links.
+    * Example: Distinguishes "Mr. Wood" as a person in the sentence “Mr. Wood is a good actor.”
+
+**Sentiment Analysis**: Scores sentences, entities, and texts as positive, negative, or neutral with magnitude.
+
+* **Syntax Analysis**: Analyzes part of speech, dependencies, lemmas, and morphology.
+
+**Categorization**: Classifies documents into over 700 predefined categories.
+
 
 ---
 
-    * Use sentiment analysis to understand customer opinion on specific products
+- Use Case 1: Measure customer sentiment on specific products.
+- Use Case 2: Extract medical insights using Healthcare Natural Language API for healthcare applications (separate service).
 
 ---
 ### 10.2.4. Translation AI
 
-* **Translation Service**: Detects over 100 languages and translates between any pairs, utilizing Google's industry-standard GNMT technology.
-    * _Supported Features_:
-        * Advanced version uses a glossary for more accurate translations
-        * Can translate entire documents (PDFs, DOCs, etc.)
-    * Price difference between Basic and Advanced versions
+**Translation AI**: Detects over 100 languages using GNMT technology.
+* **Levels**: Basic vs Advanced; Advanced offers glossaries and document translations.
+
+**Media Translation API**: Real-time audio translation from source to target language, ideal for low-latency streaming.
 
 ---
 
 ### 10.2.5. Speech‐to‐Text
 
-* *_Speech-to-Text Service_* 
-    * Converts audio to text
-    * Used for creating subtitles and translations for video recordings and streaming
+**Speech-to-Text**: Converts audio to text.
+
+* **Use cases**: Creating subtitles for videos and live streams.
+* **Integration**: Often combined with translation services for multilingual subtitles.
 
 ---
 
 ### 10.2.6. Text‐to‐Speech
 
-* The Text‐to‐Speech service provides realistic speech with humanlike intonation using DeepMind's AI expertise.
-* It supports 220+ voices across 40+ languages and variants, allowing for unique brand voice creation. 
-* * Voices can be customized to represent a brand at all touchpoints.*
+* **Text-to-Speech service**: Provides realistic speech with humanlike intonation using DeepMind's AI expertise.
+* **Voices and Languages**: Supports 220+ voices across 40+ languages and variants; create a unique brand voice.
+    * **List of supported languages**: `https://cloud.google.com/text-to-speech/docs/voices`
 
 ---
 
 ## 10.3. AutoML
 
-* **AutoML**: Automates model training tasks, allowing users to input data and configure settings for automated training.
-* **Available Data Types**:
-    * _Structured Data_
-    * _Images/Video_
-    * _Natural Language_
-    * _Recommendations/AI for Retail_
+* **AutoML (Automated ML)**: Automates model training for common ML problems like image classification, text classification.
+* **Training Process**: Users provide data and configure settings; the rest is automated via web console or SDKs.
+* **Data Types & Use Cases**:
+    * **Structured Data**
+    * **Images/Video**
+    * **Natural Language**
+    * **Recommendations AI/Retail AI**
 
 ---
 
 ### 10.3.1. AutoML for Tables or Structured Data
 
-* **Overview of AutoML Tables**: AutoML Tables provides two methods for training models: BigQuery ML and Vertex AI Tables, which can be triggered using Python, Java, or Node.js, or via REST API.
-    * **Vertex AI AutoML Tables algorithms**
-        * Classification: AUC ROC, AUC ROC, Logloss, Precision at Recall, Recall at Precision
-        * Regression: RMSE, RMSLE, MAE
-        * Time-series data: Forecasting - RMSE, RMSLE, MAPE, Quantile loss
+* BigQuery ML: SQL-based training and prediction, serverless approach (Chapter 14)
+    * Vertex AI Tables: Trained using Python, Java, Node.js, or REST API
 
-    * **Configuring AutoML job**: Budget and Enable early stopping settings affect the training process, with budget determining maximum hours allowed and enabling early stopping to stop training if a threshold is met.
+* **TABLE 4.1**: AutoML Tables algorithms
+    * Table (IID): Classification uses AUC ROC, Logloss; Regression uses RMSE, MAE
+    * Time-series data: Forecasting uses RMSE, MAPE, Quantile loss
+
+* Configure the “budget” and enable early stopping in Vertex AI AutoML to save costs if training completes within the budget
+
+* For forecasting, choose from:
+    * **AutoML**: General model for various use cases
+    * Seq2seq+: Effective for small datasets (< 1 GB)
+    * **Temporal Fusion Transformer**: High accuracy and interpretability
 
 ---
 
-    * **Model types for forecasting**: 
-        * AutoML: built-in model suitable for various use cases
-        * Seq2seq+: effective for small dataset sizes (< 1 GB)
-        * Temporal Fusion Transformer: high accuracy and interpretability model
+
+![center w:85%](images/c04f003.png)
 
 ---
+
 *AutoML for Tables or Structured Data*
 Data Type | ML Problem | Metrics
 ---|---|---
@@ -956,9 +1047,16 @@ Time‐series data | Forecasting | RMSE, RMSLE, MAPE, Quantile loss
 
 ### 10.3.2. AutoML for Images and Video
 
-* **Image classification with AutoML**: Predict one or multiple correct labels for an image using user-provided label lists.
-* **Video classification and action recognition with AutoML**: Get label predictions for entire videos, shots, and frames, as well as identify actions within a video.
-* _AutoML Edge models_ are optimized for low memory and latency deployment on edge devices such as iPhones, Android phones, and Edge TPU devices.
+**Vertex AI AutoML**: Simplifies building models for image and video data.
+- **Image Data**: Supports classification (single label), multiclass classification, object detection, and segmentation.
+- **Video Data**: Handles classification, action recognition, and object tracking.
+    * **AutoML Edge Model**: Optimized for deployment on edge devices with lower memory usage and latency; currently supports iPhones, Android phones, and Edge TPU devices.
+* **Model Size Trade-off**: Options available for Edge TPU to balance accuracy and latency.
+
+---
+
+
+![center w:85%](images/c04f004.png)
 
 ---
 
@@ -979,12 +1077,14 @@ Video | Object tracking | Get labels, tracks, and time stamps for objects you wa
 
 ### 10.3.3. AutoML for Text
 
-* *_Vertex AI AutoML Text_* provides machine learning models for text problems
-    * Solved problems include:
-        * *_Classification and Sentiment Analysis_*
-        * *_Multi-Label Classification_*
-        * *_Entity Extraction_*
-        * *_Text-to-Text Translation_*
+**AutoML Text**: Predicts one or multiple labels for documents and extracts entities.
+
+**AutoML Text (continued)**: 
+* **Text Classification**: Assigns a single correct label to a document.
+* **Multi-Label Classification**: Identifies all correct labels for a document.
+* **Entity Extraction**: Identifies entities within text items.
+
+**Text to Text**: Converts text from one language to another.
 
 ---
 
@@ -1002,9 +1102,11 @@ Text to text | Translation | Convert text from source language to target languag
 
 ### 10.3.4. Recommendations AI/Retail AI
 
-* _Google Retail AI_ is a solution that offers retailers a Google-quality search, image search, and personalized recommendations.
-    * The solution consists of three main parts: **Retail Search**, **Vision API Product Search**, and **Recommendations AI**.
-        * **Recommendations AI** uses customer behavior data to create models for product recommendations.
+**Retail Search**: Provides Google-quality search capabilities, customizable to retail needs.
+* **Vision API Product Search**: Trains on product images for image-based searches.
+**Recommendations AI**: Analyzes customer behavior and provides targeted recommendations across channels.
+* **Training & Charges**: Customers upload catalogs, feed user events; charged for model training and requests.
+* **Model Types (Table 4.4)**: Predicts "Others you may like," "Frequently bought together," "Recommended for you," and "Similar items."
 
 ---
 
@@ -1022,192 +1124,135 @@ Similar items | Other products with similar attributes | Product page | Product 
 
 ### 10.3.5. Document AI
 
-* **Document AI**: extracts details from digitized documents, including forms, passports, and government documents.
-    * Provides structure extraction, text layout analysis, key/value pair identification, entity extraction, document classification, and review capabilities.
-    * Includes customizable processors for specific use cases and a Document AI Warehouse for storing, searching, and organizing extracted data.
+**Document AI**: A platform for extracting details from various documents like scanned images, forms, and government IDs.
+
+  * **Extracts text, layouts, key/value pairs, and entities**
+  * **Supports document quality detection and deskewing**
+  * **Classifies and splits documents**
+
+**Document AI Concepts:**
+- **Processors**: Interfaces for machine learning models to perform specific tasks (general, specialized, custom)
+- **Document AI Warehouse**: Stores, searches, organizes, governs, and analyzes documents with structured metadata
 
 ---
 
 ### 10.3.6. Dialogflow and Contact Center AI
 
-* Dialogflow offers a conversational AI platform, integrating chatbots and voicebots for various services
-* It provides a Contact Center AI (CCAI) solution, combining telephony and other services
-
----
-
-#### 10.3.6.1. Virtual Agent (Dialogflow)
-
-* **Virtual Agent Design**
-  - Handle common cases automatically
-  - Forward complex calls to human agents
-  - Utilize historical call data for optimization
-
----
-
-#### 10.3.6.2. Agent Assist
-
-* **Agent Assist**: Provides real-time support to agents during calls
-    * Identifies intent and offers prepared responses
-    * Accesses a centralized knowledge base for information
-
----
-
-#### 10.3.6.3. Insights
-
-* **Service Overview**: Uses NLP to analyze driver calls and measure sentiment to inform call center operations
-* **Key Functionality**: Measures customer sentiment to help leadership make data-driven improvements
-* **Outcome**: Enhanced call center operations through data-informed decision making
-
----
-
-#### 10.3.6.4. CCAI
-
-* **Contact Center AI Platform**: A cloud-native platform for multichannel communications between customers and agents.
-* 
-* **Dialogflow and CCAI**: Advanced machine learning techniques, mostly hidden from machine learning engineers.
-* 
-* Machine learning engineer knowledge goes beyond the scope of this exam.
+* Dialogflow: Conversational AI from Google Cloud for chatbots and voicebots
+    * CCAI: Integrated into telephony services for comprehensive contact center solutions
 
 ---
 
 ## 10.4. Custom Training
 
-* **GPU Acceleration**: Custom training on GPUs accelerates compute-intensive operations like matrix multiplications for deep learning models.
-* **CPU vs GPU Training Time**: Training on a single CPU can take days or months, while offloading computation to a GPU reduces training time by an order of magnitude.
-* *_Massive Parallelism_*: GPUs enable massively parallel architectures that benefit from extensive computation, reducing training times and increasing efficiency.
+**Custom Training**: Offers full flexibility in choosing hardware options for training models.
+* **GPUs**: Accelerate deep learning model training by leveraging massively parallel architectures, ideal for compute-intensive operations like matrix multiplications.
+    * **Time Reduction**: Can drastically reduce training time from days or weeks to hours.
 
 ---
 
 ### 10.4.1. How a CPU Works
 
-* A **CPU** is a general-purpose processor that can run various types of applications.
-    * It loads data from memory, performs an operation, and stores the result back into memory for every single operation.
-    * This serial computation architecture is inefficient for tasks requiring trillions of calculations, such as training large ML models.
+**CPU**: Processor for running general workload; supports many operations.
+
+**CPU Architecture**: Loads data from memory, performs an operation, and stores the result back into memory.
+
+* **Serial Computation**: Inefficient for trillions of calculations, common in ML model training.
 
 ---
 
 ### 10.4.2. GPU
 
-**Using GPUs in Vertex AI**
-* **GPUs Bring Additional Firepower**: Specialized chips for rapid data processing, originally designed for movies and video games.
-* **GPU Architecture**: Thousands of arithmetic logic units (ALUs) work together to process large amounts of data in parallel.
-* **Configuring GPUs**: Specify GPU type and count in `WorkerPoolSpec` and consider instance type restrictions.
+**GPUs**: Specialized chips with thousands of ALUs that process data in memory for rapid image rendering, significantly speeding up tasks like large matrix multiplications and differential operations.
+
+**Machine Series Requirements**: Use A2 or N1 machine series; specify GPU type (e.g., NVIDIA_TESLA_T4, P100) and count per VM in `WorkerPoolSpec`.
+
+* **GPU Availability and Restrictions**: Check available locations on `cloud.google.com/vertex-ai/docs/general/locations`; restrictions include number of GPUs per instance and sufficient virtual CPUs/memory; refer to Google's compatibility table for detailed specifications.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 10.4.3. TPU
 
-* **TPUs for ML**: Google-designed hardware accelerators for machine learning workloads
-    * _Specialized_ for matrix processing and multiply-accumulate operations
-    * _High-performance_: each MXU performs 16,000 operations per cycle using bfloat16 format
-    * _Designed for large matrices_, key to neural network training loops
+**Tensor Processing Units (TPUs)**: Specialized hardware accelerators designed for machine learning workloads.
+* **Matrix Multiply Units (MXUs)**: Each TPU contains multiple MXUs, each with 128 × 128 multiply/accumulators capable of performing 16,000 operations per cycle in bfloat16 format.
+* **Core Task**: TPUs excel at matrix processing, crucial for neural network training.
 
 ---
 
-#### 10.4.3.1. How to Use TPUs
 
-* **TPU Configurations**: Cloud TPU offers:
-    * Single TPU device
-    * TPU Pod (group of connected devices)
-    * TPU slice (subdivision of a TPU Pod)
-    * TPU VM (virtual machine with TPU capabilities)
-    
-* **Scalability**: Recommended starting point is a single TPU, scaling to a TPU Pod for production.
-
----
-
-#### 10.4.3.2. Advantages of TPUs
-
-* _TPU acceleration outperforms GPU performance by a significant margin_ 
-  * Can speed up model training from months to weeks or days
-  * Can reduce training time for models by orders of magnitude
-
----
-
-#### 10.4.3.3. When to Use CPUs, GPUs, and TPUs
-
-* **Hardware Choice**
-  * *_CPUs_* for rapid prototyping, small models, or custom C++ operations
-  * *_GPUs_* for existing source code changes, medium-to-large models, or unavailable TPUs ops
-  * *_TPUs_* for matrix computations, large-scale models, and weeks/months of training
-
-* **Workloads Not Suited for Cloud TPUs**
-  * Branching programs, sparse data, high precision, or deep neural networks with custom C++ operations
-
----
-
-#### 10.4.3.4. Cloud TPU Programming Model
-
-* **Data Transfer Bottleneck**: Data transfer between Cloud TPU and host memory is slow due to PCIe bus limitations.
-* **Optimal Programming Model**: Execute most of the training loop on the TPU to minimize idle time and maximize performance.
-* **Partial Compilation Limitation**: Partial compilation with TPU and host execution can lead to inefficient use of resources.
+![center w:85%](images/c04f005.png)
 
 ---
 
 ## 10.5. Provisioning for Predictions
 
-* **Predictions Phase**: Focuses on making accurate predictions using pre-trained models.
-    * _Methods_: Online prediction (near real-time) and batch prediction (reasonable time, cost optimization)
-        + Continuous workload with scaling requirements
-    * Key Considerations:
-        + Scaling behavior
-        + Ideal machine type for optimal performance
+**Prediction phase**: Differing from training, involves online or batch methods; online requires real-time response, batch focuses on cost-effective processing.
+
+* **Scaling behavior**: Continuous workload requiring dynamic resource adjustment based on demand.
+* **Machine type**: Key consideration for optimal prediction performance and efficiency.
 
 ---
 
 ### 10.5.1. Scaling Behavior
 
-* **Autoscaling in Vertex AI**: automatically scales prediction nodes when CPU usage is high
-* **Monitoring Resources**: GPU usage also needs to be monitored, as it affects CPU, memory, and GPU resource utilization.
+* **Autoscaling configuration**: Scales prediction nodes based on CPU usage.
+* **GPU nodes**: Configure triggers for monitoring CPU, memory, and GPU usage.
 
 ---
 
 ### 10.5.2. Finding the Ideal Machine Type
 
-* **Cloud Deployment**
-Deploy a custom prediction container as a Docker container to a Compute Engine instance, benchmarking until 90% CPU utilization is reached.
-    * Determine QPS cost per hour for different machine types, considering single-threaded web server limitations.
-    * GPU acceleration options available, but with restrictions on model type and region availability.
+**Cost Optimization**: Benchmark instance performance by running prediction calls until 90+ percent CPU utilization, then calculate QPS cost per hour for different machine types.
 
-* **Edge Deployment Use Cases**
-Explore deployment of trained models at edge devices, considering factors such as:
-    * Model format (e.g. TensorFlow SavedModel)
-    * Web server effectiveness and latency requirements
-    * Throughput and resource utilization (CPU, memory, GPU)
+**Resource Utilization and Model Compatibility**: Ensure your custom container accounts for single-threaded limitations, effective resource usage (CPU, memory), latency, throughput, and price. Consider using GPUs only with TensorFlow SavedModels or custom containers designed for GPU acceleration.
+
+**Edge Deployment Use Cases**: Explore scenarios where trained models need to be deployed on edge devices for real-time inference.
 
 ---
 
 ### 10.5.3. Edge TPU
 
-* **Edge Inference**: Real-time data collection and processing on limited-bandwidth devices
-* _What is Edge TPU?_: A coprocessor accelerating ML inference with 4 trillion operations per second (4 TOPS) on 2 watts of power
-* **Availability**: Available in various form factors for prototyping and production, sold under Coral.ai brand
+**Edge Devices**: Collect real-time data, make decisions, take actions, and communicate with other devices or the cloud.
+
+**Edge Inference**: Run ML inference on device to handle limited bandwidth and offline operation.
+
+**Google Edge TPU**: Accelerates ML inference with 4 TOPS performance at 2 watts; available in various form factors like single-board computer and system-on-module (sold under Coral.ai).
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 10.5.4. Deploy to Android or iOS Device
 
-* **ML Kit**: A package that brings Google's machine learning expertise to mobile developers
-    * Allows deployment of models optimized for low-bandwidth devices
-    * Enables offline predictions with fast response times
+* **ML Kit**: A package from Google for integrating machine learning into mobile apps (iOS and Android)
+* **Model Training**: Can be done on Google Cloud, using AutoML or custom models
+* **Deployment**: Models are deployed to Android or iOS apps, with predictions made on-device for fast response times and offline support
 
 ---
 
 ## 10.6. Summary
 
-* **Google Cloud Hardware Options**: Available for training and prediction workloads, including GPUs and TPUs.
-* **Hardware Deployment**: Deploying models to edge devices, expanding functionality and performance.
-* **Cloud Computing Scalability**: Simplifies model training and prediction with various hardware accelerators.
+* Pretrained models on Google Cloud
+* AutoML for various scenarios
+* Hardware options: GPUs and TPUs for training
+    * Training vs prediction workloads
+* Edge device deployment concepts
 
 ---
 
 ## 10.7. Exam Essentials
 
-* _Choose the Right ML Approach_
-  * Pretrained Models: Use pre-trained models for straightforward problems
-  * AutoML: Automate model selection and training for complex problems
-  * Custom Models: Build custom models for tailored solutions
-  * **Use Serverless Solutions**: Leverage pretrained models and domain-specific solutions for scalability
+* **Choose the right ML approach**: Select between pretrained models, AutoML, or custom models based on requirements.
+* **Provision hardware for training**: Understand GPU and TPU options; choose instance types suitable for specialized hardware during training.
+* **Provision hardware for predictions**: Use CPUs and GPUs in the cloud for scalability; employ TPUs on edge devices.
 
 ---
 
@@ -1217,14 +1262,23 @@ Explore deployment of trained models at edge devices, considering factors such a
 
 ## 11.1. Designing Reliable, Scalable, and Highly Available ML Solutions
 
-* **ML Pipeline Steps**: Data collection, data transform, model training, model tuning, model deploying, model monitoring
-    * **Automating Pipeline**: Google Cloud Storage, Dataflow, scalable compute (distributed training)
-        + *_Google Vertex AI_* for custom training and hyperparameter tuning
-    * **Model Deployment**: *_Vertex AI Prediction_*
-    * *_Reproducing Pipeline_*: *_Vertex AI Pipelines_*
+**ML Pipeline Steps**: Data collection, data transform, model training, tuning, deploying, monitoring
+
+* **Scalable Storage**: Google Cloud Storage for managing and storing data
+* **Scalable Infrastructure**: Google Cloud Dataflow for PySpark transforms
+    * **Distributed Training**: For large models, use distributed compute infrastructure
+* **Model Training & Tuning**: Use Vertex AI Training or AutoML for custom models; Vertex AI Hyperparameter Tuning for automated model tuning and tracking with Vertex AI Experiments
+
+**Deployment & Monitoring**: Vertex AI Prediction for scalable production deployment; Vertex AI Model Monitoring for drift detection
+
 
 ---
 
+**Orchestration & CI/CD**: Vertex AI Pipelines for managing the complete ML workflow
+
+**Explanations & Responsible AI**: Vertex Explainable AI, model cards
+
+---
 *Designing Reliable, Scalable, and Highly Available ML Solutions*
 ML Workflow | Google Cloud Service
 ---|---
@@ -1242,13 +1296,36 @@ Explanations and responsible AI | Vertex Explainable AI, model cards
 
 ## 11.2. Choosing an Appropriate ML Service
 
-**Overview of Google Cloud ML Services**
+**Google Cloud ML Stack**: Divided into three layers based on ease of use
 
-* **Top Layer**: AI Solutions (e.g., Document AI, Contact Center AI) - Managed SaaS offerings for easy implementation
-	+ Built on top of Vertex AI services
-* **Middle Layer**: Vertex AI - Includes pretrained APIs, AutoML, and Workbench for building custom models
-	+ Serverless and scalable
-* **Bottom Layer**: Infrastructure (compute instance, containers, TPUs, GPUs, storage) - Managed by user for scalability and reliability
+- **Top Layer (AI Solutions)**: Managed SaaS offerings like Document AI, Contact Center AI, and Enterprise Translation Hub. Built on Vertex AI services.
+  
+- **Middle Layer (Vertex AI Services)**: 
+  * Pretrained APIs for common use cases in sight, language, conversation, and structured data.
+  * AutoML for customizing models with your own data.
+  * Vertex AI Workbench for custom model development.
+
+- **Bottom Layer**: Infrastructure including compute instances, containers (GKE), TPUs, GPUs, and storage. Requires self-managed scalability and reliability.
+
+**Table 5.2**: When to Use Google Cloud Services
+
+
+---
+
+| GCP Service       | When to Use                                                                 |
+|-------------------|-----------------------------------------------------------------------------|
+| BigQuery ML       | Structured data in BigQuery; comfortable with SQL; models match your needs. |
+| AutoML (Vertex AI)| Problem fits supported types like classification, object detection, etc.; data matches format and limits. |
+| Custom Model      | Problem doesn't fit other services; running training elsewhere for consistency. |
+
+---
+
+![center w:85%](images/c05f001.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
@@ -1264,26 +1341,32 @@ AutoML (in the context of Vertex AI) | Your problem fits into one of the types t
 
 ## 11.3. Data Collection and Data Management
 
-* **Data Stores**: 
-    * _Google Cloud Storage_: Object storage for large files and blobs
-    * **BigQuery**: Fully managed, SQL-like query engine for structured data
-    * _Vertex AI's datasets_: For training and annotation sets in machine learning
-        * Vertex AI Feature Store: For managing features and their versions
+* **Google Cloud Storage**: Handles large-scale storage needs.
+* **BigQuery**: Manages high-volume, low-latency analytics queries.
+* **Vertex AI's Datasets**: Manages training and annotation sets for machine learning.
+* **Vertex AI Feature Store**: Stores and manages features used in models.
+* **NoSQL Data Store**: Supports flexible, scalable unstructured data storage.
 
 ---
 
 ### 11.3.1. Google Cloud Storage (GCS)
 
-* **Google Cloud Storage**: stores objects like images, videos, audio, and unstructured data
-* **Data Sharding**: combines individual data types into large files (over 100 MB) with up to 10,000 shards for improved read/write throughput
+**Google Cloud Storage (GCS)**: Service for storing objects in Google Cloud.
+- **Use Cases**: Storing images, videos, audio, and unstructured data.
+- **File Size and Sharding**: Supports large files ≥ 100 MB; sharding into 100 to 10,000 shards improves throughput.
 
 ---
 
 ### 11.3.2. BigQuery
 
-* **Use BigQuery for tabular data storage**: faster speed with table format instead of view.
-* **Access BigQuery**: Google Cloud console, bq command-line tool, BigQuery REST API, Vertex AI Jupyter Notebooks
-    * **Supported frameworks**: TensorFlow/tfio, TFX, Dataflow, and other using the Python Client library
+**BigQuery**: Store tabular data for better performance, especially for training.
+
+* **Access Methods**: Google Cloud console, `bq` command-line tool, BigQuery REST API, Vertex AI Jupyter Notebooks.
+* **API Tools (Table 5.3)**: 
+    * TensorFlow/Keras: `tf.data.dataset reader for BigQuery`, `tfio.BigQuery.BigQueryClient()`
+    * TFX: `BigQuery client`
+    * Dataflow: `BigQuery I/O connector`
+    * Other frameworks: `BigQuery Python Client library`
 
 ---
 
@@ -1298,46 +1381,62 @@ TensorFlow or Keras | `tf.data.dataset reader for BigQuery` and tfio.BigQuery.Bi
 
 ### 11.3.3. Vertex AI Managed Datasets
 
-* **Managed Datasets**: Use Vertex AI managed datasets for training custom models, providing benefits such as centralized management, integrated labeling, and easy tracking of lineage.
-* * *
-  • Managed datasets support image, video, tabular (CSV, BigQuery tables), and text formats
-  • Integrated data labeling for unlabeled unstructured data using Vertex AI data labeling
+**Vertex AI Managed Datasets**: Simplify training by using predefined formats (image, video, tabular, text).
+
+**Advantages of Managed Storage**:
+* Centralize dataset management.
+* Integrate automated data labeling for unstructured data.
+* Facilitate model lineage tracking and iterative development.
+* Enable model performance comparison through AutoML and custom models.
+* Generate data statistics and visualizations.
+* Automatically split data into training, test, and validation sets.
+
+**When Not to Use Managed Datasets**: More control over data splitting or when data lineage isn't critical.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 11.3.4. Vertex AI Feature Store
 
-* **Vertex AI Feature Store**: Fully managed repository for organizing ML features.
-    * _Allows independent use or integration with Vertex AI workflows_
-    * Enables fast online predictions, batch exports, and feature creation
-        * _Reduces need to compute and save feature values manually_
+**Vertex AI Feature Store**: Centralized repository for ML features; supports independent use or integration with Vertex AI workflows.
+
+- **Benefits**: Reduces need to store feature values across multiple locations (e.g., BigQuery, Google Cloud Storage); facilitates drift detection and data skew mitigation through centralized management.
+
+**Real-time Feature Retrieval**: Enables fast online predictions by fetching feature values on-demand.
 
 ---
 
 ### 11.3.5. NoSQL Data Store
 
-**NoSQL Data Stores for Static Feature Lookup**
-=============================================
+**NoSQL Data Stores**: Optimized for singleton lookup operations.
 
-### Overview
+- **Memorystore**
+  * **Description**: Managed in-memory database with submillisecond latency.
+  * **Use Cases**: Real-time bidding, media and gaming applications.
 
-For static feature lookup during prediction, analytical data stores like BigQuery are not suitable due to low-latency singleton read operations. Instead, use a NoSQL database optimized for such operations.
+- **Datastore**
+  * **Description**: Fully managed document database for scalable, high-performance application development.
+  * **Use Cases**: E-commerce product recommendations.
 
-### NoSQL Data Store Options
-| **Data Store** | **Description** | **Use Cases** |
-| --- | --- | --- |
-| Memorystore | Managed in-memory database with submillisecond latency | User-feature lookup, media gaming applications |
-| Datastore | Fully managed, scalable NoSQL document database | Product recommendation system, fraud detection |
+- **Bigtable**
+  * **Description**: Scalable NoSQL database service for high throughput and low-latency workloads.
+  * **Use Cases**: Fraud detection, ad prediction, booking recommendations.
+
+
+---
+
+**Data Storage Recommendations**: Avoid block storage like NFS or VM hard disks; use BigQuery, Google Cloud Storage, or a NoSQL data store for performance.
 
 ---
 
-| Bigtable | Massively scalable NoSQL database service with low-latency workloads | Ad prediction, booking recommendation |
-
-### Performance Considerations
-* Avoid storing data in block storage (e.g. NFS, VM hard disk)
-* Store data in Google Cloud Storage or BigQuery instead of directly reading from databases like Cloud SQL for performance
+![center w:85%](images/note.png)
 
 ---
+
 *NoSQL Data Store*
 ****|  Memorystore | Datastore | Bigtable
 ---|---|---|---
@@ -1351,99 +1450,147 @@ Use cases | User‐feature lookup in real‐time bidding that requires submillis
 
 ## 11.4. Automation and Orchestration
 
-* **Machine Learning Workflows**: Data collection, preprocessing, model training, evaluation, and deployment phases
-    * **Automation**: Orchestrate pipeline steps for continuous model training
-        + Requires integration with production environment using Kubeflow or Vertex AI Pipelines
+**Machine Learning Workflows**: Define phases like data collection, preprocessing, building datasets, model training, evaluation, and deployment.
+
+**ML Pipelines**: Connect steps of an ML solution for automated execution and continuous training.
+
+**Kubeflow Pipelines**: A Kubernetes-based pipeline tool for ML projects (introduced by Google).
+
+**Vertex AI Pipelines**: Serverless alternative to Kubeflow Pipelines, simplifying ML workflow management.
 
 ---
 
 ### 11.4.1. Use Vertex AI Pipelines to Orchestrate the ML Workflow
 
-**Vertex AI Pipelines**
-=======================
+**Vertex AI Pipelines**: A managed service for automating, monitoring, and governing ML workflows in a serverless manner.
 
-*   **Overview**: Automates, monitors, and governs ML systems using serverless orchestration and storing workflow artifacts in Vertex ML Metadata.
-*   **Supported Frameworks**: TensorFlow Extended v0.30.0+, Kubeflow Pipelines v1.8.9+ or higher
-*   **Key Benefits**:
-    *   Simplifies pipeline management across different ML environments
-    *   Reduces node count and resource requirements due to serverless architecture
+- **Artifacts Storage**: Stores workflow artifacts like training data, hyperparameters, and code using Vertex ML Metadata.
+- **Pipeline Support**: Runs pipelines built with Kubeflow SDK v1.8.9+ or TensorFlow Extended v0.30.0+, with TensorFlow use cases specifically for defining pipeline operations.
+
+**Managed Steps**: Can be calls to Google Cloud services.
+
+- **Experiment Tracking**: Supports experiments, which are GA in Vertex AI Pipelines and Kubeflow Pipelines, ensuring compatibility and ease of use across different ML environments.
+
+---
+
+- **Resource Requirements**: Requires minimal resources (small nodes with modest CPU and RAM), as most work is handled within the managed service.
+
+---
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 11.4.2. Use Kubeflow Pipelines for Flexible Pipeline Construction
 
-* **Kubeflow Overview**: An open source Kubernetes framework for developing and running portable ML workloads.
-    * **Key Features**:
-        * Composes, orchestrates, and automates ML systems
-        * Supports local, on-premises, and cloud deployments (e.g., Google Cloud)
-    * **Pipeline Orchestration**: Executes required Google Cloud services to automate production ML pipelines.
+* **Kubeflow**: Open source Kubernetes framework for ML workloads
+* **Kubeflow Pipelines**: Service for composing, orchestrating, and automating ML systems; uses SDK for pipeline authoring
+    * **Google Cloud Pipeline Components**: Integrates Vertex AI functionality like AutoML into pipelines
+* **Orchestration and Automation**: Executes required Google Cloud services for production ML pipelines, with support for various compute workloads including Dataproc and AutoML
+
+---
+
+
+![center w:85%](images/c05f002.png)
 
 ---
 
 ### 11.4.3. Use TensorFlow Extended SDK to Leverage Pre‐built Components for Common Steps
 
-* **TFX and TensorFlow**: frameworks for defining, launching, and monitoring machine learning models in production
-    * Recommended for using structured and textual data with existing TensorFlow setup
-    * Useful for working with large datasets
+**TensorFlow**: Provides components for common ML workflow steps like data ingestion and training.
+
+**TFX (TensorFlow Extended SDK)**: Frameworks, libraries, and components for defining, launching, and monitoring production models. Recommended if you use TensorFlow, structured/textual data, or large datasets.
+
+* **Google Cloud Implementation**: Covered in Chapter 3, "Feature Engineering." More details available at <https://neptune.ai/blog/deep-dive-into-ml-models-in-production-using-tfx-and-kubeflow>.
 
 ---
 
 ### 11.4.4. When to Use Which Pipeline
 
-* **Vertex AI Pipelines**: Run pipelines with Kubeflow Pipelines SDK v1.8.9 or higher, or TensorFlow Extended v0.30.0 or higher.
-    * **Orchestration**: Kubeflow Pipelines and TFX provide GUIs for easy configuration, operation, monitoring, and maintenance of ML pipelines.
-        * **Recommendation**: Use Vertex AI Pipelines for its built-in support for common ML operations and lineage tracking, which is crucial for validating pipeline correctness in production.
+**Vertex AI Pipelines**: Supports Kubeflow Pipelines SDK v1.8.9+ or TensorFlow Extended v0.30.0+.
+
+* **TFX (TensorFlow Extended)**: Recommended for processing large datasets; creates a DAG and uses Apache Beam, supporting distributed backends like Cloud Dataflow.
+    * **Apache Beam**: Manages pipelines under the hood, easily executable on distributed processing backends.
+
+**Orchestrators (e.g., Kubeflow)**: Simplify configuration, operation, monitoring, and maintenance of ML pipelines; often come with user-friendly GUIs.
+
+**Vertex AI Pipelines**: Preferred for common ML operations, tracking metadata and lineage crucial for production validation.
 
 ---
 
 ## 11.5. Serving
 
-* **Machine Learning Model Deployment**: After training, evaluation, and tuning, an ML model is deployed to production for predictions.
-    * **Prediction Methods**: 
-        * _Offline Prediction_: Predictions made using the trained model without real-time data.
-        * **Online Prediction**: Predictions made using the trained model with real-time data.
+* **Model Deployment**: Deploy trained, evaluated, and tuned ML models to production for predictions.
+* **Prediction Methods**:
+    * **Offline Prediction**: Model predicts outputs for a batch of input data at once.
+    * **Online Prediction**: Model processes and predicts output for each input instance sequentially.
 
 ---
 
 ### 11.5.1. Offline or Batch Prediction
 
-* **Offline Batch Prediction**: Performing predictions on large batches of data without an active internet connection.
-* Use cases include: recommendations, demand forecasting, segment analysis, and text classification.
-* Can be run using Vertex AI with data stored in BigQuery or Google Cloud Storage.
+* Offline/batch prediction: Running batch jobs with trained models to predict on data batches.
+    * Use cases: Recommendations, demand forecasting, segment analysis, text classification.
+* Vertex AI batch prediction: Tool for running batch prediction jobs on BigQuery or Google Cloud Storage data.
+* Architecture: High-level setup on Google Cloud for offline batch prediction (Figure 5.3).
+
+---
+
+
+![center w:85%](images/c05f003.png)
 
 ---
 
 ### 11.5.2. Online Prediction
 
-**Online Predictions**
-* **Synchronous**: caller waits for prediction before performing subsequent steps
-* **Asynchronous**: end user gets notified or polls a data store for real-time predictions using **Push** (notification) or **Poll** (periodic queries)
+**Near Real-Time Predictions**: Sent via HTTPS endpoints, used in real-time bidding and sentiment analysis.
 
-**Minimizing Latency**
-* Minimize latency at the model level: smaller models with fewer neural network layers and less compute
-* Minimize latency at the serving level: low-latency read lookup data store, precomputing predictions, and caching
+  * **Synchronous Predictions**: Caller waits for response before proceeding (use Vertex AI, App Engine, or GKE for feature preprocessing).
+  * **Asynchronous Predictions**:
+    * **Push**: Model sends predictions as notifications (e.g., fraud detection).
+    * **Poll**: Store predictions in a database and periodically retrieve them.
+
+* * *
+
+**Minimizing Latency**:
+  * **Model Level**: Build smaller models, use accelerators like Cloud GPU or TPU.
+  * **Serving Level**: Use low latency data stores, precompute predictions, cache results.
+
+---
+
+
+![center w:85%](images/c05f004.png)
+
+---
+
+
+![center w:85%](images/c05f005.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ## 11.6. Summary
 
-* **Designing Reliable ML Solutions on GCP**
-    * Best practices for designing scalable and highly available ML solutions
-    * Service selection from the GCP AI/ML stack (Layers 1-3)
-* **Data Management and Storage**
-    * Data collection and management strategy in Vertex AI platform with BigQuery
-    * NoSQL data store options for submillisecond latency
-* **Automation and Orchestration**
-    * Techniques for ML pipeline automation (Vertex AI Pipelines, Kubeflow Pipelines, TFX pipelines)
+**GCP ML Services**: Use appropriate services from GCP AI/ML stack layers
+
+**Data Management & Storage**: Utilize BigQuery for data management and NoSQL store for sub/millisecond latency
+
+**Pipeline Automation**: Employ Vertex AI Pipelines, Kubeflow Pipelines, or TFX for ML automation
+
+**Model Serving**: Serve models in batch mode or real-time using Vertex AI Prediction; optimize latency with efficient architecture patterns
 
 ---
 
 ## 11.7. Exam Essentials
 
-* **Key Considerations for Scalable ML Solutions**
-  * Choose an appropriate ML service based on your use case and expertise.
-  * Implement data collection, management, and automation/orchestration strategies.
-  * Deploy models using best practices for serving data, including batch vs real-time predictions and latency management.
+* **Design scalable and available ML solutions**: Use Google Cloud AI/ML services for reliability.
+* **Choose appropriate ML service**: Select from GCP's AI/ML stack based on use case and expertise.
+* **Implement automation and orchestration**: Use Vertex AI Pipelines, Kubeflow, or TFX pipelines as needed.
+    * **Serve data effectively**: Deploy models with best practices; use batch or real-time prediction appropriately.
 
 ---
 
@@ -1453,23 +1600,30 @@ Use cases | User‐feature lookup in real‐time bidding that requires submillis
 
 ## 12.1. Building Secure ML Systems
 
-* **Data Security in Cloud Systems**: Google Cloud provides built-in security measures to protect user and employee data
-    * Encryption of stored data (at rest) is used to secure data on servers
-    * Encryption of data in transit is used to secure data during transfer between systems
+**Data Security**: Ensuring user and employee data protection is crucial for enterprises.
+
+**Encryption Measures**:
+- **Encryption at Rest**: Google Cloud encrypts stored data to protect it from unauthorized access.
+- **Encryption in Transit**: Data in transit is also encrypted to secure it during transmission.
 
 ---
 
 ### 12.1.1. Encryption at Rest
 
-* **Encryption in Google Cloud** 
-    * Data is encrypted at rest by default using customer-managed or service-managed encryption keys
-    * Can use Authenticated Encryption with Associated Data (AEAD) for table-level encryption in BigQuery
-* **Hashes for data integrity** 
-    * Google Cloud Storage supports CRC32C and MD5 hashes to check data integrity
-* **Encryption types**
-    * Server-side encryption: occurs after data is received, before storage
-        * _Key management using Google Cloud Key Management Service_
-    * Client-side encryption: occurs before data is sent, resulting in encrypted data that also undergoes server-side encryption
+**Cloud Storage & BigQuery Encryption**: Data is encrypted at rest by default, with Google managing the keys or allowing customer-managed keys.
+
+* **AEAD Encryption in BigQuery**: Individual table values can be encrypted using AEAD functions; refer to `https://cloud.google.com/bigquery/docs/reference/standard-sql/aead-encryption-concepts`.
+
+**Encryption Types**:
+- *Server-Side*: Occurs after data receipt but before disk storage.
+- *Client-Side*: Data is encrypted before transmission, with client responsible for keys and operations.
+
+**Data Integrity**: Cloud Storage supports CRC32C and MD5 hashes to check data integrity.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
@@ -1485,171 +1639,148 @@ You can create and manage your encryption keys using a Google Cloud Key Manageme
 
 ### 12.1.2. Encryption in Transit
 
-* **Data Encryption**: Google Cloud uses Transport Layer Security (TLS) to encrypt data in transit.
+* **Transport Layer Security (TLS)**: Protects data during read and write operations over the Internet.
 
 ---
 
 ### 12.1.3. Encryption in Use
 
-* **Encryption in Use**: protects data in memory from compromise by encrypting it while processing
-    * Examples: _Confidential Computing_, Confidential VMs, and Confidential GKE Nodes
-        * **Data Security Resources**: [https://cloud.google.com/blog/topics/developers-practitioners/data-security-google-cloud](https://cloud.google.com/blog/topics/developers-practitioners/data-security-google-cloud)
+**Confidential Computing**: Protects data in memory by encrypting it during processing.
+
+**Encryption in Use**: Safeguards data from compromise or exfiltration while being processed.
+
+* **Confidential VMs and Confidential GKE Nodes**: Tools for encrypting data in use.
 
 ---
 
 ## 12.2. Identity and Access Management
 
-* **IAM Overview**: Identity and Access Management (IAM) manages access to data and resources in Google Cloud.
-    * _Manage access at project or resource level._
-    * _Customize permissions using project-level and resource-level policies._
+**IAM in Google Cloud**: Manages access to data and resources.
+- **Project-level roles**: Assign roles to principals for project-wide access; commonly used for service accounts in Vertex AI Workbench, custom training, and predictions.
+    * **Service accounts**: Accounts for applications or compute workloads.
+- **Resource-level roles**: Define permissions for specific resources via policies; currently supported only for Vertex AI Feature Store and entity type resources.
 
-* **Project-Level Roles**: Grant access to resources by assigning roles to principals (users, groups, or service accounts).
-    * *_Grant write permission to particular feature stores_*
-    * *_Read permission for all users_* 
+**IAM Roles in Vertex AI**: 
+- **Predefined roles**: Grant project-wide access with related permissions (e.g., Vertex AI Administrator, User).
 
-* **Vertex AI IAM Roles**:
-    * _Predefined roles:_ Vertex AI Administrator and User
-    * _Basic roles:_ Owner, Editor, Viewer
-    * _Custom roles:_ Create own role with specific permissions
+---
+
+- **Basic roles**: Standard access control roles applicable to all Google Cloud services.
+    * **Viewer**, **Editor**, **Owner**
+- **Custom roles**: Allow creating tailored permission sets and assigning them to users.
+
+*Note: Not all predefined roles support resource-level policies.*
+
+---
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 12.2.1. IAM Permissions for Vertex AI Workbench
 
-* **Vertex AI Workbench**: A Google Cloud Platform data science service that uses JupyterLab to explore and access data.
+**Vertex AI Workbench**: Data science service on GCP that uses JupyterLab, allowing customization of Virtual Private Clouds (VPC).
+
 * **Notebook Types**:
-  * **User-Managed Notebook**: Highly customizable, but requires more setup and management.
-  * **Managed Notebook**: Less customizable, with features like automatic shutdown and integration with Cloud Storage and BigQuery.
+    * **User-managed notebook**: Highly customizable but require more setup time; use tags in metadata.
+    * **Managed notebooks**: Less customizable, integrate with Cloud Storage and BigQuery, automatically shut down idle instances.
+
 * **Access Modes**:
-  * **Single User Only**: Grants access only to the specified user.
-  * **Service Account**: Grants access to a service account, allowing multiple users to access.
+    * **Single User Only**: Grants access to a specified user.
+    * **Service Account**: Grants access via a service account that can be shared among multiple users. Requires setting up an environment variable for authentication in Google Colab.
+
+---
+
+
+![center w:85%](images/c06f001.png)
+
+---
+
+
+![center w:85%](images/c06f002.png)
+
+---
+
+
+![center w:85%](images/c06f003.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 12.2.2. Securing a Network with Vertex AI
 
-* **Google Cloud Shared Responsibility Model**: The cloud provider is responsible for monitoring and responding to security threats, while users are responsible for protecting their data and assets.
-* **Shared Fate Model**: An ongoing partnership between the cloud provider and customer to improve security, with components including:
-  * **Help getting started**: Secure blueprints and infrastructure as code (IaC)
-  * **Risk protection program**
-  * **Assured workloads and governance**
+**Google Cloud shared responsibility model**: The cloud provider is responsible for securing the cloud infrastructure, while users must protect their data and assets.
 
----
+**Shared fate model**: Enhances collaboration between the cloud provider and user to continuously improve security through secure blueprints, risk protection programs, and assured workloads.
 
-#### 12.2.2.1. Securing Vertex AI Workbench
-
-* **Secure your managed notebooks instance**
-  * Use a private IP address when creating a workbench to reduce exposure and increase security.
-  * Connect the instance to a VPC network using private services access or shared VPC network to use internal IP addresses.
-
-* _Best practices for securing Vertex AI Workbench_
-  * Enable private services access in your VPC network
-  * Use VPC Service Controls to control access to specific services and limit traffic
-
----
-
-#### 12.2.2.2. Securing Vertex AI Endpoints
-
-**Vertex AI Endpoints**
-
-* **Public Endpoint**: publicly accessible to the Internet, available by default when creating an endpoint.
-* **Private Endpoint**: securely connects to your data without traversing the public Internet, requires VPC Network Peering setup.
-    * Set up private endpoints from the Vertex AI console, select "Private" option under "Create Endpoint".
-* **VPC Network Peering**: enables direct connection between your VPC network and Vertex AI for secure communication.
-
----
-
-#### 12.2.2.3. Securing Vertex AI Training Jobs
-
-**Connecting to Vertex AI Training Jobs with Private IP Addresses**
-
-Using private IP addresses provides more network security and lower latency than public IP addresses.
-*   **Benefits:** Improved network security and reduced latency
-*   **Method:** Peer your network with Vertex AI custom training jobs using VPC (see [https://cloud.google.com/vertex-ai/docs/training/using-private-ip](https://cloud.google.com/vertex-ai/docs/training/using-private-ip))
-*   **Additional Security Measures:** Use both VPC Service Controls and IAM for defense in depth
-
----
-
-#### 12.2.2.4. Federated Learning
-
-* **Federated Learning**: enables collaborative learning on device data while keeping training data local, ensuring privacy and security.
-* **Key Benefits**:
-  * Smarter models
-  * Lower latency
-  * Less power consumption
-* **Example Use Case**: Hospitals participating in clinical trials can train shared ML models locally with secure communication to the cloud for model updates.
-
----
-
-#### 12.2.2.5. Differential Privacy
-
-* **Differential Privacy**: A system for publicly sharing dataset information while withholding individual details
-* **Purpose**: Prevent sensitive data from being memorized by machine learning algorithms
-* **Benefits**: Design responsible machine learning models on private data using differential privacy and federated learning techniques.
-
----
-
-#### 12.2.2.6. Format‐Preserving Encryption and Tokenization
-
-* _Format-Preserving Encryption (FPE)_ preserves the format of data during encryption, allowing only specific information to be exposed.
-    * Used in: Payment Card Verification and Legacy Databases to protect sensitive data without restructures databases or storing encrypted data at a centralized location.
-    * Key difference from Tokenization: FPE obfuscates sensitive info, while tokenization removes it entirely.
+* **Vertex AI Workbench notebook environment**: Secure using Vertex AI Workbench notebooks blueprint with default security recommendations.
+* **Vertex AI endpoints**: Protect public and private endpoints appropriately.
+* **Vertex AI training jobs**: Ensure secure execution of training tasks.
 
 ---
 
 ## 12.3. Privacy Implications of Data Usage and Collection
 
-* **Sensitive Data Types**: 
-  * _Personally identifiable information (PII)_, including:
-    * Name
-    * Address
-    * Social Security number (SSN)
-    * Date of birth
-    * Financial information
-    * Passport number
-    * Telephone numbers
-    * Email addresses
-* **Health Information Protection**:
-  * HIPAA Privacy Rule provides federal protections for _protected health information (PHI)_
+**PII**: Data allowing identification of a specific individual.
+
+**PHI**: Sensitive health data protected by HIPAA, including medical records and billing info.
+
+* **HIPAA Privacy Rule**: Federal protections for PHI, ensuring patient rights while permitting necessary disclosures.
 
 ---
 
 ### 12.3.1. Google Cloud Data Loss Prevention
 
-* **Google Cloud Data Loss Prevention (DLP) API**: removes identifying information from text content, including PII, using techniques such as masking, tokenization, encryption, or bucketing.
-    * _Data profiles_: identifies sensitive and high-risk data across BigQuery tables and columns
-    * _Risk analysis_: determines effective de-identification strategy or monitors for changes/outliers with metrics like _k_-anonymity and _l_-diversity
-* **DLP Job Architecture**:
-  * _Data de-identification streaming pipeline_: uses Dataflow to trigger DLP job for sensitive data in text
-  * _Configuration management_: manages templates and configuration using Cloud KMS for security
+**Google Cloud Data Loss Prevention (DLP) API**: Removes identifying information from text content using de-identification techniques like masking, tokenization, encryption, and bucketing.
+
+**Data Profiles**: Automatically scans BigQuery tables and columns across the organization, projects, and folders to identify sensitive data and create risk profiles at different levels.
+
+**Risk Analysis**: Computes re-identification risk metrics (k-anonymity, l-diversity, k-map, δ-presence) before or after de-identification to monitor changes in data.
+
 
 ---
 
-  * _Data validation and re-identification pipeline_: validates de-identified data, stores in BigQuery or other storage, and re-identifies with Dataflow pipeline
+* **Jobs and Triggers**: Runs actions like scanning content for sensitive data or calculating re-identification risks. Schedules DLP jobs using job triggers that can be set up to run on Cloud Storage repositories and other data sources.
+
+**Data De-Identification Streaming Pipeline**: Uses Dataflow to de-identify streaming and batch text data, storing the results in Google Cloud Storage or BigQuery.
+
+* **Configuration Management**: Manages templates and configurations for DLP jobs with security admins using Cloud KMS for key management.
+
+**Data Validation and Re-identification Pipeline**: Validates and re-identifies large-scale datasets stored in BigQuery or other storage types.
 
 ---
+
+![center w:85%](images/c06f005.png)
+
+---
+
 ### 12.3.2. Google Cloud Healthcare API for PHI Identification
 
-* **De-identification in Healthcare**: Removes sensitive information from healthcare data using configurable operations.
-    * **Methods**:
-        * Google Cloud Healthcare API: removes PHI from text, images, FHIR, and DICOM data
-        * Dataflow pipeline: configures and runs the DLP API on CSVs, BigQuery tables, and text strings
-* **De-identified Data**: No longer considered protected health information under HIPAA Privacy Rule.
-    * **Identifiers**:
-        * 18 specific PHI identifiers, as defined in HIPAA
+**HIPAA**: Requires special handling of PHI linked to 18 specific identifiers.
+
+**Google Cloud Healthcare API**:
+- Offers de‐identify operation to remove or mask sensitive information from text, images, FHIR, DICOM.
+- Detects and masks protected PHI in DICOM and FHIR data.
+
+**De‐identification command**: Targets the 18 HIPAA-defined identifiers to convert PHI into non-protected health information.
+
+**DLP API Dataflow pipeline**: Simplifies configuring and running DLP API on CSVs, BigQuery tables, and text strings for healthcare data.
 
 ---
 
 ### 12.3.3. Best Practices for Removing Sensitive Data
 
-* **Handling Sensitive Data**: approaches vary based on data structure, using views, Cloud DLP, NLP API, and masking techniques.
-* **Data Reduction Techniques**:
-  * **PCA (Principal Component Analysis)**: combines features to reduce dimensionality, making it harder to identify individuals.
-  * **Coarsening**: decreases granularity of data to make it less identifiable, while maintaining comparable benefits.
-    * Examples:
-      * IP addresses: zero out last octet
-      * Numeric quantities: bin numbers for anonymity (e.g., age, birthdays)
-      * Zip codes: coarsen to first three digits
+**Data Views**: Create database views that exclude sensitive columns, allowing continuous training without data engineers' access.
+
+**Cloud DLP**: Utilize Cloud DLP for unstructured content with identifiable patterns using regex.
+
+**PCA/Dimension Reduction**: Use Principal Component Analysis (PCA) to combine features into a single column, masking sensitive data through ML techniques.
+
+* **Coarsening**: Reduce granularity of fields like IP addresses, numeric quantities, and zip codes to protect individual identification.
 
 ---
 
@@ -1678,26 +1809,20 @@ Location | Use location identifiers such as city, state, or zip code, or use a l
 
 ## 12.4. Summary
 
-* **Data Security in Machine Learning**
-  * _Encryption at rest_ and _in transit_ are used to protect data
-  * IAM is used for secure access control to Vertex AI Workbench
-  * Secure ML development techniques like federated learning and differential privacy are employed
-* **PII and PHI Data Management**
-  * Cloud DLP and Cloud Healthcare APIs are used for PII and PHI data protection
-  * A scalable architecture pattern for large dataset management is proposed
+**Encryption**: Protects data at rest and in transit.
+* **IAM for Vertex AI Workbench**: Manages access control for your data science team.
+
+**Secure ML Development**: Includes techniques like federated learning and differential privacy.
+* **Cloud DLP & Healthcare APIs**: Manage PII and PHI data securely.
+* **Large Dataset Architecture**: Scales PII identification and de-identification efficiently.
 
 ---
 
 ## 12.5. Exam Essentials
 
-* **Build Secure ML Systems**:
-    * Understand encryption at rest and in transit for Google Cloud
-    * Set up IAM roles and network security for Vertex AI Workbench
-    * Learn about differential privacy, federated learning, and tokenization
-
-* **Understand Privacy Implications**
-    * Identify and mask PII and PHI type data using DLP API and Healthcare API
-    * Apply best practices for removing sensitive data
+* **Secure ML systems**: Implement encryption at rest and in transit for Cloud Storage and BigQuery; manage IAM roles and network security for Vertex AI Workbench.
+* **Privacy implications**: Use DLP API to identify and mask PII; use Healthcare API to identify and mask PHI.
+* **Best practices**: Remove sensitive data by following recommended methods.
 
 ---
 
@@ -1707,46 +1832,52 @@ Location | Use location identifiers such as city, state, or zip code, or use a l
 
 ## 13.1. Choice of Framework and Model Parallelism
 
-* **Parameter growth**: Modern deep learning models require more parameters, leading to larger datasets
-* **Distributed training**: Multinode training is necessary for large-scale deep learning on big datasets 
-    * _Data parallelism_ vs _Model parallelism_: Both approaches are used in distributed deep learning training
+* Modern deep learning models have more parameters
+* Larger datasets require multinode training for efficient training
+    * Data parallelism and model parallelism are common techniques used
 
 ---
 
 ### 13.1.1. Data Parallelism
 
-* *_Data parallelism_*: splitting dataset among GPUs or nodes, using same parameters for forward propagation
-    * Small batches are sent to every node, gradient computed and sent back to main node
-    * *_Synchronous_* vs *_asynchronous_* strategies differ in distributed training
-
----
-
-#### 13.1.1.1. Synchronous Training
-
-* **Synchronous Training**: Model sends data to multiple GPUs/accelerators, each with a full model copy, computing outputs and gradients simultaneously.
-* *_Key feature_*: All-reduce algorithm collects trainable parameters from all workers and accelerators.
-* **Parallelization**: Multiple GPUs/accelerators work together on different parts of the data.
-
----
-
-#### 13.1.1.2. Asynchronous Training
-
-* **Asynchronous Training**: allows workers to train independently, reducing downtime and idle time.
-    * **Benefits**: scalability, reduced worker downtime
-        * * *
-
-    **All-Reduce Sync Strategy**: suitable for TPU and multi-GPUs, but not ideal for all use cases.
+* Data parallelism: Split dataset into parts, assign each part to a GPU/node with the same parameters.
+    * Synchronous training: Gradient updates are aggregated before parameter updates across nodes.
+    * Asynchronous training: Node updates parameters independently without waiting for others.
+* Reduce learning rate if using many nodes to maintain smooth training.
+* Reference: [Data Parallelism vs Model Parallelism](https://analyticsindiamag.com/data-parallelism-vs-model-parallelism-how-do-they-differ-in-distributed-training)
 
 ---
 
 ### 13.1.2. Model Parallelism
 
-* **Model Parallelism**: 
-    * Model partitioning into parts, each placed on an individual GPU.
-    * Benefits: scales training to multiple GPUs or machines, overcomes memory limitations of a single GPU.
-* **Distributed Training Strategies in TensorFlow**:
-    * MirroredStrategy: synchronous distributed training on multiple GPUs
-    * ParameterServerStrategy: designated machines as workers and parameter servers for asynchronous training.
+**Model Parallelism**: Splits a model across multiple GPUs to train large models that exceed single-GPU memory limits.
+- **Benefits**: Allows training of larger models by distributing layers across GPUs, e.g., ResNet50 split into 10 GPU segments.
+
+**Distributed Training Strategies in TensorFlow**: 
+- **MirroredStrategy**: Synchronous multi-GPU training on a single machine.
+- **MultiWorkerMirroredStrategy**: Synchronous distributed training across multiple machines with potential multiple GPUs per machine.
+- **TPUStrategy**: Synchronous TPU core training.
+- **ParameterServerStrategy**: Asynchronous training using parameter servers.
+
+**Training and Deployment**: 
+
+---
+
+- Trained models can be deployed via `tf.serving`, TFLite, or TensorFlow.js.
+
+---
+
+![center w:85%](images/c07f002.png)
+
+---
+
+
+![center w:85%](images/note.png)
+
+---
+
+
+![center w:85%](images/c07f003.png)
 
 ---
 
@@ -1771,46 +1902,74 @@ Let's go over some basic terminology in neural networks that you might see in ex
 
 ### 13.2.1. Artificial Neural Network
 
-* **Artificial Neural Networks**: One-hidden layer network with a single output layer
-* _Mainly used in supervised learning_, especially for numerical and structured data types, such as regression problems
-* *Examples include feedforward neural networks*
+* **Artificial Neural Networks (ANNs)**: Simplest type with one hidden layer.
+* **Feedforward Neural Network**: Classic example of ANNs; used for supervised learning with numerical, structured data like regression problems.
+    * **Supervised Learning**: Data is labeled and the model learns to predict outputs based on input features.
+
+---
+
+
+![center w:85%](images/c07f004.png)
 
 ---
 
 ### 13.2.2. Deep Neural Network (DNN)
 
-* **Definition**: Deep neural networks are Artificial Neural Networks (ANNs) with multiple hidden layers.
-* **Characteristics**: Typically have at least two layers, making them a subset of _deep nets_ or multi-layered networks.
-* *_Deep Net_* refers to any ANN with multiple hidden layers
+* **Deep Neural Networks (DNNs)**: ANNs with multiple hidden layers.
+* **Definition**: Increased depth in neural networks compared to shallow networks.
+    * **Layers**: Typically at least two layers between input and output.
+* **Abbreviation**: DNN or _deep net_.
+
+---
+
+
+![center w:85%](images/c07f005.png)
 
 ---
 
 ### 13.2.3. Convolutional Neural Network
 
-* **Convolutional Neural Networks (CNNs)** 
-    * **Key Use Case:** Image Classification
-        * *Designed primarily for processing and analyzing images*
+* **Convolutional Neural Networks (CNNs)**: Designed for image input and excel in image classification.
+* **Scope**: Suitable for various image-based tasks beyond just classification.
 
 ---
 
 ### 13.2.4. Recurrent Neural Network
 
-* **Recurrent Neural Networks (RNNs)**: designed for sequences of data, effective in natural language processing and time-series forecasting.
-    * _Popular RNN variant_: Long Short-Term Memory (LSTM) network
-        * Used for prediction tasks like assigning class labels or predicting numerical values.
-* **Neural Network Training**: trained using stochastic gradient descent with a chosen loss function.
-    * _Goal of training_: find weights and biases resulting in low average loss across all examples.
+**Recurrent Neural Networks (RNNs)**: Designed for sequential data, effective in natural language processing.
+* **Long Short-Term Memory (LSTM) Networks**: Popular variant used for sequence prediction tasks.
+
+**Neural Network Training**:
+- Uses stochastic gradient descent.
+- Requires a loss function to evaluate prediction accuracy.
+- Goals: Minimize average loss across examples; gradients help update weights.
 
 ---
 
 ### 13.2.5. What Loss Function to Use
 
-* **Activation Functions and Loss Functions**: The choice of activation function in the output layer directly affects the chosen loss function.
-    * _**Regression**: Mean squared error (MSE) with a linear activation unit_
-    * _**Binary Classification**: Binary cross-entropy, categorical hinge loss, or squared hinge loss with sigmoid activation_
-    * _**Multiclass Classification**: Categorical cross-entropy with softmax activation_
-        - Use `sparse_categorical_crossentropy` for mutually exclusive classes
-        - Use `categorical_cross_entropy` for non-mutually exclusive classes
+**Loss Function**: Depends on output layer configuration
+
+* **Regression problem**: Mean squared error (MSE) with a linear activation unit in the output layer
+* **Binary classification problem**: Binary cross-entropy, categorical hinge loss, and squared hinge loss with a sigmoid activation function
+    * **Multiclass classification problem**: Categorical cross-entropy for one-hot encoded data; sparse categorical cross-entropy for integer-encoded labels
+
+**Example Code Snippet**:
+```python
+model = Sequential()
+model.add(Dense(10, activation='relu', kernel_initializer='he_normal', input_shape=(n_features,)))
+model.add(Dense(8, activation='relu', kernel_initializer='he_normal'))
+
+---
+
+model.add(Dense(3, activation='softmax'))
+
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+```
+
+---
+
+![center w:85%](images/note.png)
 
 ---
 
@@ -1827,200 +1986,230 @@ Multiclass classification problem | Single label multiclass | Softmax activation
 
 ### 13.2.6. Gradient Descent
 
-* **Gradient Descent Algorithm** 
-    * Calculates the negative gradient of the loss curve
-    * Takes steps in the opposite direction of the positive gradient to minimize loss
-        * Direction: Steepest descent of the loss function
-            * Magnitude: Reduces the magnitude of loss with each step
+* Gradient descent: calculates the gradient of the loss curve at the starting point
+* Gradient: vector indicating the direction and magnitude of the steepest increase in the loss function
+* Algorithm: takes steps in the direction of the negative gradient to minimize loss
 
 ---
 
 ### 13.2.7. Learning Rate
 
-* **Learning Rate**: The scalar value used to scale the gradient vector to determine the next point in gradient descent.
-    * Determines how large a step is taken at each iteration
-    * Affects convergence speed and stability of the algorithm
+* Gradient vector: has direction and magnitude
+* Gradient descent: multiplies gradient by learning rate (step size) to find next point
+    * Example: gradient magnitude 2.5, learning rate 0.01 → next point is 0.025 away
 
 ---
 
 ### 13.2.8. Batch
 
-* **Batch Size**: The number of examples used to calculate the gradient in a single iteration.
-    * Reduces computation time for smaller batches, but increases it for larger ones
-        * Helps prevent slow iterations with large datasets
+* Batch: Total number of examples used to calculate the gradient in one iteration.
+    * Large batch: Can make a single iteration computationally expensive.
+* Entire dataset: Often assumed as the batch size in gradient descent.
 
 ---
 
 ### 13.2.9. Batch Size
 
-* **Batch Size**: The number of examples in a batch
-*   _Typical values_: 10 to 1,000 for mini-batches
-*   *Fixed or dynamic*: Usually fixed, but can be dynamic with TensorFlow*
+* **Batch size**: Number of examples in a batch (e.g., SGD = 1, mini-batch = 10-1,000)
+* **Dynamic batch size**: Permitted in TensorFlow during training and inference
 
 ---
 
 ### 13.2.10. Epoch
 
-* *_Epoch_*: Training iteration using all available data exactly once
-* *A single epoch consists of one or more batches*
-* *A forward pass and backward pass count as one pass per epoch*
+* **Epoch**: One full iteration through the entire training dataset.
+* **Pass**: Consists of a forward pass and a backward pass.
+* **Batch**: Comprises part of the data used in an epoch; multiple batches make up an epoch.
 
 ---
 
 ### 13.2.11. Hyperparameters
 
-* Hyperparameters for ML models include loss, learning rate, batch size, and epoch
-    * Tuning learning rate can significantly impact training time
-        * Small learning rates result in faster but slower convergence
-        * Large batch sizes may speed up computation but slow down convergence
-
----
-
-#### 13.2.11.1. Tuning Batch Size
-
-* **Batch Size Tuning** 
-    * A small mini-batch size improves accuracy but increases iterations and updates during training
-    * Larger batch sizes reduce training time, but decrease accuracy and may cause memory issues
-    * Smaller batches result in more frequent gradient updates, reducing loss per epoch
-
----
-
-#### 13.2.11.2. Tuning Learning Rate
-
-* Achieving an optimal learning rate is crucial for efficient training to avoid wasted time and resources.
-* A lower learning rate results in more training time, increasing cloud GPU costs.
-* If the learning rate is too small or too large, training can be slow or unstable, leading to divergence.
+**Hyperparameters**: Parameters set before training begins and can be tuned.
+* **Learning Rate**: Affects how quickly the model learns; too low = slow learning, too high may overshoot optimal solution.
+* **Batch Size**: Influences computation speed; larger sizes reduce per-batch computation time but increase memory usage.
 
 ---
 
 ## 13.3. Transfer Learning
 
-* **Transfer Learning**: Applying knowledge gained from one problem to a related but different problem in machine learning
-*   **Deep Learning Technique**: Using a pre-trained neural network as a starting point for training on a new, similar problem
-    *   _Optimization_ to save time or improve performance
+**Transfer Learning**: A technique in machine learning that involves using knowledge gained from one problem to improve performance on a different but related problem.
+
+**Transfer Learning**: An optimization to save time or get better performance, especially useful when developing models with limited data.
+* You can leverage pretrained models as a starting point for your own model training.
 
 ---
 
 ## 13.4. Semi‐supervised Learning
 
-* **Semi-supervised Learning**: Combines small amounts of labeled data with large amounts of unlabeled data for machine learning.
-* *_Definition_*: Fills the gap between supervised and unsupervised learning, using a mix of labeled and unlabeled data during training.
-* **Key characteristic**: Balances small amounts of labeled examples with large quantities of unlabeled examples.
+* **Semi-supervised learning (SSL)**: A machine learning approach combining labeled and unlabeled data.
+    * **Labeled data**: Small amount of data with known labels.
+    * **Unlabeled data**: Large amount of data without known labels.
+* **Approach**: Bridges unsupervised and supervised learning by using both types of data.
 
 ---
 
 ### 13.4.1. When You Need Semi‐supervised Learning
 
-**Semi-Supervised Learning**
-* Increases training data size when labeled data is scarce
-* Used for fraud detection, clustering, speech recognition, and more
+**Semi-supervised learning**: Increases model accuracy with limited labeled data
 
-* **Benefits:** 
-    * Accurate model outputs on new, unlabeled data
-    * Can be used when collecting more labeled data is not feasible
+- **Application Example**: Detecting fraud in banking by labeling known instances and using a semi-supervised algorithm to label unknown ones, then retraining the model.
+    * **Outcome**: More accurate fraud detection but less trustworthy than traditional supervised techniques.
+
+**Use Cases**:
+* Fraud detection or anomaly detection
+* Clustering
+* Speech recognition
+* Web content classification
+* Text document classification
 
 ---
 
 ### 13.4.2. Limitations of SSL
 
-* *Semi-supervised learning* uses a small amount of labeled and large amounts of unlabeled data for classification tasks.
-* However, its effectiveness depends on the representativeness of labeled data in the entire distribution.
-* Inaccurate results can occur if labeled data is not representative.
+* Semi-supervised learning effective with minimal labeled data and abundant unlabeled data in classification tasks.
+* Not suitable for all tasks; requires representative labeled data.
+* Inadequate if labeled data doesn't reflect the full distribution.
 
 ---
 
 ## 13.5. Data Augmentation
 
-* **Neural Network Training**: Neural networks require a proportional number of examples to achieve good performance, and parameter complexity increases with task difficulty.
-* **Data Augmentation**: To address limited data, minor alterations (flips, translations, rotations) are applied to existing datasets, creating synthetically modified data for training.
-* *_Types of Data Augmentation_*:
-  * Offline augmentation: altering data before training
-  * Online augmentation: altering data in real-time during training
+**Neural networks require many parameters**: Need proportional number of examples for good performance.
+
+**Data requirements**: Large datasets needed; difficult to find relevant, large-scale datasets.
+
+    * **Data augmentation**: Create synthetic data through minor changes (flips, rotations) to existing dataset when limited data is available.
+
+**Augmentation methods**: Apply in two ways—offline (pre-processing) or online (during training)—to increase relevant data.
 
 ---
 
 ### 13.5.1. Offline Augmentation
 
-* **Offline Augmentation**: Increases dataset size by performing transformations beforehand
-* *Example:* Rotating images increases dataset size by a factor of 2 
-* *Preferable for smaller datasets due to increased size.*
+* Offline augmentation: Increases dataset size through precomputed transformations.
+    * Suitable for smaller datasets as it doubles with image rotations.
+* Method preferred: Enhances training data without real-time processing.
 
 ---
 
 ### 13.5.2. Online Augmentation
 
-* **Online Data Augmentation**: Performing data augmentation transformations on mini-batches before feeding them to machine learning models.
-* **Data Augmentation Techniques for Images**:
-  * Flip, Rotate, Crop, Scale
-  * Gaussian noise for enhanced learning capability
-  * Translate
-  * Conditional GANs for domain transformation
+**Data augmentation**: Transforming mini-batches before feeding them into a machine learning model, also known as _augmentation on the fly_, which is preferred for large datasets.
+
+* **Techniques for images**: 
+    * Flip, rotate, crop, scale, add Gaussian noise, translate
+    * Use conditional GANs to transform images between domains
+    * Apply `transfer learning` for better performance with limited data
 
 ---
 
 ## 13.6. Model Generalization and Strategies to Handle Overfitting and Underfitting
 
-* **Key Terms:**
-  * _Bias:_ difference between average prediction and correct value (error rate of training data)
-  * _Variance:_ error rate of testing data
-    * A model with high bias oversimplifies the model and pays little attention to training data.
-    * A model with high variance pays too much attention to training data, leading to poor generalization on unseen data.
+**Bias**: Model error rate on training data; high bias results in oversimplified models.
+
+**Variance**: Model error rate on testing data; high variance leads to overfitting.
+
+Training a deep neural network requires balancing capacity to avoid both underfitting (high bias) and overfitting (high variance).
 
 ---
 
 ### 13.6.1. Bias Variance Trade‐Off
 
-* **Bias-Variance Tradeoff**: Model complexity affects bias and variance.
-    * High bias (simple models): high bias, low variance
-    * High variance (complex models): high variance, low bias
-* **Underfitting vs Overfitting**: 
-    * Increase capacity to reduce underfitting
-    * Specialized techniques required for overfitting
+**Bias-Variance Trade-off**: Balancing model complexity to avoid high bias and low variance (too simple) or high variance and low bias (too complex).
+
+* **Underfitting**: Occurs with models that are too simple, requiring increased capacity.
+
+**Overfitting**: Happens with overly complex models, needing specialized techniques to address.
 
 ---
 
 ### 13.6.2. Underfitting
 
-* An **underfit model** fails to learn a problem, performing poorly on both training and test datasets.
-    * High bias, low variance, and inability to learn regardless of training dataset samples.
-        * Reasons for underfitting include: dirty data, high bias, or complex models not well-suited for data.
-* Methods to reduce underfitting:
-            * Increase model complexity
-            * Increase feature engineering
-            * Remove noise from data
+**Underfit Model**: Performs poorly on both training and test datasets; characterized by high bias.
+
+* **Data Quality Issues**: Training data not cleaned, leading to poor model performance.
+* **High Bias**: Model is too simple to capture the underlying pattern in the data.
+
+**Overfitting**: Performance varies widely with unseen examples due to excessive complexity.
+
+* **Mitigate Underfitting**: Increase model complexity, add features through engineering, clean data, and extend training duration.
 
 ---
 
 ### 13.6.3. Overfitting
 
-* **Overfitting**: 
-    * Model learns training data too well, resulting in low bias and high variance
-    * Leads to poor performance on unseen examples or statistical noise
-* **Ways to Avoid Overfitting**:
-    * Regularization techniques (e.g. Dropout, Noise)
-    * Early stopping: stop training when model performance degrades
+**Overfit Model**: Learns training data too well, performs inconsistently with new examples.
+
+**Approaches to Reduce Overfitting**:
+* Increase training data.
+* Simplify network structure and parameters.
+
+**Techniques to Avoid Overfitting**:
+* Regularization.
+  * **Dropout**: Remove inputs during training.
+  * **Noise**: Add statistical noise to inputs.
+* **Early stopping**: Monitor validation performance, stop training if it degrades.
+* Data augmentation.
+* Cross-validation.
+
+**BigQuery ML Methods**:
+* Early stopping.
+* Regularization (see documentation).
+
+**Additional Resources**:
+* 10 ways to avoid overfitting: <https://www.v7labs.com/blog/overfitting>
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 13.6.4. Regularization
 
-* **Regularization**: Shrinks learned estimates toward 0, reducing overfitting by adding a penalty term to the loss function.
-    * _L1 Regularization_: Combats overfitting by making some features obsolete, robust to outliers, and helps with feature selection.
-    * _L2 Regularization_: Forcing weights to be small but not exactly 0, improving generalization in linear models.
+**Regularization**: Shrinks coefficients toward zero to reduce overfitting.
 
-* **Training Issues**:
-    * *_Exploding Gradients_*: Batch normalization, lower learning rate, and regularization techniques help prevent large gradients that cause convergence issues.
-    * *_Dead ReLU Units_*: Lowering the learning rate can help ReLU units recover from getting stuck below 0.
+- **L1 Regularization**
+    - Combats overfitting by shrinking parameters toward 0, making some features obsolete.
+    - Penalizes absolute weight values; robust to outliers.
+    - Useful for feature selection and smaller models.
+
+- **L2 Regularization**
+    - Forces weights to be small but not zero; improves generalization in linear models.
+    - Penalizes squared weight values; less robust to outliers.
+
+**Common Neural Network Issues**: Exploding gradients, dead ReLU units, vanishing gradients.
+
+
+---
+
+- **Exploding Gradients**: Large gradients from many large terms; handled by batch normalization and lower learning rates.
+- **Dead ReLU Units**: Occurs when weighted sum < 0, unit outputs zero; mitigated by lowering learning rate.
+- **Vanishing Gradients**: Lower layers get very small gradients; ReLU activation helps.
+
+**Regularization Techniques**:
+- **Dropout Regularization**: Randomly drops out units for a single gradient step (useful for neural networks).
+- **Gradient Clipping**: Limits the size of weight updates to prevent exploding gradients.
+- **Batch Normalization**: Normalizes layer inputs, helping with vanishing/exploding gradients.
+
+**Loss Reduction Tips**:
 
 ---
 
-    * *_Vanishing Gradients_*: Using ReLU instead of sigmoid activation function helps prevent small gradients.
-
-* **Improving Training**:
-    * Increase depth and width of neural network
-    * Decrease learning rate or increase test data for smaller datasets
+- Increase network depth and width.
+- Use different features if current ones are not informative.
+- Decrease learning rate; increase model complexity carefully.
+- Utilize cross-validation or bootstrapping for small datasets.
+- Simplify the model to check predictive power of individual features.
 
 ---
+
+![center w:85%](images/tip.png)
+
+---
+
 *Regularization*
 L1 Regularization | L2 Regularization
 ---|---
@@ -2036,32 +2225,34 @@ L1 regularization helps with feature selection and reducing model size or leadin
 
 ## 13.7. Summary
 
-* **Summary of Chapter**
-  * Covered model parallelism and data parallelism strategies
-  * Discussed neural network training techniques (loss functions, gradient descent, hyperparameters)
-    * Examined importance of hyperparameters on network performance
-  * Explored transfer learning and semi-supervised learning concepts
+* **Model Parallelism & Data Parallelism**: Strategies for training TensorFlow models.
+* **Training Neural Networks**: Loss functions, gradient descent, learning rate, batch size, epochs, hyperparameters.
+    * **Hyperparameters Impact**: Decreasing learning rate or increasing epochs affect model training.
+* **Advanced Techniques**:
+    * **Transfer Learning**: Advantages and use cases.
+    * **Semi-Supervised Learning**: When needed and limitations.
+    * **Data Augmentation**: Online and offline techniques like rotation and flipping.
+    * **Model Fit & Regularization**: Underfitting, overfitting, and regularization concepts.
 
 ---
 
 ## 13.8. Exam Essentials
 
-* **Parallelism**: Choose between framework or model parallelism for large neural networks.
-    * _Data Parallel_: Train on multiple nodes with identical data
-    * _Model Parallel_: Split model across multiple nodes, each node computes a portion of the model
-* 
-* **Hyperparameter Tuning**:
-  * Understand loss functions (sparse cross-entropy, categorical cross-entropy)
-  * Learn from hyperparameters: gradient descent, learning rate, batch size, epoch
-  * Strategies to tune: grid search, random search, Bayesian optimization
-* 
-* **Transfer Learning and Transfer Augmentation**: Pretrained models trained on large datasets can help with limited data.
+* **Choose parallelism strategy**: Select framework or model parallelism for multinode training.
+  * **Multinode training**: Use data or model parallel strategies; know TensorFlow distributed training techniques.
+
+* **Understand modeling techniques**: Choose loss functions (sparse cross-entropy vs. categorical), grasp gradient descent, learning rate, batch size, and epochs as hyperparameters to tune for optimal performance.
+
+* **Transfer learning**: Utilize pretrained models to aid in training with limited data.
+
+* **Semi-supervised learning (SSL)**: Apply when labeled data is scarce; understand its limitations.
+
 
 ---
 
-    * Use pre-trained models as a starting point for your own model
-    * Apply transfer learning to adapt models to new tasks
-*
+* **Data augmentation**: Use techniques like flipping, rotation, GANs, and transfer learning for enhanced dataset diversity.
+
+* **Model generalization & overfitting/underfitting strategies**: Handle bias-variance trade-off; apply regularization (L1/L2) to prevent overfitting and underfitting.
 
 ---
 # 14. Chapter 8Model Training and Hyperparameter Tuning
@@ -2070,113 +2261,71 @@ L1 regularization helps with feature selection and reducing model size or leadin
 
 ## 14.1. Ingestion of Various File Types into Training
 
-* Data for training can be structured (e.g., tables, CSV files), semi-structured (e.g., PDFs, JSON files) or unstructured (e.g., chats, audio)
-* Data types include batch data or real-time streaming data
-* Data size ranges from small megabytes to petabyte scale
+* Data types: structured (tables, CSV), semi-structured (PDFs, JSON), unstructured (chats, emails, images)
+* Data flow: batch or real-time streaming
+* Data scale: small to petabyte
+* Preparation: cleaning and transforming data for ML training
+* Tools: Google Cloud analytics portfolio for data management
+
+---
+
+
+![center w:85%](images/c08f001.png)
 
 ---
 
 ### 14.1.1. Collect
 
-* **Batch/Streaming Data Collection**: 
-  * _Use Google Cloud services to collect batch or streaming data from various sources_
-  * **Google Pub/Sub and Pub/Sub Lite**:
-    * Real-time analytics with scalable performance
-    * Stream data directly to BigQuery from third-party applications
-    * Optimized for cost over reliability (Pub/Sub Lite)
-  * **Datastream**: 
-    * Serverless CDC and replication service for heterogeneous databases
-    * Supports streaming from Oracle and MySQL databases into Cloud Storage
-    * Integrated with Dataflow and leverages templates for load data into BigQuery, Cloud Spanner, and Cloud SQL
-  * **BigQuery Data Transfer Service**:
+**Google Cloud Pub/Sub and Lite**: Real-time messaging and analytics with scalable serverless services for global publishing and subscribing; Pub/Sub Lite optimizes for cost over reliability.
+
+**Datastream**: Serverless change data capture (CDC) service for moving on-premises Oracle and MySQL databases to Google Cloud storage, integrating with Dataflow and templates for loading into BigQuery, Cloud Spanner, and Cloud SQL.
+
+**BigQuery Data Transfer Service**: Automates data ingestion from Teradata, Amazon Redshift, S3, and Google SaaS apps like Cloud Storage and Google Ads directly into BigQuery.
 
 ---
 
-    * Load data from external sources (Teradata, Amazon Redshift, S3) into BigQuery
-
----
 ### 14.1.2. Process
 
-* *_Data Preprocessing Tools_*
-	+ Data cleaning and handling
-	+ Data transformation and normalization
-	+ Feature engineering and extraction
-
----
-
-#### 14.1.2.1. Cloud Dataflow
-
-* **Cloud Dataflow**: Serverless, fully managed data processing service for streaming and batch data
-    * Uses Apache Beam with exactly-once streaming semantics, ensuring each message is processed only once
-    * Allows building pipelines, monitoring execution, transforming, and analyzing data to simplify business logic
-
----
-
-#### 14.1.2.2. Cloud Data Fusion
-
-* **Cloud Data Fusion**: A UI-based ETL (Extract, Transform, Load) tool for data integration and processing without coding.
-
----
-
-#### 14.1.2.3. Cloud Dataproc
-
-* **Dataproc**: A fully managed service for running Apache Spark, Flink, Presto, and 30+ open-source tools on Google Cloud Platform.
-    * Supports batch processing, querying, streaming, and machine learning
-    * Automates cluster creation, management, and shutdown to reduce costs
-* **Integration with other services**:
-    * Seamlessly integrates with BigQuery for data transformation and reporting
-    * Uses HDFS for storage and automatically installs the Cloud Storage connector
-* **Connectors**: Supports various connectors such as Cloud Storage, BigQuery, Cloud Bigtable, and Pub/Sub Lite Spark connector.
-
----
-
-*Cloud Dataproc*
-Connector | Description
----|---
-Cloud Storage connector | This is by default available on Dataproc and this connector helps run Apache Hadoop or Apache Spark jobs directly on data in Cloud Storage. Store your data in Cloud Storage and access it directly with Cloud Storage connector. You do not need to transfer it into HDFS first.
-BigQuery connector | You can use BigQuery connector to enable programmatic read/write access to BigQuery. This is an ideal way to process data that is stored in BigQuery as command‐line access is not exposed. The BigQuery connector is a library that enables Spark and Hadoop applications to process data from BigQuery and write data to BigQuery. BigQuery Spark connector is used for Spark and BigQuery Hadoop connector is used for Hadoop.
-BigQuery Spark connector | Apache Spark SQL connector for Google BigQuery. The connector supports reading Google BigQuery tables into Spark's DataFrames, and writing DataFrames back into BigQuery. This is done by using the Spark SQL Data Source API to communicate with BigQuery.
-Cloud Bigtable with Dataproc | Bigtable is an excellent option for any Apache Spark or Hadoop uses that require Apache HBase. Bigtable supports the Apache HBase APIs so it is easy to use Bigtable with Dataproc.
-Pub/Sub Lite Spark connector | The Pub/Sub Lite Spark connector supports Pub/Sub Lite as an input source to Apache Spark Structured Streaming in the default micro‐batch processing and experimental continuous processing modes.
-
-<!-- _class: centered -->
-
----
-
-#### 14.1.2.4. Cloud Composer
-
-* **Cloud Composer**: a fully managed data workflow orchestration service using Apache Airflow.
-    * Supports hybrid and multicloud architecture for on-premises, multiple clouds, or Google Cloud.
-    * Integrates end-to-end with Google Cloud products such as BigQuery, Dataflow, and Dataproc.
-
----
-
-#### 14.1.2.5. Cloud Dataprep
-
-* **Cloud Dataprep**: A UI-based ETL tool for visual exploration, cleaning, and preparing structured and unstructured data for analysis, reporting, and machine learning.
-
----
-
-#### 14.1.2.6. Summary of Processing Tools
-
-* **Summary of Processing Tools**: 
-    * _Dataflow_: for batch and interactive processing
-    * _Fusion Tables_: for real-time analytics
-    * _Cloud Functions_: for event-driven processing
-* Note: Not exhaustive, as figure is not shown.
+* **Data processing tools**: Required for transforming raw data into a format suitable for ML training.
+* **Tool selection**: Varies based on data source and specific needs.
 
 ---
 
 ### 14.1.3. Store and Analyze
 
-* **Data Storage Options**
-  * Tabular data: BigQuery, BigQuery ML
-  * Image, video, audio, unstructured data: Google Cloud Storage
-  * Unstructured data: Vertex Data Labeling, Vertex AI Feature Store
-* 
-* **Storage Best Practices**
-  * Avoid storing data in block storage like NFS and VMs
-  * Use large container formats on Cloud Storage for image, video, audio, and unstructured data
+**Google Cloud Storage Options**: 
+- **Tabular data**: BigQuery, BigQuery ML
+- **Image, video, audio, unstructured data**: Google Cloud Storage
+- **Unstructured data**: Vertex Data Labeling
+- **Structured data**: Vertex AI Feature Store
+- **AutoML image, video, text**: Vertex AI Managed Datasets
+
+* * *
+
+**Storage Recommendations**:
+- Avoid block storage like NFS and VMs.
+- Avoid direct database reads from Cloud SQL.
+
+* * *
+
+**Data Storage Tips**:
+- Use large container formats for image, video, audio on Cloud Storage.
+- Combine data into files of at least 100 MB; aim for 100 to 10,000 shards.
+- For TensorFlow: Sharded TFRecord files.
+- For other frameworks: Avro files in Cloud Storage.
+
+---
+
+- Use TensorFlow I/O for Parquet format management.
+
+---
+
+![center w:85%](images/tip.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
@@ -2195,11 +2344,14 @@ For AutoML image, video, text | Vertex AI Managed Datasets
 
 ## 14.2. Developing Models in Vertex AI Workbench by Using Common Frameworks
 
-* **Vertex AI Workbench Overview**: A Jupyter Notebook-based environment for data science workflow, integrating with Google Cloud services.
-* **Managed Notebooks vs User-Managed Notebooks**:
-    * Managed notebooks: More features, automatic shutdown, UI integration with Cloud Storage and BigQuery, automated notebook runs.
-    * User-managed notebooks: Fewer features, no automatic shutdown, UI integration limitations, custom containers and frameworks available.
-    * Consider user-managed notebooks for specific networking and security needs.
+**Vertex AI Workbench**: Jupyter Notebook-based environment for data science workflow
+
+* **User-managed notebook**
+    * Older version with more control and fewer features
+    * No automated shutdown, UI integration with Cloud Storage or BigQuery, no automated runs, custom containers not supported
+* **Managed notebook**
+    * Latest offering; supports automated shutdown, UI integration, scheduled runs, custom containers, Dataproc/Serverless Spark, multiple frameworks
+* Both notebooks include pre-installed deep learning packages and integrate with GitHub
 
 ---
 
@@ -2215,156 +2367,314 @@ Managed notebook | User‐managed notebook
 
 ### 14.2.1. Creating a Managed Notebook
 
-**Creating a Managed Notebook in Vertex AI**
-* Go to Vertex AI and enable all APIs
-* Click on Workbench > New Notebook and create the notebook
-* Wait for it to be created, then click "Open JupyterLab" to access your environment
+**Enable APIs**: Go to Vertex AI and enable All APIs.
+
+**Create Managed Notebook**: Click Workbench > Managed Notebooks > New Notebook > Create (Figure 8.4).
+
+**Open JupyterLab**: After creation, click Open JupyterLab button (Figure 8.5). 
+
+* **Upgrade Option**: Notice the manual upgrade option for managed notebooks.
+
+---
+
+
+![center w:85%](images/c08f004.png)
+
+---
+
+
+![center w:85%](images/c08f005.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 14.2.2. Exploring Managed JupyterLab Features
 
-* **Getting Started**: After clicking Open JupyterLab, frameworks like Serverless Spark and PySpark are available for use.
-    * **Features**: The JupyterLab environment comes with tutorials, a terminal option to run commands on the entire notebook.
-    * **Notebook Environment**: Supports running Dataproc cluster within the notebook.
+**Managed Notebook Environment**: Contains Serverless Spark and PySpark for local use.
+* **Serverless Spark**: Runs Dataproc cluster within the notebook.
+**Tutorials Folder**: Includes pre-made notebooks to facilitate model building and training.
+* **Terminal Option**: Allows running terminal commands on the entire notebook.
+
+---
+
+
+![center w:85%](images/c08f006.png)
 
 ---
 
 ### 14.2.3. Data Integration
 
-* Open the Browse GCS icon in the left navigation bar
-* Load data from cloud storage folders
-* Access Google Cloud Storage directly from the managed notebook
+* Click the Browse GCS icon to access cloud storage folders.
+* Load data from Google Cloud Storage into a managed notebook.
+
+---
+
+
+![center w:85%](images/c08f007.png)
 
 ---
 
 ### 14.2.4. BigQuery Integration
 
-* Click the BigQuery icon to access your BigQuery tables
-* Alternatively, use the Open SQL editor to query tables directly from JupyterLab
+* Click the BigQuery icon to access data from your tables.
+* Use the SQL editor directly in JupyterLab for querying BigQuery tables.
+
+---
+
+
+![center w:85%](images/c08f008.png)
 
 ---
 
 ### 14.2.5. Ability to Scale the Compute Up or Down
 
-* *_Access Click N1-Standard-4 instance_* 
-    * *_Modify hardware settings_* 
-        * *_Attach GPU (if available)_*
+**Modify Jupyter Environment Hardware**: Choose `n1-standard-4` instance and adjust settings.
+* **Attach GPU**: Option available directly within the environment.
 
 ---
 
 ### 14.2.6. Git Integration for Team Collaboration
 
-* Integrate or clone an existing git repository for project collaboration
-    * Use the left navigation branch icon or run `git clone <your-repository name>` in the terminal
+* Integrate or clone repositories in a managed notebook
+    * Click left navigation icon for integration or use `git clone` command
+* Scale hardware by managing notebook resources (Fig. 8.9)
+* Enable git functionality with managed notebook interface (Fig. 8.10)
+
+---
+
+
+![center w:85%](images/c08f009.png)
+
+---
+
+
+![center w:85%](images/c08f010.png)
 
 ---
 
 ### 14.2.7. Schedule or Execute a Notebook Code
 
-* **Execute a Notebook Automatically**: Click Execute in Jupyter interface to execute notebooks manually or set up auto-execution by clicking on the triangle black arrow.
-    * To enable auto-execution, click on Submit notebooks to Executor and select scheduling options.
-* **Scheduling Options**: Choose Type option to schedule notebook run for one-time execution or at a scheduled time.
+**Python Execution**: Write "hello world," click Run cell, use black triangle arrow.
+
+**Automatic Execution**: Click Execute (Figure 8.11) to submit notebook for scheduling (Figure 8.12).
+
+**Scheduling Notebook**: Navigate to Type option (Figure 8.13) to schedule one-time or timed runs.
+
+---
+
+
+![center w:85%](images/c08f011.png)
+
+---
+
+
+![center w:85%](images/c08f012.png)
+
+---
+
+
+![center w:85%](images/c08f013.png)
 
 ---
 
 ### 14.2.8. Creating a User‐Managed Notebook
 
-* **Choosing User-Managed Notebooks**: 
-    * Select a framework (e.g., Python 3, TensorFlow) when creating a notebook.
-    * Configure networking with shared VPCs for advanced options.
+**User-Managed Notebooks**: Choose the execution environment (e.g., TensorFlow) during creation.
+* **Execution Environment**: Select from options like Python 3, TensorFlow, R, JAX, Kaggle, PyTorch.
+**Advanced Options**: Configure networking with shared VPCs.
+**Hardware Considerations**: Use small hardware instances for development; training occurs in separate containers managed by Vertex AI.
 
-* **Key Features**:
-    * No need for large hardware or compute instance for development in JupyterLab.
-    * Training and prediction are performed outside the notebook environment using SDKs or APIs.
+---
+
+
+![center w:85%](images/c08f014.png)
+
+---
+
+
+![center w:85%](images/c08f015.png)
+
+---
+
+
+![center w:85%](images/c08f016.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ## 14.3. Training a Model as a Job in Different Environments
 
-* **Vertex AI Training Modes**: 
-  * _AutoML_: Minimal technical effort required
-  * Custom training: Full control over model development and outcome targeting
+**AutoML**: Enables minimal-effort creation and training of models.
+
+**Custom training**: Offers full control over training applications for tailored outcomes, including algorithm selection, loss function development, and metric definition.
 
 ---
 
 ### 14.3.1. Training Workflow with Vertex AI
 
-* **Training Options in Vertex AI**
-  * Training pipelines: orchestrate custom training jobs and hyperparameter tuning for AutoML or custom models
-    * Create AutoML‐trained model or custom‐trained model
-    * Add dataset or upload model to Vertex AI for prediction serving
-  * Custom jobs: specify settings for custom training code, including worker pools and machine types
-    * Used by custom‐trained models only
-  * Hyperparameter tuning jobs: search for best hyperparameter combination (not supported in AutoML)
+**Training pipelines**: Primary workflow for training AutoML or custom models; orchestrate steps including dataset addition and model upload.
+
+**Custom jobs**: Specify settings for running custom training code, used only with custom-trained models.
+
+**Hyperparameter tuning jobs**: Search for optimal hyperparameters by optimizing metric values across trials, used only with custom-trained models.
+
+---
+
+
+![center w:85%](images/c08f017.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 14.3.2. Training Dataset Options in Vertex AI
 
-**Training Datasets on Vertex AI**
+**No Managed Dataset**: Use Cloud Storage or BigQuery data for training via Vertex AI managed notebooks, integrating with Google Cloud Storage FUSE for specifying datasets.
 
-* **Dataset Options**
-  * _No Managed Dataset_: Use Cloud Storage or BigQuery data, integrating with Vertex AI notebooks via GCS FUSE.
-  * _Managed Dataset_: Centralized management of datasets, labeling, and governance, including automatic splitting and performance tracking.
+**Managed Dataset**: Centralize dataset management, create labels, use integrated data labeling, track lineage, compare model performance, generate statistics, and automatically split data.
 
-**Mounting NFS Shares for Remote File Access**
+* **Custom Training Jobs**: Mount NFS shares to containers for accessing remote files locally.
 
-* Configure custom training jobs to mount NFS shares, accessing remote files as local with high throughput and low latency.
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 14.3.3. Pre‐built Containers
 
-* **Pre-built Container Setup**: Organize code according to application structure, upload training code to Cloud Storage bucket, and choose compute instances.
-    * Use standard dependencies or libraries by specifying in `setup.py`.
-    * Create a source distribution using `sdist` command.
-* **Creating Custom Job**: 
-    * Build Docker image based on prebuilt container image and local Python code
-    * Push image to Container Registry and create custom job using `gcloud ai custom-jobs create`
-        * Specify region, display name, worker pool spec, and executor image URI.
+* **Vertex AI Training with Prebuilt Containers**: Use scikit-learn, TensorFlow, PyTorch, or XGBoost containers hosted on the container registry.
+    * **Code Structure**: Organize code in a root folder with `setup.py` and a trainer folder containing `task.py` (entry point).
+    * **Training Setup**: Upload training code as Python source distribution to Cloud Storage; use `gcloud ai custom-jobs create` command for job creation.
+
+* **Custom Job Command**: Builds Docker image based on prebuilt container and local code, pushes to Container Registry.
+    * **Parameters**:
+        * **LOCATION**: Region where the container will run.
+        * **JOB_NAME**: Display name for the CustomJob.
+
+---
+
+        * **MACHINE_TYPE**: Type of machine; refer to available training machine types.
+        * **REPLICA_COUNT**: Number of worker replicas (usually 1).
+        * **EXECUTOR_IMAGE_URI**: URI of base container image for new Docker image.
+        * **WORKING_DIRECTORY**: Local directory containing entry point script.
+
+---
+
+![center w:85%](images/c08f018.png)
+
+---
+
+
+![center w:85%](images/c08f019.png)
 
 ---
 
 ### 14.3.4. Custom Containers
 
-* **Benefits of Custom Container**
-  * Faster start-up time
-  * Use the ML framework of your choice
-  * Extended support for distributed training
-  * Use the newest version of an ML framework
+**Custom Container Benefits:**
+- Faster startup time: Preinstall dependencies to save time on application boot.
+- Flexibility in ML framework choice: Use any preferred framework, e.g., PyTorch.
+- Distributed training support: Enable distributed training with various frameworks.
 
-* **Creating a Custom Container for Vertex AI Training**
+**Creating a Custom Container for Vertex AI Training:**
+- **Step 1: Setup Files:** Create Dockerfile and `trainer/task.py` in root directory. Dockerfile installs dependencies, copies code, sets entry point.
+    * Example Dockerfile:
+      ```docker
+      FROM image:tag
+      WORKDIR /root
 
-1. Create a Dockerfile, build and push to Artifact Registry:
-  * Set up files with required folder structure
-  * Install dependencies and copy training code
-  * Configure entry point to invoke training code
-2. Use the following commands to build and run the container:
-  ```bash
-docker build -f Dockerfile -t ${IMAGE_URI} .
-docker run ${IMAGE_URI}
-```
-3. Push the image to Artifact Registry and create a custom job:
-  ```
+      RUN pip install pkg1 pkg2 pkg3
+      RUN curl https://example-url/path-to-data/data-filename --output /root/data-filename
 
 ---
 
-gcloud ai custom-jobs create \
-   --region=_LOCATION_ \
-   --display-name=_JOB_NAME_ \
-   --worker-pool-spec=machine-type=_MACHINE_TYPE_ ,replica-count=_REPLICA_COUNT_ ,container-image-uri=_CUSTOM_CONTAINER_IMAGE_URI_
-```
+      COPY your-path-to/model.py /root/model.py
+      COPY your-path-to/task.py /root/task.py
+
+      ENTRYPOINT ["python", "task.py"]
+      ```
+- **Step 2: Build and Push:** Use provided commands to build and push Docker image to Artifact Registry.
+    * Commands:
+      ```bash
+      export PROJECT_ID=$(gcloud config list project --format "value(core.project)")
+      export REPO_NAME=REPOSITORY_NAME
+      export IMAGE_NAME=IMAGE_NAME
+      export IMAGE_TAG=IMAGE_TAG
+      export IMAGE_URI=us-central1-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+
+      docker build -f Dockerfile -t ${IMAGE_URI} ./
+      docker push ${IMAGE_URI}
+      ```
 
 ---
+
+- **Step 3: Start Training:** Create custom job using `gcloud` command.
+    * Command:
+      ```bash
+      gcloud ai custom-jobs create \
+           --region=_LOCATION_ \
+           --display-name=_JOB_NAME_ \
+           --worker-pool-spec=machine-type=_MACHINE_TYPE_ ,replica-count=_REPLICA_COUNT_ ,container-image-uri=_CUSTOM_CONTAINER_IMAGE_URI_
+      ```
+
+* * *
+
+By running training jobs in custom containers, you can leverage unsupported ML frameworks and dependencies.
+
+---
+
+![center w:85%](images/c08f020.png)
+
+---
+
+
+![center w:85%](images/tip.png)
+
+---
+
 ### 14.3.5. Distributed Training
 
-* To run a distributed training job with Vertex, specify multiple machines (nodes) in the training cluster
-    * Configure worker pools with different tasks and replicas, including primary, secondary, workers, parameter servers, reduction server, and evaluators
-    * Use CLUSTER_SPEC or TF_CONFIG environment variables to reference specific parts of the training cluster
+**Distributed Training with Vertex AI:**
+- **Replica and Worker Pools**: Define multiple nodes (replicas) in a training cluster; worker pools of identical configurations handle different tasks.
+    * **Primary Replica**: Manages other replicas, reports job status.
+    * **Worker Replicas**: Perform the bulk of the work based on your configuration.
+    * **Parameter Servers & Reduction Server**: Store model parameters and manage shared state or increase throughput/reduce latency using all-reduce algorithms.
+
+- **Configuring Distributed Training**:
+    - Use ML frameworks like TensorFlow, PyTorch with NCCL.
 
 ---
 
+    - Set up worker pools in `workerPoolSpecs[]` for different roles (e.g., primary, workers).
+    - For Vertex AI Reduction Server: Follow prerequisites; use Docker container images to configure worker pools.
+
+- **Example Setup**:
+    ```sh
+    gcloud ai custom-jobs create \
+      --region=_LOCATION_ \
+      --display-name=_JOB_NAME_ \
+      --worker-pool-spec=machine-type=n1-highmem-96,replica-count=1,accelerator-type=NVIDIA_TESLA_V100,accelerator-count=8,container-image-uri=_CUSTOM_CONTAINER_IMAGE_URI_ \
+      --worker-pool-spec=machine-type=n1-highmem-96,replica-count=4,accelerator-type=NVIDIA_TESLA_V100,accelerator-count=8,container-image-uri=_CUSTOM_CONTAINER_IMAGE_URI_ \
+
+---
+
+      --worker-pool-spec=machine-type=n1-highcpu-16,replica-count=16,container-image-uri=us-docker.pkg.dev/vertex-ai-restricted/training/reductionserver:latest
+    ```
+
+---
 *Distributed Training*
 Position in workerPoolSpecs[] | Task Performed in Cluster
 ---|---
@@ -2377,95 +2687,122 @@ Second (`workerPoolSpecs[1]`) | Secondary, replicas, workers.
 
 ## 14.4. Hyperparameter Tuning
 
-* **Hyperparameters**: parameters set before training that are not learned directly from data
-    * _Defined by the algorithm itself_
-    * Not adjusted during training, but rather chosen beforehand
-        * Examples: learning rate, regularization strength, batch size
-    * Must be tuned before training begins
+* Hyperparameters: Parameters of the training algorithm set before learning begins.
+* **Learning rate**: Key hyperparameter in gradient descent that influences model training.
+* *FIGURE 8.21*: Illustrates the distinction between model parameters and hyperparameters.
+
+---
+
+
+![center w:85%](images/c08f021.png)
 
 ---
 
 ### 14.4.1. Why Hyperparameters Are Important
 
-* **Hyperparameter Selection**: crucial for neural network success
-    * Influences model behavior and predictive accuracy
-    * Involves searching hyperparameter space efficiently using algorithms like Grid Search, Random Search, or Bayesian Search
-        + **Search Algorithms**:
-            * *_Grid Search_*: exhaustive search through manually specified hyperparameters
-            * *_Random Search_*: generates random combinations of hyperparameters to find best solution
-            * *_Bayesian Search_* (Vertex AI default): uses past evaluations to select next hyperparameter set
+**Hyperparameter Selection**: Crucial for neural network success as it influences model behavior.
+
+* **Search Space Optimization**: Vertex AI uses Bayesian optimization to efficiently search through hyperparameters.
+    * **Bayesian Search**: Considers past evaluations to choose the next hyperparameter set, reducing dimensionality issues compared to grid and random search.
+
+**Hyperparameter Tuning**: Automates the process of finding optimal settings using Google Cloud's compute infrastructure.
+
+* **Experiment Management**: Facilitates large-scale testing, providing optimized hyperparameters for better model accuracy.
 
 ---
 
 ### 14.4.2. Techniques to Speed Up Hyperparameter Optimization
 
-* **Hyperparameter Optimization Techniques**
-  * Use simple validation sets instead of cross-validation for large datasets
-  * Parallelize training across multiple machines using distributed computing
-  * Cache pre-computed computations to avoid redundant calculations
-  * Decrease number of hyperparameter values to consider in grid search
+**Distributed Training**: Increase speed by parallelizing across multiple machines.
+
+**Reduced Validation Set**: Use a simple validation set for large datasets to speed up optimization by a factor of ~k, but requires sufficient data.
+
+**Pre-computation/Caching**: Avoid redundant computations to boost efficiency.
+
+**Random Search**: Utilize random search for fewer trials and improved performance.
+
+**Bayesian Optimization**: Explore cloud-based tools like Google Cloud Machine Learning Engine for hyperparameter tuning.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 14.4.3. How Vertex AI Hyperparameter Tuning Works
 
-* **Hyperparameter Tuning**: runs multiple trials with varying hyperparameters to optimize target metrics, such as accuracy.
-  * **Custom Job Configuration**:
-    * Create a `config.yaml` file specifying API fields, including metric ID, goal, parameter ID, and search algorithm.
-    * Define VM type, Docker container image URI, and trial count for the custom job.
-* **Hyperparameter Tuning Steps**:
-  * Install `cloud-ml hypertune` package in the Dockerfile for a custom container.
-  * Add hyperparameter tuning code to the training application's main function.
-  * Build and push the container to Artifact Registry, then configure a hyperparameter tuning job using gcloud CLI commands.
+**Hyperparameter Tuning**: Runs multiple training sessions with varied hyperparameters to optimize model performance.
+* **Communication**: Involves interaction between Vertex AI and the training application, where the latter defines necessary information.
+    * **Metrics**: Specifies target variables (e.g., accuracy) to evaluate each trial, ensuring they are numeric.
+
+**Configuration Steps Using gcloud CLI**:
+1. Install `cloud-ml hypertune` package in Dockerfile for custom container.
+2. Add hyperparameter tuning code in main function and define metrics.
+3. Build and push the container to Artifact Registry; configure using a training pipeline or custom job.
+
+
+---
+
+**Setting Up Hyperparameter Tuning Job with YAML**:
+1. Define study specification with metric ID, goal, parameter ID, and value range.
+2. Specify trial job details like machine type and Docker image URI in `config.yaml`.
+3. Run command to create custom job for hyperparameter tuning.
+
+**Additional Notes**: Can use default Bayesian algorithm or specify a search algorithm; track progress on Vertex AI console.
+
+---
+
+![center w:85%](images/c08f022.png)
 
 ---
 
 ### 14.4.4. Vertex AI Vizier
 
-* **Vertex AI Vizier**: black-box optimization service for complex ML models without known objective functions
-* **Use cases**:
-  * Tuning hyperparameters for neural network recommendation engines
-  * Optimizing user interface elements and computing resources
-  * Identifying optimal recipe ingredient ratios
+**Vertex AI Vizier**: A black-box optimization service for tuning hyperparameters in complex ML models.
 
----
+* **No known objective function**: Evaluates without a predefined goal.
+* **Costly evaluations**: Handles systems too complex or expensive to evaluate frequently.
+* **Versatile use cases**: Optimizes hyperparameters, model parameters, and any system that can be evaluated.
 
-#### 14.4.4.1. How Vertex AI Vizier Differs from Custom Training
-
-* **Vertex AI Vizier**: independent service for optimizing complex models with many parameters
-* **Use cases**: ML and non‐ML, training jobs or integration with other systems (multicloud)
-* *_Hyperparameter tuning_*: uses Vertex AI Vizier to determine best settings for an ML model, using Bayesian optimization by default
+- Optimize neural network hyperparameters
+- Improve application usability through UI design
+- Minimize computing resources for jobs
+- Optimize recipe ingredients for best results
 
 ---
 
 ## 14.5. Tracking Metrics During Training
 
-* **Tracking Machine Learning Model Metrics**: 
-  * Using interactive shells
-  * TensorFlow Profiler
-  * What‐If Tool
+* **Interactive Shell**: For real-time model debugging
+* **TensorFlow Profiler**: To analyze and optimize model performance
+* **What-If Tool**: For exploring and explaining model predictions
 
 ---
 
 ### 14.5.1. Interactive Shell
 
-* **Interactive Shell in Vertex AI**: 
-    * Enable an interactive shell by setting enableWebAccess API field to true while setting up custom jobs programmatically or checking Enable training debugging in the console.
-    * Available only while job is in RUNNING state; link to web terminal created for each node.
+**Interactive Shell**: Accessible while the job is in the RUNNING state, it allows inspecting the file system and running debugging utilities.
 
-* **Logging and Metrics**:
-    * Logs available in Cloud Monitoring after Vertex AI exports metrics.
-    * View logs by clicking on the View logs link on the Vertex AI training page.
+**Web Terminal**: Created for each node during job execution; provides access via links on the job details page after Vertex AI starts running your job.
 
-* **Tools for Tracking Metrics and Profiling**:
-    * py-spy: visualizes Python program execution time
-    * `nvidia-smi` and `nvprof`: monitors GPU usage in GPU-enabled containers
+* **Tools for Metric Tracking & Profiling**:
+    * `py-spy`: Visualizes Python program execution without modifying code.
+    * `nvidia-smi` and `nvprof`: Monitor GPU usage in GPU-enabled containers.
+    * Perf: Analyzes training node performance using Linux profiling with performance counters.
 
 ---
 
-    * Perf: analyzes performance of training node using Linux profiling with performance counters
+
+![center w:85%](images/c08f023.png)
 
 ---
+
+
+![center w:85%](images/c08f024.png)
+
+---
+
 *Interactive Shell*
 Visualize Python Execution with py‐spy | Retrieve Information about GPU Usage | Analyze Performance with Perf
 ---|---|---
@@ -2477,52 +2814,72 @@ py‐spy is a sampling profiler for Python programs. It lets you visualize what 
 
 ### 14.5.2. TensorFlow Profiler
 
-* **Vertex AI TensorBoard Profiler**: Monitors model training performance, pinpoints bottlenecks for faster and cheaper training.
-* **Accessing the dashboard**: Custom jobs page or experiments page in Google Cloud console.
-* *To capture a profiling session, ensure your training job is in RUNNING state.*
+**Vertex AI TensorBoard**: Enterprise-ready managed version of TensorBoard for monitoring and optimizing model training.
+
+* **Profiler**: Helps understand resource consumption to pinpoint and fix performance bottlenecks, accelerating model training.
+    * **Access**: Via custom jobs or experiments page in Google Cloud console.
+    * **Capture**: Requires a running training job.
+
+**TF Profiler**: Allows on-demand profiling of remote Vertex AI training jobs, visualizing results in Vertex TensorBoard.
 
 ---
 
 ### 14.5.3. What‐If Tool
 
-* **Interactive Visualization of AI Models**: The What-If Tool allows you to inspect and compare AI Platform Prediction models using an interactive dashboard.
-* **Configuration Steps**:
-  * Install the `witwidget` library and configure `WitConfigBuilder`
-  * Set model details, target feature, and label vocabulary
-  * Pass `config_builder` to `WitWidget` with a specified display height
+**What-If Tool (WIT)**: Interactive dashboard for inspecting AI Platform Prediction models.
+
+* **Integration**: Supports TensorBoard, Jupyter Notebooks, Colab notebooks, and Vertex AI Workbench user-managed notebooks.
+    * **Preinstallation**: Included in Vertex AI Workbench notebooks and TensorFlow instances.
+
+**Usage**:
+1. Install `witwidget` library (preinstalled in Vertex AI Workbench).
+2. Configure `WitConfigBuilder` to inspect or compare models using project, model name, version, target feature, and label vocabulary.
+3. Display WIT widget with specified height:
+   ```python
+   WitWidget(config_builder, height=800)
+   ```
+
 
 ---
 
+**Example**: Explore the tool in this Colab notebook: *[https://colab.research.google.com/github/pair-code/what-if-tool/blob/master/What_If_Tool_Notebook_Usage.ipynb]*.
+
+---
 ## 14.6. Retraining/Redeployment Evaluation
 
-* *_Data drift_*: Change in the distribution of training data over time
-* *_Concept drift_*: Change in the underlying patterns or relationships in the data
-* *_Model performance decay_*: Gradual decrease in model accuracy as user behavior and training data evolve
+* Model performance decays over time due to changes in user behavior and training data.
+* Decay rates vary among models.
+* **Data drift**: change in the distribution of input features.
+* **Concept drift**: shift in the relationship between inputs and outputs.
 
 ---
 
 ### 14.6.1. Data Drift
 
-* **Data Drift**: Change in statistical distribution of production data from baseline data used to train or build the model
-    * _Causes_: change in feature attribution, change in input data (e.g., unit changes)
-    * _Detection_: examining feature distribution, correlation between features, or checking data schema
+* Data drift: Change in production data's statistical distribution from training data
+    * Detection methods: Monitor feature attribution changes, check for input unit shifts (e.g., Fahrenheit to Celsius)
+* Feature distribution: Examine changes in how features are distributed
+* Monitoring system: Use to track schema and correlation changes over baseline
 
 ---
 
 ### 14.6.2. Concept Drift
 
-* **Concept Drift**: Change in statistical properties of the target variable over time
-    * Example: Sentiment analysis models may need to adapt as user opinions evolve
-    * _Monitoring deployed models can help detect drift_, using tools like Vertex AI Model Monitoring.
+**Concept Drift**: Change in the statistical properties of the target variable over time.
+
+**Detection**: Requires monitoring of deployed models; can be achieved using Vertex AI Model Monitoring.
+
+* **Vertex AI Model Monitoring**: Tool for detecting concept drift by monitoring deployed models.
 
 ---
 
 ### 14.6.3. When Should a Model Be Retrained?
 
-* **Retraining Strategies**: 
-  * Periodic training: Retrain model at set intervals (e.g., weekly, monthly) based on updated training data alignment with business use case.
-  * Performance-based trigger: Retrain if model performance falls below threshold, assuming sophisticated monitoring system.
-  * Data changes trigger: Retrain when data drift occurs in production.
+**Retraining strategies**: Choose an interval (weekly/monthly/yearly) based on data update frequency for periodic training.
+
+* **Performance-based trigger**: Retrain when model performance falls below predefined threshold, assuming a robust monitoring system is in place.
+
+**Data changes trigger**: Rebuild models if data drift occurs, indicated by changes in model performance.
 
 ---
 
@@ -2539,51 +2896,69 @@ Retraining on demand | This is a manual and traditional way of retraining your m
 
 ## 14.7. Unit Testing for Model Training and Serving
 
-* **Testing Challenges**: testing machine learning systems is hard due to the interconnected code, model, and data
-* **Model Testing**
-    * *_Unit tests_*: test individual units of code (e.g., ensuring a single gradient step decreases loss)
-        * Checking output shapes and ranges align with expectations
-        * Verifying decrease in loss after one gradient step on batch data
+**Machine Learning Testing**: Involves testing code, model, and data.
+
+* **Model Code Testing**: Ensures units of code function as expected through unit tests.
+    * **Data Testing**: Checks model output shape, output ranges, gradient steps, dataset assertions, and label leakage between training and validation sets.
 
 ---
 
 ### 14.7.1. Testing for Updates in API Calls
 
-* **Testing API Updates**: Instead of retuning the entire model, write a unit test with random input data to verify a single step of gradient descent completes without errors.
-    * This method is more resource-efficient than retraining the entire model.
-    * It allows for quick validation and testing of API updates.
+* Test API updates: Retrain the model, which is resource-intensive.
+* Test API updates: Write a unit test for random input generation and one-step gradient descent.
+* Simplify testing: Avoid runtime errors during development.
 
 ---
 
 ### 14.7.2. Testing for Algorithmic Correctness
 
-* **Validate Model Correctness**:
-	+ Train model for iterations, verify loss decreases
-	+ Train without regularization, verify memorization (loss close to 0)
-	+ Test specific subcomputations (e.g., network parts run once per input element)
+* Verify model correctness by checking decreasing loss during training
+* Train without regularization; expect low training loss if model is complex
+* Test individual components like CNN parts for correct operation per input element
 
 ---
 
 ## 14.8. Summary
 
-* **AI/ML File Ingestion**: stages of file ingestion (collect, process, store, analyze) with services like Pub/Sub, BigQuery Data Transfer Service, and Datastream
-    * **Model Training**: training using Vertex AI with frameworks scikit-learn, TensorFlow, PyTorch, XGBoost
-        * **Model Evaluation**: unit testing, hyperparameter tuning, and tracking with Vertex AI interactive shell and metrics
-* **Hyperparameter Tuning**: search algorithms (e.g. Grid Search) and tools like Vertex AI Vizier
+* **File types**: Structured, unstructured, semi-structured; ingestion stages: collect, process, store, analyze
+    * **Collect**: Pub/Sub, Pub/Sub Lite
+    * **Store & Analyze**: BigQuery Data Transfer Service, Datastream, Cloud Dataflow, Cloud Data Fusion, Cloud Dataproc, Cloud Composer, Cloud Dataprep
+
+* **Model training**: Vertex AI training; frameworks: scikit-learn, TensorFlow, PyTorch, XGBoost; prebuilt and custom containers
+
+* **Training validation**: Unit test data and models for machine learning
+
+* **Hyperparameter tuning**: Vertex AI Vizier; search algorithms
+
+* **Model tracking & debugging**: Vertex AI metrics, interactive shell, TensorFlow Profiler, What-If Tool
+
 
 ---
 
+* **Drift management**: Retrain model to avoid data drift or concept drift
+
+---
 ## 14.9. Exam Essentials
 
-* **File Ingestion**: Understand various file types (structured, unstructured, semi-structured) for AI/ML workloads in GCP. Use Pub/Sub, BigQuery Data Transfer Service, and Cloud Dataflow for data ingestion.
-* **Vertex AI Workbench**: Understand feature differences between managed and user-managed notebooks. Know when to use each type of notebook and how to create them.
-    * Manage environment and frameworks (scikit-learn, TensorFlow, PyTorch, XGBoost) using Vertex AI training along with architecture.
+* **Ingest data into Google Cloud**: Use Pub/Sub, BigQuery Data Transfer Service, and Datastream for structured, unstructured, and semi-structured files.
+    * **Process data**: Utilize Cloud Dataflow, Cloud Data Fusion, Cloud Dataproc, Cloud Composer, and Cloud Dataprep for ETL jobs.
+* **Use Vertex AI Workbench**: Understand managed vs. user-managed notebooks; know how to create and use them with supported frameworks.
+* **Train models in Vertex AI**:
+    * **Model training options**: AutoML, custom training using prebuilt or custom containers.
+    * **Training setup**: Use pipelines or custom jobs; support for scikit-learn, TensorFlow, PyTorch, XGBoost.
 
 ---
 
-* **Model Training and Serving**: Unit test data and models for machine learning, test API updates, and algorithm correctness. Track metrics during training using Interactive shell, Tensorflow Profiler, and What‐If tool.
-    * Understand hyperparameter tuning (grid search, random search, Bayesian search) and use custom jobs to set up tuning.
-* **Hyperparameter Tuning**: Use Vertex AI Vizier for hyperparameter tuning, understanding its differences from setting up custom hyperparameter tuning.
+    * **Distributed training**: Set up using Vertex AI custom jobs.
+* **Test models**: Unit test data and models; test APIs after updates.
+* **Hyperparameter tuning**:
+    * **Search algorithms**: Grid search, random search, Bayesian search.
+    * **Setup**: Use custom jobs; understand Vertex AI Vizier.
+* **Track training metrics**: Use Interactive shell, Tensorflow Profiler, What-If tool.
+* **Evaluate retraining/redeployment**:
+    * **Bias variance trade-off**: Strategies for underfitting and overfitting.
+    * **Regularization**: L1 vs. L2; when to apply each.
 
 ---
 # 15. Chapter 9Model Explainability on Vertex AI
@@ -2592,132 +2967,124 @@ Retraining on demand | This is a manual and traditional way of retraining your m
 
 ## 15.1. Model Explainability on Vertex AI
 
-* **Model Prediction Explainability**: As model impact on business outcomes increases, model developers' responsibility to explain predictions also grows.
-    * _High-stakes applications_: Model developers must justify decisions like loan approvals or patient medication doses.
-    * _Low-stakes applications_: Consumers may not need explanations for movie recommendations.
+**Model Explainability**: Increases with the impact of predictions on business outcomes.
+* **Examples**:
+    * Movie recommendations: Low explainability required.
+    * Credit loan approval or drug dosage prediction: High explainability required.
+**Visibility into Training Process**: Important for developing human-explainable ML models.
 
 ---
 
 ### 15.1.1. Explainable AI
 
-* **Explainability** refers to understanding an ML or deep learning system's internal mechanics.
-  * _Global explainability_ makes the overall model transparent and comprehensive.
-  * _Local explainability_ explains individual predictions.
-* Explainability builds trust, improves adoption, and helps with debugging complex models.
+**Explainability**: The extent to which ML models can be understood by humans.
+
+* **Global Explainability**: Makes the overall ML model transparent.
+* **Local Explainability**: Explains individual predictions made by the model.
+
+Debugging complex models like deep neural nets is difficult due to their opacity, whereas linear models and decision trees are more interpretable. Explainable techniques are necessary for understanding and debugging these models.
 
 ---
 
 ### 15.1.2. Interpretability and Explainability
 
-* **Interpretability vs Explainability**: 
-    * _Interpretability_ focuses on associating causes with effects.
-    * _Explainability_ focuses on understanding model parameters' influence on results.
+* **Interpretability**: Accuracy in associating causes with effects in machine learning models.
+* **Explainability**: Ability to justify model results using hidden parameters in deep neural networks.
+    * **Deep neural nets**: Covered in Chapter 7, "Model Building".
 
 ---
 
 ### 15.1.3. Feature Importance
 
-* **Feature Importance**: technique that assigns scores to features based on their contribution to model predictions.
-    * **Benefits**:
-        * _Variable selection_: remove unnecessary variables to save compute and infrastructure costs and training time.
-        * **Data leakage prevention**: identify target variable as a feature to avoid data leakage and incorrect results.
+* Feature importance: Scores indicating the value of each feature in constructing boosted decision trees.
+    * Variable selection: Helps identify unimportant variables for model deployment, reducing costs and time.
+* Target/label or data leakage detection: Identifies accidental inclusion of target variable as a feature.
 
 ---
 
 ### 15.1.4. Vertex Explainable AI
 
-* **Vertex Explainable AI**: integrates feature attributions into Vertex AI to understand model outputs for classification and regression tasks.
-    * Provides insights into feature contributions to predicted results, enabling model verification, bias recognition, and improvement ideas.
-        * Supports AutoML models, custom-trained TensorFlow models based on tabular or image data.
-
----
-
-#### 15.1.4.1. Feature Attribution
-
-**Vertex AI Feature Attribution**
-
-* **Method 1: Sampled Shapley**
-	+ Assigns credit to each feature, considering different permutations
-	+ Provides a sampling approximation of exact Shapley values
-	+ Used for nondifferentiable models (e.g. ensembles of trees and neural networks)
-* **Method 2: Integrated Gradients**
-	+ Gradient-based method for efficient computation
-	+ Mostly used in deep neural networks with image use cases
-	+ Provides feature importance on individual examples, but not global
-* **Method 3: XRAI (eXplanation with Ranked Area Integrals)**
-	+ Combines integrated gradients with additional steps to determine region contributions
-
----
-
-	+ Used for image data and models that accept image inputs
-	+ Provides explanations in images by highlighting relevant regions
-
----
-*Feature Attribution*
-Method | Supported Data Types | Model Types | Use Case | Vertex AI–Equivalent Model
----|---|---|---|---
-Sampled Shapley | Tabular | Nondifferentiable models (explained after the table), such as ensembles of trees and neural networks. | Classification and regression on tabular data | Custom‐trained models (any prediction container)
-
-<!-- _class: centered -->
-
----
-
-#### 15.1.4.2. Vertex AI Example–Based Explanations
-
-* **Active Learning with Example-Based Explanations**: Enables selective labeling of data using explanations that show which class an instance belongs to.
-    * Can be applied to various data types (images, text, tables).
-        * Currently in public preview and not included in the exam questions.
+* **Vertex Explainable AI**: Integrates feature attributions to help understand model outputs for classification and regression tasks.
+    * **Feature attributions**: Shows the contribution of each data feature to predicted results, aiding in model verification, bias recognition, and improvements.
+* **Supported Services**:
+    * AutoML image models (classification only)
+    * AutoML tabular models (classification and regression only)
+    * Custom-trained TensorFlow models (tabular or image data)
 
 ---
 
 ### 15.1.5. Data Bias and Fairness
 
-* **Data Bias**: occurs when certain parts of data are not collected or misrepresented, leading to skewed outcomes.
-    * Examples: surveys with biased questions, systemic or historical beliefs, non-random sampling, or small sample sizes.
-* **ML Fairness**: ensures that biases in data and model inaccuracies do not lead to unfair treatment of individuals based on characteristics such as race, gender, etc.
-    * Techniques for detection:
-        * AutoML tables: Explainable AI feature attributions
-        * Vertex AI interactive dashboard with What-If Tool (features overview functionality)
-* **Bias Detection Tools**: 
-    * Language Interpretability Tool (for NLP models)
+* **Data Bias**: Occurs when certain parts of data are not collected or misrepresented.
+    * **Types**: Surveys, systemic/historical beliefs, non-random/sample size issues.
+* **ML Fairness**: Ensures models do not treat individuals unfavorably based on protected characteristics (race, gender, etc.).
+* **Detection Tools**:
+    * Vertex AI's Explainable AI feature attributions in AutoML tables.
+    * Interactive `What-If Tool` dashboard for bias detection in datasets.
+    * Open-source `Language Interpretability Tool` for NLP models.
 
 ---
 
 ### 15.1.6. ML Solution Readiness
 
-**ML Solution Readiness**
+**Responsible AI**: Principles and tools to ensure ethical use of AI models.
+    * **Explainable AI**: Using Vertex AI offerings for transparent model construction.
+    * **Model cards**: Documentation explaining model functionality, audience, and maintenance.
 
-* _Key concepts:_ **Responsible AI**, **Model Governance**
-* 
-  * **Responsible AI:** Use tools like Explainable AI, Model cards, and TensorFlow open source toolkit to inspect and understand AI models.
-  * **Model Governance:**
-    * Assign responsibility for model output and prediction
-    * Use benchmark datasets and fairness indicators to detect implicit bias
-    * Implement human-in-the-loop review and what-if analysis
+**Model governance**: Processes to implement company AI principles.
+    * Human in the loop for sensitive tasks.
+    * Responsibility assignment matrix per task.
+    * Maintain model cards for versioning and data lineage.
+    * Evaluate models on benchmark datasets and validate fairness.
+    * Use what-if analysis tools for feature importance.
 
 ---
 
 ### 15.1.7. How to Set Up Explanations in the Vertex AI
 
-* You need to configure explanations for custom-trained models to use Vertex Explainable AI.
-    * To get batch explanations, set generateExplanation field to true when creating a batch prediction job.
-    * Local kernel explanations can be generated in User-Managed Vertex AI Workbench notebook without deploying the model to Vertex AI.
+**Custom-trained models**: Configure explanations for custom models (`https://cloud.google.com/vertex-ai/docs/explainable-ai/configuring-explanations-feature-based`).
+
+**AutoML models**: No specific configuration required for AutoML tabular classification or regression to use Vertex Explainable AI (`https://cloud.google.com/vertex-ai/docs/explainable-ai/getting-explanations`).
+
+* **Online explanations**: Send `explain` requests instead of `predict` requests to get predictions with feature attributions.
+* **Batch explanations**: Set the generateExplanation field to true in batch prediction jobs to obtain feature attributions asynchronously.
+
+---
+
+* **Local kernel explanations**: Generate explanations locally using Vertex Explainable AI within a User-Managed Vertex AI Workbench notebook, without deploying the model.
+
+**Explainable AI SDK**: Preinstalled in user-managed notebooks; use `save_model_with_metadata()` for TensorFlow models and `explain()` to visualize feature attributions.
+
+---
+
+![center w:85%](images/note.png)
 
 ---
 
 ## 15.2. Summary
 
-* **Explainable AI**: Aims to provide insights into machine learning models' decisions
-    * Key aspects: Explainability vs interpretability, feature importance, data bias, and fairness
-    * Importance of explainability for ML model trust
+**Explainable AI**: Technique to make machine learning models understandable
+
+**Feature Importance**: Key factor in explaining model decisions; highlights critical input features
+
+**Data Bias & Fairness**: Essential for ensuring ML models are unbiased and fair
+
+**ML Solution Readiness**: Evaluating if an ML solution is ready for deployment
+
+* **Explainable AI Techniques on Vertex AI Platform**
+    * **Sampled Shapley**
+    * **XRAI**
+    * **Integrated Gradients**
 
 ---
 
 ## 15.3. Exam Essentials
 
-* **Model Explainability on Vertex AI**: Understand what explainability means and its importance, including feature importance and global vs local explanations.
-    * Supported feature attribution methods: Sampled Shapley algorithm, integrated gradients, XRAI
-    * Ex explainable AI available for TensorFlow prediction container and AutoML models
+**Explainability on Vertex AI**: Know global and local explanations, feature importance, and use options like Sampled Shapley, integrated gradients, XRAI.
+
+**Responsible AI & ML Governance**: Cover data bias, fairness, and feature attributions for identifying biases.
+
+**Vertex AI Support**: Explainable AI SDK for TensorFlow prediction container and AutoML tabular/image models.
 
 ---
 
@@ -2727,54 +3094,64 @@ Sampled Shapley | Tabular | Nondifferentiable models (explained after the table)
 
 ## 16.1. Scaling Prediction Service
 
-* **Deploying a TensorFlow Model**: A saved model contains trained parameters and computation, allowing for sharing or deployment with various frameworks.
-* **Saved Models**: Created by calling `tf.saved_model.save()`, stored as a directory on disk, and include a `saved_model.pb` file describing the function `tf.Graph`.
-* **Key Benefits**: No need for original model building code to run, useful for sharing, deploying, or using with TensorFlow Lite, TensorFlow.js, TensorFlow Serving, or TensorFlow Hub.
+**Saved Model**: A complete TensorFlow program including trained parameters and computation; can be shared or deployed using various tools.
+
+* **Deployment Options**: TensorFlow Lite, TensorFlow.js, TensorFlow Serving, TensorFlow Hub
+
+**TF Model Serving Options**: Represented in Figure 10.1, showing distribution strategies with CPUs, GPUs, and TPUs.
+
+---
+
+
+![center w:85%](images/c10f001.png)
 
 ---
 
 ### 16.1.1. TensorFlow Serving
 
-**TensorFlow Serving Overview**
- 
-* Host trained TensorFlow models as API endpoints through a model server.
-* Handles model serving and version management.
-* Supports REST and gRPC API endpoints.
+**TensorFlow Serving**: Hosts trained TensorFlow models as API endpoints for model serving and version management.
 
-**Setup Steps**
+**API Endpoints**: Supports REST and gRPC.
 
-1. Install TensorFlow Serving with Docker or manually (docker recommended).
-2. Train and save a model using TensorFlow.
+**Setup Steps**:
+1. Install TensorFlow Serving with Docker.
+2. Train and save a model with TensorFlow.
 3. Serve the saved model using TensorFlow Serving.
+
+* * *
+
+**Installation**: Recommended to install TensorFlow Serving with Docker; managed containers on Vertex AI can also be used for management.
 
 ---
 
-#### 16.1.1.1. Serving a Saved Model with TensorFlow Serving
 
-* **REST API Request**
-    * The TensorFlow ModelServer accepts POST requests to `http://host:port/<URI>:<VERB>`, where `URI` is `/v1/models/${MODEL_NAME}[/versions/${MODEL_VERSION}]` and `<VERB>` is either `classify`, `regress`, or `predict`.
-* **Prediction Response**
-    * The `predict()` response returns a JSON object with the following structure:
-        * `predictions`: a list of objects containing `class_ids`, `probabilities`, `classes`, and `logits` tensors.
+![center w:85%](images/note.png)
 
 ---
 
 ## 16.2. Serving (Online, Batch, and Caching)
 
-* **Best Practices for Serving**
-  * Use a combination of batch prediction and online prediction for optimal performance
-  * Implement caching mechanisms to reduce latency and improve scalability
-  * Optimize model serving architecture for efficient processing and storage
+* Batch Prediction (Offline Serving): For processing large datasets not requiring real-time responses.
+* Online Prediction: For real-time requests needing immediate results.
+* Best Practices for Serving and Caching Strategy: To be covered in Chapter 5.
 
 ---
 
 ### 16.2.1. Real‐Time Static and Dynamic Reference Features
 
-* _Two types of input features are used: static and dynamic._
-    * **Static Reference Features**: Values do not change in real time, updated in batches. Used for estimating prices or recommending products.
-        * Stored in NoSQL databases optimized for singleton lookup operations (e.g., Firestore).
-* **Dynamic Real-Time Features**: Computed on the fly, used for predicting events or recommending articles based on current user behavior.
-    * Stored in low-latency read/write databases (e.g., Cloud Bigtable).
+* **Static Reference Features**: Values do not change in real time; typically updated in batches, stored in a data warehouse like Firestore.
+* **Dynamic Real-Time Features**: Computed on the fly using event-stream processing pipelines; used for real-time use cases like predicting engine failure or recommending news articles based on current session activity.
+    * **Storage and Processing**: Stored in low-latency databases such as Cloud Bigtable, processed via Dataflow streaming pipelines.
+
+---
+
+
+![center w:85%](images/c10f002.png)
+
+---
+
+
+![center w:85%](images/c10f003.png)
 
 ---
 
@@ -2793,82 +3170,69 @@ Static reference architecture (see Figure 10.2). | Dynamic reference architectur
 
 ### 16.2.2. Pre‐computing and Caching Prediction
 
-* **Pre-computation Approach**: Pre-compute predictions in batch scoring job, store them in low-latency data store (e.g. Memorystore or Datastore), and let clients fetch pre-existing predictions.
-* **Benefits**: Reduces online prediction latency for specific entities or feature combinations with high cardinality.
-    * Example: Hybrid approach can be used to precompute for top N entities (e.g. most active customers) and use model directly for others.
+**Offline Batch Scoring**: Pre-compute predictions in batch jobs and store them for quick online serving.
+
+* **Key-Value Store**: Data ingested, processed, and stored with keys.
+* **Batch Prediction Job**: Trained model runs on prepared data to produce key-identified predictions.
+* **Low-Latency Data Store**: Export predictions to a store optimized for fast singleton reads.
+* **Client Request**: Sends prediction request by unique key; ML gateway fetches and returns the prediction.
+
+**Lookup Keys**: 
+  * Specific Entity: Use for single-entity IDs (e.g., customer ID, device ID).
+  * Feature Combination: Hash input features to create keys for anonymous/new customers.
+
+---
+
+
+![center w:85%](images/c10f004.png)
 
 ---
 
 ## 16.3. Google Cloud Serving Options
 
-* **Prediction Types in Google Cloud**: Online predictions make immediate predictions on incoming data, while batch predictions process entire datasets at once.
-* 
-* **Vertex AI Support**: Both AutoML and custom models can utilize online and batch prediction capabilities.
- 
-* *_No specific job setup information provided_*
+**Online Predictions**: Deploy models for real-time predictions.
+
+**Batch Predictions**: Process data in batches for predictions.
+
+**Vertex AI**: Use for setting up online and batch prediction jobs for both AutoML and custom models.
 
 ---
 
 ### 16.3.1. Online Predictions
 
-* To set up a real-time prediction endpoint, you can either train models using *_Vertex AI_* or import existing models from other sources (*_on-premise_, _other cloud_, or _local device_*).
-    * Importing prebuilt containers requires artifacts with specific filenames (*_TensorFlow SavedModel_*, *_scikit-learn_*, or *_XGBoost_*).
-    * For custom container hosting, create a container image and push it to Artifact Registry.
-* Steps for setup:
-  * Deploy the model resource to an endpoint
-  * Make a prediction
-  * Undeploy if not in use
+**Real-time Prediction Endpoint Setup:**
 
----
+* **Models trained in Vertex AI using Vertex AI training:** AutoML or custom models.
+* **Model trained elsewhere (on-premise, on another cloud, or in local device):** Import to Google Cloud before deployment.
+    * **Prebuilt container import:** Use specific filenames like `saved_model.pb` for TensorFlow, `model.joblib`/`pkl` for scikit-learn, and `model.bst`, `joblib`, or `pkl` for XGBoost.
+* **Custom container import:** Create a container image and push to Artifact Registry using Cloud Build.
 
-#### 16.3.1.1. Deploying the Model
+**Prediction Setup Steps:**
 
-* **Model Deployment**: Vertex AI automatically provisions resources and sets up autoscaling for containerized models (TensorFlow, scikit-learn, or XGBoost) deployed using the Prediction endpoint.
-    * Users can deploy multiple models to a single endpoint.
-    * Models can be deployed to multiple endpoints.
-
----
-
-#### 16.3.1.2. Make Predictions
-
-* **Preprocessing Data**: Preprocess input instances to match `task.py` format using the `predict` function.
-* *_Endpoint_:_ *_Get a REST endpoint ID_ for real-time prediction.
-    * _Format Input Data_: JSON for prebuilt containers, or with additional parameters field for custom containers.
-
----
-
-#### 16.3.1.3. A/B Testing of Different Versions of a Model
-
-* **A/B Testing**: compares two versions of a machine learning model to determine which one performs better.
-    * Tests control (A) version against variant (B) version to measure success based on key metrics.
-    * Allows for gradual deployment and replacement of models.
-* **Vertex AI A/B Testing**: uses traffic-split parameter to deploy multiple models to the same endpoint, serving a percentage of traffic before increasing to 100%.
-* **Additional Capabilities**: Vertex AI model evaluation feature allows for model performance measurement, tracking, and decision-making on model progression to online testing or production.
-
----
-
-#### 16.3.1.4. Undeploy Endpoints
-
-* **Undeploying Endpoints**: Undeploy endpoints when not in use to avoid incurring charges.
-* _When to undeploy_ : During weekdays or when the business is inactive for a few hours.
-* *Example usage:* `endpoint.undeploy(deployed_model_id=deployed_model_id)`
-
----
-
-#### 16.3.1.5. Send an Online Explanation Request
-
-* **Send Online Explanation Request**: Use `aiplatform.Endpoint().explain()` with instances and parameters to get online explanations
-* **Returns Predictions and Feature Attributions**: Similar responses to prediction requests, including feature attributions and predictions
-* _No Python SDK Example Code Required_: The provided code snippet is not necessary as the explanation request can be sent directly through the `aiplatform.Endpoint` class
+1. Deploy model resource to an endpoint.
+2. Make a prediction.
+3. Undeploy if the endpoint is not in use.
 
 ---
 
 ### 16.3.2. Batch Predictions
 
-* **Batch Prediction**: Run model on production data, saves output to Cloud Storage.
-    * Input data must be formatted for specific AutoML or custom model requirements (JSON Lines, TFRecord, CSV files, etc.).
-    * Output options: BigQuery table or Google Cloud Storage bucket. 
-        * Model monitoring can be enabled in Preview mode to detect skew.
+**Batch Prediction**: Run model on input data stored in Cloud Storage and save results back to Cloud Storage.
+- **Input Data Preparation**: Ensure data is formatted as per AutoML or custom model requirements (JSON Lines, TFRecord, CSV, File list, BigQuery).
+    * **Options for Custom-Trained Models**: JSON Lines, TFRecord, CSV, File list, BigQuery.
+**Execution**: Use Vertex AI APIs or console to create a batch prediction job; output can be stored in BigQuery or Cloud Storage.
+- **Output Options**: Choose between BigQuery table or Google Cloud Storage bucket.
+    * **Model Monitoring**: Enable for skew detection (in Preview).
+
+---
+
+
+![center w:85%](images/c10f007.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
@@ -2887,43 +3251,46 @@ BigQuery | Specify a BigQuery table as projectId.datasetId.tableId. Vertex AI tr
 
 ## 16.4. Hosting Third‐Party Pipelines (MLflow) on Google Cloud
 
-* **MLflow Overview**: An open-source platform for managing the machine learning life cycle, supporting multiple libraries and programming languages.
-  * *_Functions:_* 
-    + Experiment tracking
-    + Packaging ML code
-    + Model management and deployment
-    + Centralized model store (Model Registry)
-* **Hosting on Google Cloud**: Leverage scalability and availability of Vertex AI for model training and hosting. Use high-performance compute resources such as GPUs, TPUs, and CPUs.
-  * *_Setup:_* 
-    + PostgreSQL DB for metadata storage
-    + Google Cloud Storage bucket for artifact storage
-    + Compute Engine instance or Kubernetes for installation
+**MLflow Tracking**: For experiment tracking and parameter comparison.
+
+**MLflow Projects**: Package ML code for reuse and sharing.
+
+**MLflow Models**: Manage and deploy models across various serving platforms.
+
+**MLflow Model Registry**: Centralized model store with versioning and stage transitions.
+
+* **Google Cloud Setup**: Use PostgreSQL DB for metadata, Cloud Storage bucket for artifacts, Compute Engine or Kubernetes for server installation.  
+* **Alternative Installation**: Run MLflow using a Google Cloud plugin (`https://pypi.org/project/google-cloud-mlflow`).
 
 ---
 
 ## 16.5. Testing for Target Performance
 
-* **Test for Production Performance**
-  * Check training-serving skew with real-time data
-  * Monitor model age and performance throughout the ML pipeline
-  * Test numerical stability of weights and outputs (no NaN or null values) 
-* _Additional Tools: Vertex AI Model Monitoring and Feature Store_
-  * Detects skew and monitors model performance over time
+**Model Performance Testing**: Ensure real-time data quality and check for training-serving skew.
+* **Numerical Stability**: Verify model weights and outputs are not NaN or null; ensure more than half of layer outputs are non-zero.
+**Vertex AI Services**: Use Vertex AI Model Monitoring and Feature Store for detecting skew and monitoring performance.
 
 ---
 
 ## 16.6. Configuring Triggers and Pipeline Schedules
 
-**Triggering Training or Prediction Jobs on Vertex AI**
- 
-* Use Cloud Scheduler to set up a cron job schedule.
-* Utilize Vertex AI managed notebooks for Jupyter Notebook execution and scheduling.
-* Leverage Cloud Build, Cloud Run, event-driven serverless Cloud Functions, and Cloud Pub/Sub for custom training and deployment.
+**Cloud Scheduler**: Schedule Vertex AI training or prediction jobs using a cron job.
+* **Cloud Workflows**: Orchestrate multiple HTTP-based services into a durable and stateful workflow, useful for chaining microservices like data cleaning, transformation, and model deployment.
 
-**Orchestration Options**
+**Vertex AI Pipelines**: Automate, monitor, and govern ML systems by orchestrating ML workflows in a serverless manner and storing artifacts using Vertex ML Metadata.
+* **Cloud Composer**: Orchestrate data-driven workflows (particularly ETL/ELT) using Python as DAG definition files, supporting pipelines across multiple cloud platforms.
 
-* **Cloud Workflows**: orchestrate multiple HTTP-based services into a durable workflow.
-* **Vertex AI Pipelines**: automate, monitor, and govern ML systems by orchestrating workflows in a serverless manner.
+
+---
+
+**Cloud Functions & Cloud Pub/Sub**: Use event-based triggers for deploying models or retraining jobs. Consider using an orchestrator like Cloud Workflows for complex workflows involving multiple functions.
+* * *
+
+For more information: [Choosing the Right Orchestrator on Google Cloud](https://cloud.google.com/blog/topics/developers-practitioners/choosing-right-orchestrator-google-cloud)
+
+---
+
+![center w:85%](images/note.png)
 
 ---
 
@@ -2939,27 +3306,25 @@ Cloud Composer | Cloud Composer is designed to orchestrate data‐driven workflo
 
 ## 16.7. Summary
 
-* **TF Serving Scaling**:
-	* Covered `predict` function details and understanding output from SignatureDef
-	* Discussed online serving architecture (static and dynamic)
-	* Examine pre-computing and caching while serving predictions
-* **Model Deployment and Production**:
-	+ Deploy models using online and batch mode with Vertex AI Prediction and Google Cloud options
-	+ Address performance degradation in production (training-serving skew, data quality changes)
-* **Automating Model Pipelines**:
-	+ Configure triggers and schedules using Cloud Run, Cloud Build, Cloud Scheduler, Vertex AI managed notebooks, and Cloud Composer
+**TF Serving**: Enables scalable prediction services using the `predict` function and SignatureDef of saved models.
+* **Serving Architecture**: Discussed static and dynamic architectures, focusing on pre-computing and caching for efficiency.
+* **Deployment Options**: Covered online and batch deployment with Vertex AI Prediction and Google Cloud serving options.
+    * **Performance Considerations**: Addressed performance degradation due to training-serving skew and data quality changes.
+* **Automation Tools**: Learned about using Cloud Run, Cloud Build, Cloud Scheduler, Vertex AI managed notebooks, and Cloud Composer for model pipelines.
 
 ---
 
 ## 16.8. Exam Essentials
 
-* **TensorFlow Serving Overview**: TensorFlow Serving is a system to deploy and serve pre-trained machine learning models. It allows for scalable prediction services, Google Cloud serving options, and model performance testing.
-* **Prediction Services**:
-  * _Online Serving_: real-time invocation of models with dynamic reference features
-  * _Batch Serving_: offline invocation of models with cached responses
-  * _Caching_: strategy to improve serving latency
-* 
-  * **Google Cloud Options**: set up real-time endpoints, batch jobs, and automated pipelines using Google Cloud Vertex AI Prediction, Workflows, Vertex AI Pipelines, and Cloud Composer.
+**TensorFlow Serving**: Deploy trained TensorFlow models; set up with Docker; understand prediction responses.
+
+**Prediction Services Scaling**: Online vs. batch serving; handle real-time (static/dynamic) and caching strategies.
+
+**Google Cloud Options**: Real-time endpoints via Vertex AI Prediction; use APIs or GCP console; batch predictions setup.
+
+**Performance Testing**: Monitor model performance degradation using Vertex AI Model Monitoring.
+
+**Triggers and Schedules**: Set up triggers to invoke models on Google Cloud; schedule with Cloud Scheduler, managed notebooks, Workflows, Vertex AI Pipelines, and Cloud Composer.
 
 ---
 
@@ -2969,80 +3334,128 @@ Cloud Composer | Cloud Composer is designed to orchestrate data‐driven workflo
 
 ## 17.1. Orchestration Frameworks
 
-* An **orchestrator** manages the steps of an ML pipeline, such as data cleaning, transformation, and model training.
-* It automatically executes the pipeline based on defined conditions and runs in a sequence.
-* Orchestrating is useful for both development and production phases to automate the execution of the pipeline.
+**Orchestrator**: Manages steps like data cleaning, transformation, and model training in an ML pipeline; runs sequentially based on defined conditions.
+
+**Orchestration phases**: 
+* **Development phase**: Automates ML experiment execution for data scientists.
+* **Production phase**: Automates pipeline execution based on schedules or triggers.
+
+**Examples of orchestrators**: Kubeflow Pipelines, Vertex AI Pipelines, Apache Airflow, Cloud Composer.
 
 ---
 
 ### 17.1.1. Kubeflow Pipelines
 
-**Kubeflow Overview**
+**Kubeflow**: ML toolkit for Kubernetes, enabling deployment and management of complex systems.
+- **Components**: Supports various ML frameworks (TensorFlow, PyTorch, MXNet) for experimentation and production use.
 
-* Kubeflow is the ML toolkit for Kubernetes
-* **Builds on Kubernetes for deploying, scaling, and managing complex systems**
-* Allows deployment of any ML framework (TensorFlow, PyTorch, MXNet) on various clouds or local platforms
+**Kubeflow Pipelines**: Platform for building, deploying, and managing multistep ML workflows using Docker containers.
+- **Pipeline**: Describes ML workflow as a graph with components and their relationships; includes inputs and outputs of each component.
 
-**Kubeflow Pipelines**
+**Platform Components**: 
+    * User interface (UI) for managing experiments and runs
+    * Scheduling engine for multistep workflows
+    * SDK for defining and manipulating pipelines/components
 
-* Platform for building, deploying, and managing multistep ML workflows based on Docker containers
-* **Description of an ML workflow in the form of a graph, including all components and their relations**
-* Runs pipelines by launching Kubernetes pods corresponding to steps (components) in the workflow
+---
+
+    * Notebooks for interacting with the system using the SDK
+    * Orchestration, experimentation, and reuse capabilities
+
+* * *
+
+**Installation Options**: 
+    - Google Cloud: GKE or managed Vertex AI Pipelines
+    - On-premises/local systems for testing
+
+---
+
+![center w:85%](images/c11f003.png)
+
+---
+
+
+![center w:85%](images/c11f004.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ### 17.1.2. Vertex AI Pipelines
 
-### **Serverless Machine Learning Pipelines**
+**Vertex AI Pipelines**: Run Kubeflow or TFX pipelines serverlessly, providing automatic infrastructure management and data lineage.
 
-*   Run Kubeflow Pipelines or TensorFlow Extended pipelines on Vertex AI Pipelines without server setup
-*   Bring existing pipeline code and run it serverless on Vertex AI Pipelines
+* **Data Lineage**: Tracks data transformations from source to model consumption, capturing metadata and ML artifacts like models or datasets.
+    * **Artifact Lineage**: Describes factors resulting in an artifact (e.g., training data, hyperparameters).
 
-### **Key Features of Vertex AI Pipelines**
+**Components and Steps**: Define pipeline workflow code as self-contained components with inputs, outputs, and container images.
 
-*   Provides data lineage for tracking data movement and transformations
-*   Automates, monitors, and experiments with interdependent parts of an ML workflow
+* * *
 
-### **Pipeline Components and Structure**
-
-*   Defined by code as a self-contained set of code that performs one part of the pipeline's workflow
-*   Can be built custom or reused from pre-built components
-
-### **Running Vertex AI Pipelines**
-
+**Vertex AI Pipelines Capabilities**:
+- Automate, monitor, and experiment with ML workflows.
+- Portable, scalable, based on containers.
 
 ---
 
-*   Supports Kubeflow Pipelines SDK v1.8.9+ and TensorFlow Extended v0.30.0+
-*   Migrate existing pipelines to Vertex AI Pipelines with reference guide at `https://cloud.google.com/vertex-ai/docs/pipelines/migrate-kfp`
+- Use custom or pre-built components, including Google Cloud Pipeline Components.
 
 ---
+
+![center w:85%](images/c11f005.png)
+
+---
+
+
+![center w:85%](images/c11f006.png)
+
+---
+
+
+![center w:85%](images/c11f007.png)
+
+---
+
+
+![center w:85%](images/c11f008.png)
+
+---
+
+
+![center w:85%](images/note.png)
+
+---
+
 ### 17.1.3. Apache Airflow
 
-* **Apache Airflow**: An open source workflow management platform for data engineering pipelines
-    * Founded in 2014 at Airbnb to manage complex workflows
-        * Represents workflows as directed acyclic graphs (DAGs) with tasks, dependencies, and data flows
+**Apache Airflow**: An open-source platform for managing data engineering workflows using DAGs.
+
+* **Workflows in Airflow**: Represented as directed acyclic graphs (DAGs) containing dependent tasks.
+* **Key Components**: Includes a UI, scheduler, and executor.
 
 ---
 
 ### 17.1.4. Cloud Composer
 
-* **Cloud Composer**: A fully managed workflow orchestration service built on Apache Airflow
-* **Benefits**:
-  * No installation or management overhead
-  * Use Airflow-native tools with a focus on workflows, not infrastructure
-* **Use cases**: 
-  * Orchestrate data-driven workflows (ETL/ELT)
-  * Batch workloads with low latency
+**Cloud Composer**: Fully managed workflow orchestration service based on Apache Airflow with no setup or maintenance.
+
+**Benefits**: 
+* Quick creation of Airflow environments.
+* Access to Airflow-native tools like the web interface and command-line utilities.
+* Ideal for data-driven workflows, especially ETL/ELT processes.
+
+**Use Cases**: Orchestrating batch workloads in data pipelines, triggering jobs in BigQuery or starting Dataflow pipelines.
 
 ---
 
 ### 17.1.5. Comparison of Tools
 
-* **Orchestrators Comparison** 
-    * Kubeflow Pipelines: orchestrate ML workflows in frameworks like TensorFlow and PyTorch, set up on-premises or in cloud.
-    * Vertex AI Pipelines: managed serverless pipeline for Kubeflow Pipelines, no infrastructure management needed.
-    * Cloud Composer: manages ETL/ELT pipelines using Apache Airflow, Python-based implementation.
+**Orchestrator Management and Support**: Kubeflow Pipelines supports ML workflows in any framework like TensorFlow; Vertex AI Pipelines offers serverless, managed Kubernetes with no infrastructure management needed; Cloud Composer is a managed Apache Airflow for ETL/ELT pipelines.
+
+* **Failure Handling**: Kubeflow Pipelines requires custom failure handling; Vertex AI Pipelines leverages Kubeflow's failure management; Cloud Composer handles GCP metrics to act on failures or successes.
 
 ---
 
@@ -3058,120 +3471,142 @@ It can be set up on‐premises or in any cloud. | Managed serverless pipeline to
 
 ## 17.2. Identification of Components, Parameters, Triggers, and Compute Needs
 
-* **Triggering an MLOps Pipeline**
-Automate retraining of ML models with new data, on demand or schedule, based on various conditions such as model performance degradation or availability of new data.
-* To train a new ML model, the deployed CT pipeline is executed without deploying new pipelines or components, only a new prediction service or trained model is served.
-* A new pipeline is deployed for a new implementation through a CI/CD pipeline.
+* **Triggers for MLOps pipelines**: Automate retraining of ML models with new data or changes in model performance.
+    * **Data availability**: Execute existing continuous training (CT) pipeline to train a new model; no new components are deployed.
+    * **New implementation**: Deploy a new pipeline through CI/CD when implementing an updated model.
+
+**FIGURE 11.9** Continuous training and CI/CD
+
+---
+
+
+![center w:85%](images/c11f009.png)
 
 ---
 
 ### 17.2.1. Schedule the Workflows with Kubeflow Pipelines
 
-* **CI/CD with Kubeflow Pipelines**
-    * Kubeflow Pipelines uses a Python SDK (`www.kubeflow.org/docs/components/pipelines/v1/sdk/sdk-overview`) to operate pipelines programmatically.
-    * Services for invoking Kubeflow Pipelines include:
-        * Cloud Scheduler
-        * Pub/Sub and Cloud Functions
-        * Cloud Composer or Cloud Data Fusion
-        * Argo built-in scheduler
+**Kubeflow Pipelines SDK**: Use kfp.Client for programmatic pipeline operations.
+- **Trigger Methods**: 
+  * Cloud Scheduler for scheduled runs
+  * Pub/Sub and Cloud Functions for event-based triggers
+  * Cloud Composer or Cloud Data Fusion for larger workflows
+  * Built-in Argo scheduler for recurring tasks
+- **Alternative Build Systems**: Jenkins (via Google Cloud Marketplace) or Apache Airflow with Cloud Composer
+- **Cloud Build Customization**: Skip triggers for documentation or experimentation notebook changes
+
+---
+
+
+![center w:85%](images/c11f010.png)
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 17.2.2. Schedule Vertex AI Pipelines
 
-* **Scheduling with Cloud Scheduler**
-  * Schedule pipeline execution using Cloud Scheduler with an event-driven Cloud Function and HTTP trigger
-  * Upload compiled pipeline JSON to Cloud Storage bucket and create Cloud Function with HTTP trigger
-  * Create Cloud Scheduler job, allowing manual run (optional)
-* **Scheduling with Cloud Pub/Sub**
-  * Trigger pipeline run using event-driven Cloud Function and Cloud Pub/Sub topic
-  * Specify Pub/Sub trigger in Cloud Functions, enabling function call on message publication
+**Schedule pipeline execution with Cloud Scheduler**: Use Cloud Scheduler and an HTTP-triggered Cloud Function to schedule pipeline runs.
+**Trigger a pipeline run with Cloud Pub/Sub**: Utilize a Cloud Pub/Sub trigger in a Cloud Function to execute pipelines in response to messages.
 
 ---
 
 ## 17.3. System Design with Kubeflow/TFX
 
-* **System Design Overview**: 
-  * _Kubeflow DSL_
-  * _TFX_
+**Kubeflow DSL**: Discuss system design using Kubeflow Domain-Specific Language.
+**TFX**: Cover system design using TensorFlow Extended.
 
 ---
 
 ### 17.3.1. System Design with Kubeflow DSL
 
-* **Kubeflow Pipelines**: pipelines stored as YAML files executed by Argo Workflows
-* **Python DSL**: authoring pipelines using a custom-built language for ML workflows
-    * **Container Creation**:
-        * Create container with Python function or Docker container
-        * Define operations referencing container, args, data mounts, and variables
-
----
-
-#### 17.3.1.1. Kubeflow Pipelines Components
-
-* To invoke a component in the pipeline, create a _component op_ using one of three methods:
-    * Lightweight Python component
-    * Reusable component with `component.yaml` file
-    * Predefined Google Cloud components
-* Component ops are automatically created from specifications using `ComponentStore.load_components`.
+* **Kubeflow Pipelines**: Stores pipelines as YAML files executed by Argo.
+    * **Argo Workflows**: Default runtime environment for Kubeflow Pipelines.
+* **Python DSL**: Used to author pipelines; represents ML workflow operations and supports simple Python functions in containers.
+* **Pipeline Definition**:
+    * Create container: As a Python function or Docker image.
+    * Define operation: Container, command-line arguments, data mounts, variables.
+    * Sequence operations: Define parallelism and dependencies.
+    * Compile to YAML: Convert Python-defined pipeline into a format Kubeflow can use.
 
 ---
 
 ### 17.3.2. System Design with TFX
 
-* **TFX Overview**: 
-  * A Google production-scale machine learning platform based on TensorFlow
-  * Provides a configuration framework and shared libraries for production-ready ML workflows
-* **TFX Pipeline Components**:
-  * ExampleGen: ingests input dataset, optionally splitting it
-  * Transform: performs feature engineering on the dataset
-  * Trainer: trains the model
-  * Evaluator: validates training results, checks for anomalies and missing values
-    * Note that ModelValidator is deprecated and fused with Evaluator
+**TFX**: Google’s production-scale ML platform based on TensorFlow, providing a configuration framework and shared libraries for building and managing ML workflows.
+
+* **TFX Pipelines**: Orchestrate ML workflows across platforms like Apache Airflow, Apache Beam, and Kubeflow Pipelines.
+    * **Components**: ExampleGen (ingests data), StatisticsGen (calculates dataset stats), SchemaGen (creates schema), ExampleValidator (detects anomalies), Transform (feature engineering), Trainer (model training), Tuner (hyperparameter tuning), Evaluator (model validation), Model Validator (checks model suitability), Pusher (deploys model).
+
+
+---
+
+**TFX Libraries**: Provide base functionality for standard components like TFDV.
+
+* **Orchestration Systems**: Use Apache Airflow, Cloud Composer, or Vertex AI Pipelines to run TFX stages.
+    * **Kubeflow Pipelines**: Run on GKE with TFX Pipeline DSL and CLI compiling Python code to a YAML file.
+
+---
+
+![center w:85%](images/c11f012.png)
+
+---
+
+
+![center w:85%](images/note.png)
 
 ---
 
 ## 17.4. Hybrid or Multicloud Strategies
 
-* **Multicloud**: Combining at least two public cloud providers (e.g., GCP + AWS) for flexible deployment options.
-  * Integrate GCP AI APIs with on-premises or applications using AWS Lambda
-  * Run BigQuery analytics on data stored in Azure Blob Storage or Amazon S3
-* **Hybrid Cloud**: Combining private and public cloud environments, enabling flexibility and scalability.
-  * Anthos: A hybrid and multicloud platform for cloud modernization and ML development
-    * Supports BigQuery Omni and hybrid AI offerings
-    * Enables on-premises deployment of GKE, Kubeflow Pipelines, and Cloud Run
+**Multicloud**: Interconnection between at least two public cloud providers.
+
+* **GCP AI APIs**: Can be integrated anywhere or in applications; AWS Lambda can call GCP ML APIs.
+    * **BigQuery Omni**: Runs BigQuery analytics on data from S3 or Azure Blob Storage; `LOAD DATA` SQL statement transfers data into BigQuery for analysis and BigQuery ML.
+
+**Hybrid cloud**: Combines private (on-premises) and public cloud environments.
+
+* **Anthos features**: Supports hybrid ML development with:
+    * **BigQuery Omni**: Managed by Anthos, simplifies querying data.
+    * **Speech-to-Text On-Prem**: Generally available on Anthos through Google Cloud Marketplace.
 
 ---
 
+    * **GKE on-premises**: Sets up Kubeflow Pipelines for ML workflows.
+    * **Cloud Run on-premises**: Runs API-based pretrained AI services.
+
+---
 ## 17.5. Summary
 
-* **Orchestration Tools**: 
-  * *_Kubeflow_*: Managed platform for ML workflows, integrates with Cloud Build and TensorBoard
-  * *_Vertex AI Pipelines_*: Serverless workflow management, integrates with Cloud Function event triggers
-  * *_Cloud Composer_*: Orchestrates TFX pipelines on Kubeflow and GKE
+**Orchestration Tools**: 
+- **Kubeflow**: Runs ML workflows on GCP Kubernetes Engine.
+- **Vertex AI Pipelines**: Managed serverless way to run Kubeflow and TFX workflows; uses Cloud Function event triggers for scheduling.
+- **Apache Airflow/Cloud Composer**: For complex, custom workflow automation.
 
-* **Scheduling and Deployment**:
-  * *_Kubeflow_*: Use Cloud Build to trigger deployments
-  * *_Vertex AI Pipelines_*: Use Cloud Function event triggers for scheduling
-* 
-  * *_TFX_*: Supports bringing own orchestrator or runtime, can be run on Kubeflow, Cloud Composer, and Vertex AI Pipelines
+**ML Workflow Scheduling**: 
+- **Kubeflow**: Uses Cloud Build for deployment.
+- **Vertex AI Pipelines**: Uses Cloud Functions or can be run manually.
+
+**System Design with Kubeflow & TFX**: 
+- **Components**: Create tasks as components in Kubeflow Pipelines; visualize with TensorBoard.
 
 ---
 
+- **TFX**: Three core components and libraries to define ML pipelines; supports various orchestrators including Cloud Composer, Kubeflow, and Vertex AI Pipelines.
+
+**Hybrid & Multicloud**: 
+- Use BigQuery Omni for data from AWS S3 and Azure storage.
+- Set up Kubeflow Pipelines on GKE with Anthos.
+
+---
 ## 17.6. Exam Essentials
 
-* **Orchestration Frameworks**: 
-  * _Kubeflow Pipelines_: Run on GCP, uses Cloud Build for deployment
-  * _Vertex AI Pipelines_: Run on GCP, integrates with Kubeflow and TFX
-  * _Apache Airflow_ and _Cloud Composer_: Alternatives to Kubeflow and Vertex AI
-
-* **Scheduling ML Workflows**: 
-  * Use Cloud Build for Kubeflow
-  * Use Cloud Function event triggers for Vertex AI Pipelines
-  * Schedule pipelines using Kubeflow Pipelines or TFX
-
-* **System Design**:
-  * _Kubeflow and TFX_: Create tasks as components, orchestrate with cloud runtimes
+**Orchestration Frameworks**: Kubeflow Pipelines and Vertex AI Pipelines (on GCP), Apache Airflow, Cloud Composer  
+    * **Kubeflow Pipelines/Vertex AI Pipelines**: Run ML workflows; use Cloud Build for deployment triggers, Cloud Functions for event-based scheduling.  
+* **TFX/Kubeflow System Design**: Components, tasks orchestrated as components in Kubeflow; TFX pipelines on Kubeflow or Vertex AI Pipelines using any orchestrator.
 
 ---
 
@@ -3181,229 +3616,192 @@ Automate retraining of ML models with new data, on demand or schedule, based on 
 
 ## 18.1. Model Monitoring
 
-**Model Performance After Deployment**
-* A deployed model may not perform well on real-time data due to changes in the environment.
-* Changes can occur unexpectedly, such as a pandemic or subtle changes in input data.
-* The model's performance degrades over time if it is not adapted to new data.
+**Deployment**: Transition from Jupyter Notebook experimentation to production with serverless architecture.
+- **Model Performance Uncertainty**: Post-deployment, evaluate model performance on real-time data; consider external factors like pandemics or subtle input changes.
+    * **Drift**: Models may become less relevant over time due to environmental changes; detect concept and data drift for recovery.
 
-**Concept Drift and Data Drift**
-* _Drift_: A concept that occurs when the distribution of data changes over time.
-* Two types:
-  * **Concept Drift**: Changes in the underlying concepts or relationships between variables.
-  * **Data Drift**: Changes in the distribution of input data.
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 18.1.1. Concept Drift
 
-* **Concept Drift**: Relationship between input variables and predicted variables changes over time
-    * _Example:_ Spam emails: as filters improve, spammers adapt by modifying their emails
-        * Adversarial agents engage in a cat-and-mouse game to outmaneuver detection systems
+* **Concept drift**: Relationship between input variables and predicted outcomes changes over time.
+    * **Adversarial behavior**: Spammers modify email content to evade spam filters, causing concept drift in models trained on historical data.
+* **Model assumptions changing**: Underlying conditions affecting model predictions alter, leading to decreased accuracy.
 
 ---
 
 ### 18.1.2. Data Drift
 
-* **Data Drift**: Change in input data fed to machine learning models compared to original training data.
-    * Can occur due to changes in statistical distribution or input schema (e.g., new product labels, changed column meanings).
-    * Requires continuous monitoring of data to detect model deterioration and take corrective action.
+* **Data drift**: Change in input data distribution or schema compared to training data.
+    * **Statistical distribution changes**: Model performance degrades if demographic shifts occur.
+* **Input schema changes**: New data (e.g., SKUs) or altered column meanings affect model accuracy.
+* **Model monitoring**: Continuously assess input data and re-evaluate models using training metrics to detect drift.
 
 ---
 
 ## 18.2. Model Monitoring on Vertex AI
 
-* Vertex AI offers model monitoring features to detect:
-    + _Training-serving skew_ (difference in input feature distribution between training data and production)
-    + _Prediction drift_ (change in input statistical distribution over time)
-* Detection is available for categorical and numerical features, including:
-  * Categorical features: color, country, zip code
-  * Numerical values: price, speed, distance
+* **Training-serving skew**: Input feature distribution difference between production and training data impacts model performance.
+    * **Original data access required**: Enable this feature if you have the original data.
+* **Prediction drift**: Statistical input distribution changes in production over time impact model performance.
+    * **No original data needed**: Use for monitoring inputs without original training data.
+* **Data types monitored**: Both skew and drift detection are available for categorical and numerical features.
+
+---
+
+
+![center w:85%](images/c12f001.png)
+
+---
+
+
+![center w:85%](images/c12f002.png)
 
 ---
 
 ### 18.2.1. Drift and Skew Calculation
 
-* **Baseline Calculation**
-    * For categorical features: count or percentage of instances by category
-    * For numerical features: count or percentage in buckets (equal-sized)
-* **Distribution Comparison**
-    * Categorical: L-infinity distance between baseline and latest production distribution
-    * Numerical: Jensen-Shannon divergence between baseline and latest production distribution
+**Baseline Distribution:**
+- **Skew detection baseline:** Statistical distribution of feature values in training data.
+- **Drift detection baseline:** Statistical distribution of feature values seen in production recently.
 
----
+**Distribution Calculation:**
+- **Categorical features:** Count or percentage of each value.
+- **Numerical features:** Count or percentage within equal-sized buckets.
 
-#### 18.2.1.1. Practical Considerations of Enabling Monitoring
-
-* To monitor data effectively without increasing costs, consider the following:
-  * Configure a prediction request sampling rate for only a sample of production inputs.
-  * Set the monitoring frequency to control how often logged inputs are analyzed for skew or drift.
-  * Set alerting thresholds for each feature to detect statistical distance exceeding a certain value.
+**Comparison Method:**
+- **Categorical:** L-infinity distance between baseline and latest production distribution.
+- **Numerical:** Jensen-Shannon divergence for distance score.
 
 ---
 
 ### 18.2.2. Input Schemas
 
-**Input Parsing in Vertex AI**
-
-* _Automatically parsed for AutoML models_
-* _Schema not required but recommended for custom-trained models_
+**Input Values**: Part of prediction request payloads, parsed by Vertex AI for monitoring.
+* **Schema**: Required for custom-trained models; provided automatically for AutoML models.
 
 ---
 
-#### 18.2.2.1. Automatic Schema Parsing
 
-* **Automatic Schema Detection**: Vertex AI model monitoring automatically parses the input schema when enabled for skew or drift, analyzing the first 1,000 requests.
-    * _Schema efficacy_ is best with key-value pairs format (_e.g._ {"feature": value})
-    * Example: {"make":"Ford", "model":"focus", year: "2011", "color":"black"}
-
----
-
-#### 18.2.2.2. Custom Schema
-
-* **Vertex AI Schema Requirements**
-  * Use Open API schema format for analysis instance
-  * Type can be _object_, _array_, or _string_
-    * _object_: key/value pairs, properties specify each feature type
-    * _array_ or _csv-string_: array-like format, order of features must be specified
+![center w:85%](images/tip.png)
 
 ---
 
 ## 18.3. Logging Strategy
 
-* **Logging**: Collecting requests to track trends in input features and for auditing purposes.
-    * **Implementation**: Enabled during model deployment or endpoint creation in Vertex AI.
-        * **Applicable domains**: Regulated financial verticals may require logging for all models, while other cases may be useful for updating training data.
+**Model Monitoring**: Track input trends and request logging.
+* **Logging Requirements**: Mandatory in regulated domains; useful for updating training data.
+**Enabling Prediction Logs in Vertex AI**: Available for AutoML tabular, image models, and custom-trained models; can be set during deployment or endpoint creation.
 
 ---
 
 ### 18.3.1. Types of Prediction Logs
 
-* *_Prediction Node Logs_* 
-  * *_Event Tracing Log_*: records events that occur during prediction node execution
-  * *_Performance Log_*: tracks performance metrics such as latency and throughput
-  * *_Error Log_*: logs errors that occur in the prediction nodes
-
----
-
-#### 18.3.1.1. Container Logging
-
-* **Logging Output**: Logs *_stdout_* and *_stderr_* from prediction nodes to Cloud Logging
-* **Debugging Utility**: Useful for diagnosing issues with containers or models
-* **Cloud Platform Integration**: Integrates with Google Cloud Platform's logging services
-
----
-
-#### 18.3.1.2. Access Logging
-
-* **Cloud Logging**: logs timestamp and latency data for requests
-* *Enabled by default for v1 service endpoints*
-* *Can be configured via deployment options*
-
----
-
-#### 18.3.1.3. Request‐Response Logging
-
-* Logs online prediction requests and responses to a BigQuery table for data augmentation
-* Can be enabled during or after creating a prediction endpoint
-    * Allows for increased training or test data through recorded interactions
+* Enable three independent log types for prediction nodes
+* Logs include:独立启用三种不同类型的日志以从预测节点获取信息。这些类型互不影响，可以单独启用或禁用。
 
 ---
 
 ### 18.3.2. Log Settings
 
-* **Update Log Settings**: Update log settings when creating an endpoint or redeploying a model.
-* **Consider Costs of Logging**: High QPS may produce significant logs, affecting costs.
-* **Logging Configuration**: Use `gcloud` command to specify logging configuration, e.g.:
- 
-  * `‐‐disable‐container‐logging`
-  * `‐‐enable‐access‐logging`
+**Log settings**: Configurable during endpoint creation or model deployment.
+
+**Logging considerations**: 
+* Undeploy and redeploy models to change log settings after initial deployment.
+* High QPS can lead to increased logging costs; consider scaling and cost management together.
+
+**Example gcloud command**:
+```gcloud ai endpoints deploy-model _1234567890_ \
+--region=_us-central1_ \
+--model=_model_id_12345_ \
+--display-name=_image_classification_ \
+--machine-type=_a2-highgpu-2g_ \
+--accelerator=count=2,type=nvidia-tesla-t4 \
+---disable-container-logging \
+---enable-access-logging```
 
 ---
 
 ### 18.3.3. Model Monitoring and Logging
 
-* **Restrictions between model monitoring and request-response logging**
-  * Model monitoring cannot be enabled if request-response logging is already enabled
-  * Request-response logging can only be enabled or disabled, not modified, once model monitoring is initially enabled
+**Model Monitoring and Request-Response Logging**: Use shared backend infrastructure (BigQuery table) but have overlapping restrictions.
+
+  * Enabling Model Monitoring after Request-Response Logging is not possible.
+  * Modifying Request-Response Logging after enabling Model Monitoring is restricted.
 
 ---
 
 ## 18.4. Model and Dataset Lineage
 
-* **Metadata Importance**: metadata (parameters, artifacts, metrics) is crucial in tracking and comparing experiments, detecting model degradation, and understanding lineage of ML artifacts.
-* **Metadata Benefits**:
-  * Detect degradation
-  * Compare hyperparameter effectiveness
-  * Track lineage for source discovery
-* **Metadata Use Cases**
-  * Rerun ML workflows with same parameters
-  * Audit downstream usage
+**Metadata**: Recordings of experiment parameters and observations.
+
+* **Tracking Model Performance**: Detect degradation post-deployment; compare hyperparameters.
+    * **Lineage Management**: Trace datasets/models, identify sources and descendants.
+* **Reproducibility**: Rerun workflows with identical settings.
+* **Audit Trail**: Monitor artifact usage for compliance and impact analysis.
 
 ---
 
 ### 18.4.1. Vertex ML Metadata
 
-* **Vertex ML Metadata**: Open source ML metadata library for Google Cloud
-  * Based on MLMD library developed by TensorFlow Extended team
-* **Data Model**
-  * **Metadata Store**: Regional container for all metadata resources, shared across orgs
-    * _Artifacts_: Data created by or consumed by ML workflows (e.g. datasets, models)
-  * _Context_: Group of artifacts and executions, useful for comparing metrics and identifying best models
-* **Key Resources**
-  * _Execution_: Step in a machine learning workflow, annotated with runtime parameters
+* **Metadata store**: Top-level container for all metadata resources, regional and project-specific.
+* **Metadata resources**:
+    * **Artifacts**: Entities or data pieces created/consumed by ML workflows (e.g., datasets, models).
+    * **Context**: Group of artifacts and executions (e.g., experiments with parameters and metrics).
+    * **Execution**: Step in ML workflow annotated with runtime parameters.
+* **Event**: Connects artifacts and executions, capturing relationships like origin lineage.
+* **Metadataschema**: Specifies schema for data types using OpenAPI YAML.
 
 ---
 
-#### 18.4.1.1. Manage ML Metadataschemas
 
-* **Metadata Resource Schema**: `_system schemas_` for common resource types stored under namespace `system`, including `Model`, with properties such as framework, version, and payload format.
-* **Create Artifact Operation**:
-  * Define a function with parameters such as project, location, URI, artifact ID, display name, schema version, description, and metadata.
-  * Call the `create()` function of the `Artifact` class to create a system artifact instance in the metadata store.
-* **Lookup Artifact Operation**:
-  * Use a function to query or look up an artifact like dataset or model using filters such as display name and creation date.
-
----
-
-#### 18.4.1.2. Vertex AI Pipelines
-
-* Vertex AI Pipelines store model metadata and artifacts in the metadata store for _lineage tracking_.
-    * Automatically generates a series of artifacts with each pipeline run, including dataset summaries and model evaluation metrics.
-    * Provides a visual representation of the lineage, allowing you to track data usage and model deployment.
+![center w:85%](images/c12f003.png)
 
 ---
 
 ## 18.5. Vertex AI Experiments
 
-* **Vertex AI Experiments**: Automates trial tracking and analysis for machine learning models
-    * Tracks experiment steps (preprocessing, embedding, training), input (algorithms, hyperparameters, datasets), and output (models, metrics, checkpoints)
-    * Provides a single pane of glass to view experiments in the Google Cloud console
+**ML Model Development**: Find the best model for your use case by experimenting with different libraries, algorithms, architectures, and hyperparameters.
+
+**Vertex AI Experiments**:  
+- Track experiment steps (preprocessing, embedding, training)
+- Monitor inputs (algorithms, hyperparameters, datasets)
+- Record outputs (models, metrics, checkpoints)
+
+**Google Cloud Console**: View experiments in a single pane, analyze runs, and explore results.
+
+**Vertex AI SDK for Python**: Access experiments, runs, parameters, metrics, and artifacts; track lineage with Vertex ML Metadata.
 
 ---
 
 ## 18.6. Vertex AI Debugging
 
-* _Debugging issues in Vertex AI training_
-    * Connect to the container running the custom training job
-        * Install interactive Bash shell (pre-installed in some containers)
-        * Enable `enableWebAccess` API field for interactive shells
-        * Verify service account permissions and setup
+**Access Training Container**: Connect to the container where training is running.
+
+* **Install Bash Shell**: Pre-built containers come with this installed.
+* **Enable Interactive Shells**: Set `enableWebAccess` API field to true.
+* **Debugging Tools**: Use interactive shell to check permissions, visualize Python execution with py-spy, analyze performance using perf, and check CPU/GPU usage.
 
 ---
 
 ## 18.7. Summary
 
-* **Model Maintenance**: Monitoring deployed models for performance degradation
-* **Logging Strategies**: Various options in Vertex AI for logging and tracking
-* **Model Lineage Tracking**: Using Vertex ML Metadata and Vertex AI Experiments to track model development history
+* **Model Monitoring**: Detect performance degradation post-deployment
+* **Logging Strategies**: Utilize various methods in Vertex AI for logging
+    * **Vertex ML Metadata & Vertex AI Experiments**: Track model lineage and experiments when building multiple models
 
 ---
 
 ## 18.8. Exam Essentials
 
-* **Model Monitoring**: Continuously monitor model performance after deployment to detect changes in input data, such as data drift and concept drift.
-  * **Logging Strategies**: Implement logging to track deployment performance and create new training data, using Vertex AI's logging capabilities.
-    * **Vertex ML Metadata**: Utilize Vertex ML Metadata for storing and accessing model metadata, tracking lineage of models and artifacts.
+* **Model Monitoring**: Continuously watch for data drift and concept drift in deployed models.
+* **Logging Strategies**: Implement logging to track deployment performance and generate new training data using Vertex AI.
+    * **Vertex ML Metadata**: Utilize managed GCP solution for storing and accessing model lineage and artifacts, including creating and querying metadata.
 
 ---
 
@@ -3413,156 +3811,144 @@ Automate retraining of ML models with new data, on demand or schedule, based on 
 
 ## 19.1. MLOps Maturity
 
-* **MLOps Phases**: Organizations journey through 3 phases of machine learning adoption:
-    * **Level 0 (Manual)**: Manual model training and development
-    * **Level 1 (Strategic Automation)**: Automated pipelines and deployment
-    * **Level 2 (CI/CD)**: Full automation with continuous integration and continuous deployment
-* **Key Steps in ML**: 
-    * Data extraction, analysis, preparation
-    * Model training, evaluation, validation
-    * Deployment and monitoring
-* **MLOps Leveling**: Defined by automation level of these steps:
-    * MLOps 0: Manual
-    * MLOps 1: Strategic automation
-    * MLOps 2: CI/CD automation
+**MLOps**: Application of DevOps principles to machine learning.
+* **Phases of ML journey**: Experimentation → Automation → Transformation
+    * **Experimentation**: Manual model training using pipelines; reflects initial AI readiness.
+    * **Automation**: Full automation of ML processes, using CI/CD; marks advanced AI maturity.
+* **ML steps**:
+    * **Data**
+        * Extraction: Collect and aggregate data.
+        * Analysis: Perform EDA, identify feature engineering needs.
+        * Preparation: Transform data, split into train/test/validation sets.
+    * **Model**
+        * Training: Experiment with algorithms and hyperparameters.
 
 ---
 
+        * Evaluation: Assess model quality using metrics.
+        * Validation: Ensure model meets performance criteria before deployment.
+    * **Deployment**
+        * Serving: Deploy for online or batch predictions; manage scaling.
+        * Monitor: Continuously monitor for anomalies, drift, and skew.
+
+---
 ### 19.1.1. MLOps Level 0: Manual/Tactical Phase
 
-* **Experimentation Phase**: Organizations experiment with ML to build proof of concepts, test AI/ML use cases, and validate business improvements.
-    * Focused on individual or team experimentation and model training.
-    * Output is a trained model handed off to the release/deployment team for deployment.
+* **Experimentation Phase**: Focus on building proof of concepts and testing AI/ML use cases.
+    * **Outputs**: Model developed and handed off to release/deployment team via model registry.
+* **Model Deployment**: Deployment team deploys the model to serve predictions.
 
 ---
 
-#### 19.1.1.1. Key Features of Level 0
 
-* **Tactical Phase Key Points**
-    * No automation in tasks; all manual
-    * Separate teams for data science and MLOps with limited handoff processes
-    * Limited scalability due to manual iterations
-    * No consideration of Continuous Integration (CI) or Continuous Deployment (CD)
-
----
-
-#### 19.1.1.2. Challenges
-
-* _Model degradation_ is a major challenge during this phase
-    * Can be mitigated by actively monitoring prediction quality
-    * Frequent retraining and algorithm experimentation are necessary
+![center w:85%](images/c13f001.png)
 
 ---
 
 ### 19.1.2. MLOps Level 1: Strategic Automation Phase
 
-* **MLOps Level 1 (Strategic Phase)**: Organizations with defined business objectives, prioritize ML to solve problems.
-    * Key services include:
-        * Automated pipeline triggers
-        * Feature Store
-        * Metadata management
+**Organizations**: Identified business objectives; prioritized ML for problem-solving  
+**MLOps Level 1/Strategic Phase**: Automated continuous training & delivery of model predictions  
+    * **Pipelines**: Automate data and model validation, triggers, Feature Store, metadata management  
+**Development Environment**: Central repository for source code; orchestrated model training  
+**Artifacts Sharing**: Infrastructure to share between teams; clear distinction between dev & production environments
 
 ---
 
-#### 19.1.2.1. Key Features of MLOps Level 1
 
-* **Level 1 Phase:**
-  * Features:
-    * Orchestration of experimentation steps
-    * Automated continuous training in production
-    * Unification with best practices (unified codebases)
-  * Benefits:
-    * Increased iteration speed
-    * Continuous delivery of new models
-
----
-
-#### 19.1.2.2. Challenges
-
-* **Manual Pipeline Management**: team manages only a few pipelines, with manual deployment for new pipelines.
-* *Pipelines are mainly triggered by data changes.*
-* Automating pipeline management through CI/CD setup is necessary for using non-existent technologies.
+![center w:85%](images/c13f002.png)
 
 ---
 
 ### 19.1.3. MLOps Level 2: CI/CD Automation, Transformational Phase
 
-* An organization in the transformational phase leverages AI for innovation and agility
-* ML experts are integrated into product teams and across business units
-* Datasets are shared across silos and ML projects collaborate between product groups * CI/CD automation is utilized throughout the entire pipeline, including model updates.
+**Transformational Phase**: Uses AI for innovation and agility; ML experts in product teams across business units.
+
+* **Data Access**: Datasets accessible across silos; projects shared between groups.
+
+* **CI/CD Automation**: Entire pipeline automated, including model updates (e.g., TensorFlow version changes).
 
 ---
 
-#### 19.1.3.1. Key Features of Level 2
 
-* **Level 2 Adoption**: Moving to level 2 involves adopting a CI/CD model for machine learning (ML) pipelines.
-    * _Key Features_: 
-        * Automated pipeline development, testing, and deployment
-        * Continuous retraining and monitoring of models
-        * Blue/green deployment options for model rollout
-    * **Goal**: Automate ML solution maintenance to adapt to rapid technological advancements.
+![center w:85%](images/c13f003.png)
 
 ---
 
 ## 19.2. Retraining and Versioning Models
 
-* **Drift Detection Limitations**: Model performance can degrade over time, requiring retraining.
-* **Key Considerations**:
-  * Monitor for drift detection and training-serving skew
-  * Collect real data for evaluation and new training datasets
-  * Determine when to retrain the model
-* **Retraining Frequency**: Establish a strategy for using collected data to train new models.
+**Model Monitoring**: Tracks drift and training-serving skew; collects data for performance evaluation and new training datasets.
+    * **Retraining Frequency**: Determined based on collected data to ensure model performance remains high.
+* **Data Collection**: Essential for creating fresh training and test datasets when enabling monitoring.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 19.2.1. Triggers for Retraining
 
-**Retraining Model Policies**
+**Retraining Pipeline:** Triggered based on policies like absolute threshold or rate of degradation.
+    * **Absolute Threshold**: Retrain when accuracy falls below a set percentage (e.g., 90%).
+    * **Rate of Degradation**: Retrain if performance drops by more than 2% in a day.
+**Considerations:**
+    * **Training Costs:** Avoid frequent retraining to minimize expenses.
+    * **Training Time:** Account for varying training times (minutes to weeks) and potential degradation during this period.
+    * **Delayed Training:** Ensure thresholds prevent significant performance loss before new models are deployed.
 
-* **Trigger retraining based on accuracy levels:**
-  + Absolute threshold (e.g., below 90% accuracy)
-  + Rate of degradation (e.g., sudden drop of more than 2% in accuracy)
-* **Consider the impact on model performance and deployment:**
-  + Minimize frequent retraining to avoid high training costs
-  + Balance model degradation vs. delayed training for new models
+---
+
+    * **Scheduled Retraining:** A simpler option is regular retraining on a fixed schedule.
+
+---
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 19.2.2. Versioning Models
 
-**Model Versioning**
-* Enables deployment of multiple models with version IDs for backward compatibility
-    * Allows users to select older models when new ones are released
-    * Solves disruptions caused by unexpected changes in behavior or performance
+**Model Versioning**: Allows deploying multiple versions of a model with distinct version IDs.
+
+**Version Selection**: Users can choose between versions when accessing models via API, ensuring backward compatibility and maintaining expected performance.
+
+**API Access**: Models are accessible using REST endpoints, providing convenience for users to monitor different versions.
 
 ---
 
 ## 19.3. Feature Store
 
-* **Feature Engineering Challenges**: Feature engineering is a valuable investment but often leads to repetitive tasks due to lack of sharing.
-* * **Main Issues**: 
-    + Non-reusable features
-    + Governance complexity
-    + Team divisions
-* **Consequences**: Reduces ML solution effectiveness, hinders productization and creates governance issues.
+**Feature Engineering**: A critical but time-consuming process in building effective ML models.
+
+* **Non-reusable**: Features created for specific projects are often not designed to be shared, leading to redundant effort.
+    * **Training vs. Serving Differences**: Ad hoc feature creation results in inconsistencies between training and serving data, impacting model performance.
+* **Governance and Collaboration Issues**: Lack of shared features complicates data governance and fosters siloed team structures.
+* **Productization Challenges**: Ad hoc features are difficult to automate and integrate into production systems requiring low-latency access.
 
 ---
 
 ### 19.3.1. Solution
 
-* **Feature Stores**: centralized location for features and metadata, applying software engineering principles like versioning, documentation, and access control
-    * Key features: fast processing of large feature sets and low-latency access for real-time and batch predictions
-    * Examples: Feast (open-source), Google Cloud Vertex AI Feature Store
+**Central Location for Features**: Stores features and metadata, facilitating sharing between data engineers and ML engineers.
+
+**Key Features of Feature Stores**: 
+* Process large feature sets quickly.
+* Access features with low latency for real-time prediction and batch access for training and predictions.
+
+**Feast**: An open-source Feature Store by Google and Gojek, available as a software download. 
+
+**Google Cloud Managed Service - Vertex AI Feature Store**: Provides dynamic scaling based on needs.
 
 ---
 
 ### 19.3.2. Data Model
 
-* The Vertex AI Feature Store uses a time-series model to store data.
-    * **Key Concepts:**
-        * _Featurestore_: A container with one or more entity types.
-        * _EntityType_: Stores similar or related features, e.g., batters and team.
-            * **Entity Structure:** `player_id` (unique String), team, batting_avg, age.
+**Vertex AI Feature Store**: Uses a time-series model for data storage, enabling temporal management.
+- **Hierarchy**: Featurestore → EntityType → Feature
+* **Featurestore**: Top-level container holding one or more entity types.
+* **EntityType**: Represents a type of feature with associated features like player_id, team, batting_avg, and age.
 
 ---
 
@@ -3579,102 +3965,112 @@ Row | player_id | Team | Batting_avg | Age
 
 ### 19.3.3. Ingestion and Serving
 
-* **Ingestion**: supports both batch and streaming ingestion into BigQuery
-    * Supports batch ingestion during model training
-    * Supports online ingestion for online inference
-* **Retrieval**: two methods: batch and online
-    * Batch method returns values up to time t
-    * Online method returns values at or before time t
+* **Vertex AI Feature Store**: Supports batch and streaming ingestion; features can be stored in BigQuery.
+    * **Ingestion Methods**: Batch (for model training) and online (for real-time inference).
+* **Feature Retrieval**:
+    * **Batch Method**: Used during model training, retrieves values up to time t.
+    * **Online Method**: Used for real-time inference, returns values at or before time t.
 
 ---
 
 ## 19.4. Vertex AI Permissions Model
 
-* **IAM Overview**: Identity and Access Management (IAM) controls access to resources and operations like training, deploying, and monitoring.
-    * Enforce permissions using IAM
-    * Refer to Chapter 6: Building Secure ML Pipelines for discussion
-* **GCP IAM Fundamentals**: Revisit GCP's IAM fundamentals before diving into Vertex AI permissions model. 
-* **IAM Best Practices**:
-    * **Least Privilege:** Restrict users and applications to only necessary actions.
-    * Manage service accounts and keys, enable audit logs and cloud logging roles.
-    * Use policy management to ensure policies are implemented at every level
+**Identity and Access Management (IAM)**: Enforces access control to resources and operations like training, deploying, and monitoring.
+
+**Least privilege**: Restrict users and applications to only necessary actions.
+
+* **Manage service accounts and keys**: Periodically check security assets.
+* **Auditing**: Enable audit logs using cloud logging roles.
+
+**Vertex AI specific best practices**: Follow general IAM guidelines tailored for ML pipelines.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 19.4.1. Custom Service Account
 
-* Using default service accounts created by Vertex AI can lead to unnecessary permissions
-* Custom service accounts with specific permissions are recommended for security and cost efficiency
+* **Service Accounts**: Automatically created by Google for accessing resources in a project.
+* **Permission Management**: Prefer using custom service accounts with minimal necessary permissions (e.g., not granting access to BigQuery and GCS if not needed).
 
 ---
 
 ### 19.4.2. Access Transparency in Vertex AI
 
-* **Logging Requirements**: Many domains require logging for access verification and compliance.
-* *_Cloud Audit logs_*: Capture user activity from your organization.
-* *_Access Transparency logs_*: Capture actions of Google personnel in your project.
+**Logs**: Capture user access and actions.
+* **Cloud Audit logs**: Record actions by users from your organization.
+* **Access Transparency logs**: Document actions by Google personnel.
+
+For a full list of supported services, see: [https://cloud.google.com/vertex-ai/docs/general/access-transparency](https://cloud.google.com/vertex-ai/docs/general/access-transparency)
 
 ---
 
 ## 19.5. Common Training and Serving Errors
 
-* Common errors during training and serving can be identified by understanding their underlying causes
-* Familiarizing yourself with these common errors enables effective debugging using TensorFlow as the framework
+**Common Errors**: Frequently encountered issues during training and serving.
+
+**Debugging**: Understanding these errors helps in effective problem resolution.
+
+* **TensorFlow Specific**: Examples and focus will be given using TensorFlow.
 
 ---
 
 ### 19.5.1. Training Time Errors
 
-* **Common Errors in Training Phase**
-  * _Insufficient input transformation or encoding_
-  * _Mismatched tensor shapes_
-  * _Out-of-memory errors due to large instance sizes_
+**Training Errors**: Occur during `Model.fit()` execution.
+
+* **Input Data Issues**: Not transformed or encoded.
+* **Tensor Shape Mismatch**: Incorrect dimensions.
+* **Memory Overload**: Due to large instance sizes on CPU/GPU.
 
 ---
 
 ### 19.5.2. Serving Time Errors
 
-* *_Serving time errors occur only during deployment_* 
-    * _Typical errors include: untransformed input data, signature mismatch_
+**Serving Time Errors**: Seen only during deployment; different from training errors.
+
+* **Input Data Issues**: Not transformed or encoded.
+* **Signature Mismatch**: Occurs during deployment.
 
 ---
 
 ### 19.5.3. TensorFlow Data Validation
 
-* **TensorFlow Data Validation**: Analyzes training and serving data to prevent errors, including:
-  * Computing statistics
-  * Inferring schema
-  * Detecting anomalies
+**TensorFlow Data Validation (TFDV)**: Analyzes training and serving data to compute statistics, infer schema, and detect anomalies.
+
+* **Full Documentation**: Available at <https://cloud.google.com/vertex-ai/docs/training/monitor-debug-interactive-shell>
 
 ---
 
 ### 19.5.4. Vertex AI Debugging Shell
 
-* **Vertex AI Interactive Shell**: an interactive shell for debugging training, allowing inspection of training containers
-    * _Runs tracing and profiling tools_
-    * _Analyzes GPU utilization_
-    * _Validates IAM permissions for the container_
+**Interactive Shell**: Allows debugging of training in both pre-built and custom containers.
+
+* **Tracing and Profiling Tools**: Run to diagnose issues.
+* **GPU Utilization Analysis**: Monitor GPU use during training.
+* **IAM Permission Validation**: Ensure correct permissions for the container.
 
 ---
 
 ## 19.6. Summary
 
-* **Long-term ML application maintenance** is based on CI/CD principles, focusing on automation of training, deployment, and monitoring.
-* The balance between model quality and retraining policy cost must be considered.
-* A feature store can solve the inefficiency problem caused by departments not sharing features.
+**ML Operations (MLOps)**: Based on CI/CD principles for maintaining ML applications through automation.
+* **Automation**: Involves training, deployment, and monitoring processes.
+* **Retraining Policy**: Balances model quality with training cost.
+    * **Feature Store**: Enables sharing of features across departments using open-source software or Vertex AI Feature Store.
 
 ---
 
 ## 19.7. Exam Essentials
 
-* MLOps maturity levels:
-  * Experimental phase: basic automation
-  * Strategic phase: automation with some integration
-  * Mature phase: CI/CD-inspired architecture for scalability and efficiency
-* Key concepts:
-  * Model versioning: tracking changes and triggers for retraining
-    * _Retraining triggers_ can be based on model degradation or time-based schedules
-  * Feature store: managing shared features across teams for efficient collaboration
+**MLOps Maturity**: Different levels from experimental to fully mature CI/CD‐inspired architecture.
+
+**Model Versioning & Retraining Triggers**: Trigger retraining based on model degradation or time; manage new versions in the model repository.
+
+**Feature Store Usage**: Share engineered features using managed (Vertex AI Feature Store) or open-source (Feast) solutions.
 
 ---
 
@@ -3684,31 +4080,62 @@ Row | player_id | Team | Batting_avg | Age
 
 ## 20.1. BigQuery – Data Access
 
-* **Data Access Methods**
-    * Three ways to access data: 
-        * Using the web console with SQL queries
-        * Running SQL queries in a Jupyter Notebook using `%%bigquery`
-        * Using Python API in Jupyter Notebook
-    * **Python API Example**
-        * Import BigQuery library and create client
-        * Pass query as string, capture results in Pandas DataFrame
+* **Web Console**: Write SQL queries directly and view results.
+* **Jupyter Notebook (Magic Command)**: Use `%%bigquery` to run BigQuery queries in Vertex AI Workbench.
+    * **Python API**: Import BigQuery library, create client, execute query using Python, capture results in Pandas DataFrame.
+
+---
+
+
+![center w:85%](images/c14f001.png)
+
+---
+
+
+![center w:85%](images/c14f002.png)
 
 ---
 
 ## 20.2. BigQuery ML Algorithms
 
-**BigQuery ML**
+**BigQuery ML**: Allows creating machine learning models using standard SQL queries without writing Python code.
 
-* Allows creation of machine learning models using standard SQL queries
-* No need for Python code; serverless architecture makes training and prediction easy
+**BigQuery ML**: Completely serverless for training and prediction.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ### 20.2.1. Model Training
 
-* To create a model in BigQuery ML, use `CREATE MODEL` with options for model type and input label columns.
-    * Model types include regression, classification, clustering, collaborative filtering, dimensionality reduction, time-series forecasting, and generic models like TensorFlow.
-    * The `CREATE OR REPLACE MODEL` statement can be used to reuse model names and create a new one if it does not exist.
+**CREATE MODEL**: Statement used to create machine learning models in BigQuery.
+
+* **Options**: 
+    * `model_type`: Specifies the type of model (e.g., logistic regression, linear regression).
+    * `input_label_cols`: Identifies the target column for training.
+    
+**Training Data**: SELECT statement specifying the table and columns to use for training.
+
+**Model Types in BigQuery ML**:
+* Regression: LINEAR_REG, BOOSTED_TREE_REGRESSOR, DNN_REGRESSOR, AUTOML_REGRESSION
+* Classification: LOGISTIC_REG, BOOSTED_TREE_CLASSIFIER, DNN_CLASSIFIER, DNN_LINEAR_COMBINED_CLASSIFIER, AUTOML_CLASSIFIER
+* Clustering: KMEANS
+
+---
+
+* Deep and Wide Models: DNN_LINEAR_COMBINED_REGRESSOR, DNN_LINEAR_COMBINED_CLASSIFIER
+* Time-series Forecasting: ARIMA_PLUS
+* Dimensionality Reduction: PCA, AUTOENCODER
+* General: TENSORFLOW
+
+**DNN Model Options**: Fully configurable using TensorFlow estimators.
+
+---
+
+![center w:85%](images/c14f003.png)
 
 ---
 
@@ -3731,41 +4158,82 @@ General | TENSORFLOW | Generic TensorFlow model
 
 ### 20.2.2. Model Evaluation
 
-* Use a separate dataset for model evaluation using `ML.EVALUATE` to ensure accuracy.
-    * This step should be performed on a data set not seen by the model.
-    * Results are displayed in a web interface and can be queried easily.
+**Model Evaluation**: Use separate dataset via `ML.EVALUATE` function  
+**Query Example**: 
+```sql
+SELECT * FROM ML.EVALUATE(MODEL `projectid.test.creditcard_model1`, ( SELECT * FROM `test.creditcardtable`))
+```
+**Evaluation Results**: Shown in **FIGURE 14.4**
+
+---
+
+
+![center w:85%](images/note.png)
+
+---
+
+
+![center w:85%](images/c14f004.png)
 
 ---
 
 ### 20.2.3. Prediction
 
-* The `ML.PREDICT` function predicts values from a BigQuery ML model.
-    * Passes an entire table to predict and returns a new table with predicted values and probabilities.
-        * Example use case: `SELECT * FROM ML.PREDICT(MODEL 'dataset1.creditcard_model1', (SELECT * FROM 'dataset1.creditcardpredict' LIMIT 1))`
+* **ML.PREDICT function**: Used to make predictions with a BigQuery ML model, adding predicted labels and probabilities as new columns.
+    * **Output**: Includes original input columns plus `_predicted_<label_column_name>` and `_predicted_<label_column_name>_probs`.
+* **Example SQL (full output)**: 
+    ```sql
+    SELECT * FROM ML.PREDICT(MODEL `dataset1.creditcard_model1`, 
+                             (SELECT * FROM `dataset1.creditcardpredict` LIMIT 1))
+    ```
+* **Example SQL (selected predictions only)**:
+    ```sql
+    SELECT predicted_defaultpaymentnextmonth, 
+           predicted_defaultpaymentnextmonth_probs 
+    FROM ML.PREDICT(MODEL `dataset1.creditcard_model1`, 
+
+---
+
+                    (SELECT * FROM `dataset1.creditcardtable` LIMIT 1))
+    ```
+* **Query results**: Shows predictions and their probabilities for each label.
+
+---
+
+![center w:85%](images/c14f005.png)
 
 ---
 
 ## 20.3. Explainability in BigQuery ML
 
-* **Explanation**:
-  * Explanability is crucial for debugging models and improving transparency.
-  * In BigQuery, global feature importance values can be accessed at the model level or per prediction using SQL functions.
+**Explainability in BigQuery**: Enhances model transparency and is required in certain domains.
 
-* **Enabling Global Explanation**
-  * Set `enable_global_explain=TRUE` during training to enable global explanations.
-  * Use `ML.GLOBAL_EXPLAIN(MODEL 'model1')` to query global explanations.
+- **Global Feature Importance**: Set `enable_global_explain=TRUE` during training; returned as a table showing input features and their importance values.
+- **Predictive Explanations**: Use `ML.EXPLAIN_PREDICT` to get feature attributions for individual predictions, shown in the form of top-k features impacting the model.
 
 * **Model Explainability Methods**:
-  * Table 14.2: Model types and explainability methods
-    + Linear/logistic regression: Shapley values, standard errors, p-values
-    + Boosted Trees: Tree SHAP, Gini-based feature importance
+    * Linear and logistic regression: Shapley values, standard errors, p-values
+    * Boosted Trees: Tree SHAP, Gini-based importance
+    * Deep Neural Network: Integrated gradients
+    * Arima_PLUS: Time-series decomposition
 
 ---
 
-    + Deep Neural Network/Wide-and-Deep: Integrated gradients
-    + Arima_PLUS: Time-series decomposition
+
+![center w:85%](images/c14f006.png)
 
 ---
+
+
+![center w:85%](images/c14f007.png)
+
+---
+
+
+![center w:85%](images/c14f008.png)
+
+---
+
 *Explainability in BigQuery ML*
 Model Type | Explainability Method | Description
 ---|---|---
@@ -3780,114 +4248,136 @@ Arima_PLUS | Time‐series decomposition | Decompose into multiple components if
 
 ## 20.4. BigQuery ML vs. Vertex AI Tables
 
-**Summary**
+**BigQuery ML**: Designed for SQL experts handling complex tables and queries; used by analysts and business users.
 
-* *_BigQuery_*: serverless data warehouse for SQL experts, ideal for complex queries and automation.
-* *_Vertex AI_*: designed for machine learning engineers, with fine-grained control over training and prediction flow.
-* *_Choose BigQuery_* for analysts or business users, *_Vertex AI_* for machine learning engineers.
+**Vertex AI**: Targets data scientists and machine learning engineers proficient in Python/Java, using Jupyter Notebooks and Pandas DataFrames; offers fine-grained control over data flow and training process.
+
+* * *
+
+For **analysts or business users**, use BigQuery ML. For **machine learning engineers**, consider Vertex AI.
+
+---
+
+
+![center w:85%](images/tip.png)
 
 ---
 
 ## 20.5. Interoperability with Vertex AI
 
-* **Vertex AI and BigQuery ML Integration**: The two Google Cloud products are designed to work together, with multiple integration points throughout the machine learning pipeline.
- 
-* Key Integration Points:
-  * Data ingestion
-  * Model training and deployment
-  * Model monitoring and management
-  * Data processing and feature engineering
+* **Interoperability**: Designed for seamless use of Vertex AI and BigQuery ML throughout the machine learning pipeline
+    * **Integration Points**: At least six distinct areas where the two products work together easily
 
 ---
 
 ### 20.5.1. Access BigQuery Public Dataset
 
-* **BigQuery Datasets**: Over 200 publicly available datasets through Google Cloud Public Datasets Program.
-    * Accessible for free, only paying for queried results.
-    * Can be used in GCP projects and also with Vertex AI for machine learning tasks.
+* **BigQuery Public Datasets**: Over 200 datasets available through Google Cloud Public Datasets Program.
+    * **Access**: Free storage provided by Google, pay only for queries run.
+* **Usage with Vertex AI**: Enhance ML models by combining private data with public datasets.
+    * **Example**: Improve traffic prediction model using combined weather data.
 
 ---
 
 ### 20.5.2. Import BigQuery Data into Vertex AI
 
-* **Creating a Vertex AI Dataset**: You can create a dataset by providing a source URL, including BigQuery URLs, in a few steps.
-  * _Use `bq://project.dataset.table_name` as the `bq_source`_
-  * No need to export and import data from/to BigQuery
+**Vertex AI Dataset Creation**: Provide a BigQuery URL directly to create a Vertex AI dataset.
+* **Python Code Example**: 
+    * ```python
+       from google.cloud import aiplatform
+       dataset = aiplatform.TabularDataset.create(
+           display_name="my-tabular-dataset",
+           bq_source="bq://project.dataset.table_name",
+       )
+       ```
+**Integration with BigQuery**: Directly connect to and utilize data in BigQuery without exporting it.
 
 ---
 
 ### 20.5.3. Access BigQuery Data from Vertex AI Workbench Notebooks
 
-* Using managed notebook instance in Vertex AI Workbench allows direct access to BigQuery dataset and SQL query execution.
-* Enables data exploration, visualization, machine learning model experimentation, and feature engineering with various datasets.
-* Facilitates seamless integration of Jupyter Notebook with BigQuery for efficient data analysis.
+* **Jupyter Notebook in Vertex AI Workbench**: Allows direct browsing of BigQuery datasets, SQL query execution, and DataFrame download.
+* **Usefulness for Data Scientists**: Facilitates exploratory analysis, visualization creation, machine learning model experimentation, and feature engineering with various datasets.
 
 ---
 
 ### 20.5.4. Analyze Test Prediction Data in BigQuery
 
-* **Exporting Model Predictions**: When training a model, provide train and test datasets. Export the test prediction results directly to BigQuery for analysis.
-    * Enables further testing of models using SQL queries
-    * Facilitates data-driven insights into model performance
+* Reverse integration with BigQuery: Export model test predictions directly to BigQuery.
+* Facilitates further analysis: Use SQL methods for detailed examination of test dataset predictions.
+* Simplifies workflow: Streamline the process of moving model output into data analytics pipelines.
 
 ---
 
 ### 20.5.5. Export Vertex AI Batch Prediction Results
 
-* You can use BigQuery tables as input data for batch predictions in Vertex AI
-* Predictions are sent directly back to BigQuery and stored as a table
-* Useful when integrating with existing MLOps pipelines that use Vertex AI and BigQuery
+* Batch predictions in Vertex AI can use BigQuery tables as input.
+* Predictions can be stored back into BigQuery as new tables.
+* Useful for MLOps workflows where data is managed in BigQuery.
 
 ---
 
 ### 20.5.6. Export BigQuery Models into Vertex AI
 
-* You can export a BigQuery model to GCS and then import it into Vertex AI for complete freedom.
-* To simplify the process, you can register your BigQuery ML models directly in the Vertex AI Model Registry.
-* Currently, some models (ARIMA_PLUS, XGBoost, transform-based) are not supported for direct export.
+**Model Export**: Export BigQuery ML models to GCS for import into Vertex AI.
+
+**Direct Registration**: Use Vertex AI Model Registry to register BigQuery ML models directly, bypassing GCS export.
+
+**Support and Limitations**: Supports both BigQuery built-in models and TensorFlow models; ARIMA_PLUS, XGBoost, and transform-based models cannot be exported.
 
 ---
 
 ## 20.6. BigQuery Design Patterns
 
-* BigQuery ML introduces novel solutions to common data science and machine learning problems
-* These solutions are referred to as design patterns, addressing recurring issues in the field
-* Elegant new approaches provide a way to tackle familiar challenges
+* **Design patterns**: Repeated problem-solution pairs in data science and machine learning.
+* **BigQuery ML**: Innovative approach to machine learning with novel solutions for common problems.
+* **Elegant solutions**: New, efficient methods addressing traditional challenges in BigQuery ML.
 
 ---
 
 ### 20.6.1. Hashed Feature
 
-* **Categorical Variable Issues**: Incomplete vocabulary, high cardinality, and cold start problems
-    * **Data Scaling**: High cardinality creates scaling issues for ML models
-    * **New Values**: New values can't be predicted with existing training data (cold start problem)
-* **Solution**: Transform categorical variable to low cardinal domain using hashing functions like FarmHash
+**Incomplete vocabulary**: Data might lack some categorical values, leading to issues in ML models.
+
+**High cardinality**: Variables like zip code have many categories (high cardinality), causing scaling problems.
+
+**Cold start problem**: New values can appear that weren't in the training data, requiring handling of unknowns.
+
+* **Hashing solution**: Convert high-cardinality variables using FarmHash in BigQuery:
+  * `ABS(MOD(FARM_FINGERPRINT(zipcode), numbuckets))`
 
 ---
 
 ### 20.6.2. Transforms
 
-* **Model Pipelining**: inputs are modified or enhanced before feeding into a model, and transformations must be applied during deployment.
-    * **BigQuery Solution**: uses `TRANSFORM` clause in `CREATE_MODEL` function
-    * _Example Transformations_: Feature Cross, Quantile Bucketize
+**TRANSFORM clause**: Applies transformations to input features before feeding them into a model.
+
+* **Example usage**: 
+    * `ML.FEATURE_CROSS(STRUCT(f1, f2)) as cross_f`
+    * `ML.QUANTILE_BUCKETIZE(f3) OVER() as buckets`
+
+**Available transforms in BigQuery ML**: POLYNOMIAL_EXPAND, FEATURE_CROSS, NGRAMS, QUANTILE_BUCKET, HASH_BUCKETIZE, MIN_MAX_SCALER, STANDARD_SCALER
+
+**Caveat**: Models with transformations using the `TRANSFORM` clause may not work outside BigQuery ML.
 
 ---
 
 ## 20.7. Summary
 
-* **BigQuery ML**: democratized machine learning in the SQL community
-* * **Key Features**:
-  * Uses SQL for ML pipeline actions and transformations
-  * High interoperability with Vertex AI
-  * Unique design patterns for efficient model creation
+**BigQuery**: Cloud service that democratized machine learning for SQL users.
+
+**BigQuery ML**: A part of BigQuery that enables performing all stages of a machine learning pipeline using SQL, reducing model creation time through direct input value transformations.
+
+**Interoperability with Vertex AI**: BigQuery ML can be seamlessly integrated with Google’s Vertex AI, offering extended functionality.
 
 ---
 
 ## 20.8. Exam Essentials
 
-* **BigQuery and ML Overview**: Learn BigQuery's history, innovation of bringing ML to data analysis, and SQL-based training/prediction/model explanation.
-    * _**Integration between BigQuery ML and Vertex AI**: Understand the differences in design for analysts/SQL experts vs ML engineers, and how they work together seamlessly._
-    * **BigQuery Design Patterns**: Apply reusable solutions (hashing, transforms, serverless predictions) to machine learning pipelines.
+* **BigQuery and ML**: Data warehouse with integrated machine learning using SQL.
+    * **BigQuery ML vs Vertex AI**: BigQuery ML for analysts, Vertex AI for engineers; seamless integration between services.
+
+* **BigQuery design patterns**: Elegantly solves common ML problems like hashing, transforms, and serverless predictions.
 
 ---
 
@@ -3897,10 +4387,18 @@ Arima_PLUS | Time‐series decomposition | Decompose into multiple components if
 
 ## 23.1. Register and Access the Online Test Bank
 
-* To access online test bank content, go to `www.wiley.com/go/sybextestprep` and follow the registration instructions.
-    * Select your book from the list and complete required information, including security verification.
-    * Enter pin code received via email to activate account.
-        * Log in with new username and password, then access test bank content.
+**Registering for Online Test Bank Access:**
+
+* Go to `www.wiley.com/go/sybextestprep` and click "here to register," then select your book.
+* Complete registration by providing security verification; an email with a pin code will be sent.
+* Use the pin code to activate access on the test bank site.
+    * Log in with username and password or create a new account.
+* Ensure you see your test bank listed; refresh the page if necessary.
+
+---
+
+
+![center w:85%](images/logo.png)
 
 ---
 

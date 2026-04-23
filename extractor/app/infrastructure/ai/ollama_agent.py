@@ -2,6 +2,8 @@ import requests
 import json
 from typing import List
 
+from app.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
+
 
 class AIAgent:
     """AI Agent for text simplification and summarization using Ollama"""
@@ -10,31 +12,7 @@ class AIAgent:
         self.ollama_host = ollama_host
         self.endpoint = f"{ollama_host}/api/generate"
         self.model = "qwen2.5:7b"
-        
-        self.system_prompt = """# Entity
-You are an expert in simplifying and summarizing technical texts.
-Your task is to create concise, clear, and accurate summaries of the content provided to you.
-
-# Rules
-- Remove redundancies and unnecessary details
-- Use clear and direct language. Be very straightforward
-- Give the summary inmediately without any preamble or additional commentary
-- This information will be placed in slides, so be concise and to the point
-- Use bullet points. Use max three of them.
-
-formatting
-- use markdown formatting where appropriate, including bold and italics for emphasis
-- DO NOT use "#" headings or titles
-- in a bullet point, the distance between the asterisk and the text must be exactly one space
-- do not use "-" because it will be confused with slide breaks
-
-# Examples
-
-* **Concept 1**: very short summary
-* **Concept 2**: very short summary
-    * **Concept 3**: This is a sub-point explaining concept 3 in a concise manner (if needed, not mandatory)
-
-"""
+        self.system_prompt = SUMMARIZE_SYSTEM_PROMPT
     
     def summarize_content(self, content: str) -> str:
         """
