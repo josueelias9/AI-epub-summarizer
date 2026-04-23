@@ -1,0 +1,92 @@
+### EPUB Structure Extractor API
+### Requires the REST Client extension (humao.rest-client)
+
+@baseUrl = http://localhost:8000
+@apiUrl = {{baseUrl}}/api/v1
+
+# ─────────────────────────────────────────────
+# Health
+# ─────────────────────────────────────────────
+
+### Root
+GET {{baseUrl}}/
+
+### Health check
+GET {{baseUrl}}/health
+
+# ─────────────────────────────────────────────
+# Books
+# ─────────────────────────────────────────────
+
+### List books (paginated)
+GET {{apiUrl}}/books?skip=0&limit=10
+
+### Get book by ID
+GET {{apiUrl}}/books/1
+
+### Create a book
+POST {{apiUrl}}/books
+Content-Type: application/json
+
+{
+  "title": "Clean Architecture",
+  "author": "Robert C. Martin",
+  "isbn": "978-0134494166",
+  "description": "A guide to software structure and design.",
+  "language": "en",
+  "publisher": "Prentice Hall",
+  "publication_date": "2017"
+}
+
+### Delete a book
+DELETE {{apiUrl}}/books/1
+
+# ─────────────────────────────────────────────
+# Chapters
+# ─────────────────────────────────────────────
+
+### List chapters for a book
+GET {{apiUrl}}/books/1/chapters
+
+### Get chapter by ID
+GET {{apiUrl}}/chapters/1
+
+# ─────────────────────────────────────────────
+# Metadata
+# ─────────────────────────────────────────────
+
+### Get metadata for a book
+GET {{apiUrl}}/books/1/metadata
+
+# ─────────────────────────────────────────────
+# Processing Jobs
+# ─────────────────────────────────────────────
+
+### List all jobs
+GET {{apiUrl}}/jobs
+
+### List jobs filtered by status  (pending | processing | completed | failed)
+GET {{apiUrl}}/jobs?status=pending
+
+### Get job by ID
+GET {{apiUrl}}/jobs/1
+
+# ─────────────────────────────────────────────
+# Statistics
+# ─────────────────────────────────────────────
+
+### Global stats
+GET {{apiUrl}}/stats
+
+# ─────────────────────────────────────────────
+# Search
+# ─────────────────────────────────────────────
+
+### Search books
+GET {{apiUrl}}/search/books?q=clean
+
+### Search chapters (all books)
+GET {{apiUrl}}/search/chapters?q=architecture
+
+### Search chapters within a specific book
+GET {{apiUrl}}/search/chapters?q=architecture&book_id=1

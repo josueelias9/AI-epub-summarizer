@@ -10,7 +10,8 @@
         "hediet.vscode-drawio",
         "ms-python.python",
         "tomoki1207.pdf",
-        "marp-team.marp-vscode"
+        "marp-team.marp-vscode",
+        "humao.rest-client"
       ],
       "settings": {
         "workbench.colorTheme": "Monokai"

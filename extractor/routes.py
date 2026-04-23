@@ -1,4 +1,4 @@
-k"""
+"""
 API routes for EPUB Structure Extractor
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
