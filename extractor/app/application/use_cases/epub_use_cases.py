@@ -18,11 +18,29 @@ class ExtractEpubUseCase:
         self._extractor = extractor
 
     def execute(self, epub_path: str, json_output: str) -> Dict[str, Any]:
-        structure = self._extractor.extract_structure(epub_path)
+        output_dir = os.path.dirname(os.path.abspath(json_output))
+        images_output_dir = os.path.join(output_dir, "images")
+        structure = self._extractor.extract_structure(epub_path, images_output_dir=images_output_dir)
+
+        # Preserve existing summaries so a re-extract does not wipe AI work
+        if os.path.exists(json_output):
+            with open(json_output, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+            self._merge_summaries(existing, structure)
+
         os.makedirs(os.path.dirname(json_output) or ".", exist_ok=True)
         with open(json_output, "w", encoding="utf-8") as f:
             json.dump(structure, f, ensure_ascii=False, indent=2)
         return structure
+
+    # TODO: validate that it only works if the content is empty
+    def _merge_summaries(self, source: Dict[str, Any], target: Dict[str, Any]) -> None:
+        """Copy summaries from an existing JSON structure into the freshly extracted one."""
+        for key, info in target.items():
+            if key in source and source[key].get("summary"):
+                info["summary"] = source[key]["summary"]
+            if info.get("subsections") and key in source:
+                self._merge_summaries(source[key].get("subsections", {}), info["subsections"])
 
     def get_statistics(self, structure: Dict[str, Any]) -> Dict[str, int]:
         stats = {

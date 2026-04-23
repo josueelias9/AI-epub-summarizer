@@ -11,7 +11,8 @@
         "ms-python.python",
         "tomoki1207.pdf",
         "marp-team.marp-vscode",
-        "humao.rest-client"
+        "humao.rest-client",
+        "Gruntfuggly.todo-tree"
       ],
       "settings": {
         "workbench.colorTheme": "Monokai"
