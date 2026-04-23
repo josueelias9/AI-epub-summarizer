@@ -15,8 +15,8 @@ services:
     container_name: ollama-container
     ports:
       - "11434:11434"
-    # environment:
-    #   - OLLAMA_HOST=0.0.0.0
+    volumes:
+      - ollama_data:/root/.ollama
     # restart: unless-stopped
     deploy:
       resources:
@@ -25,6 +25,25 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # One-shot container: pulls required models and exits.
+  # Re-runs are instant because models are cached in ollama_data volume.
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["/bin/sh", "-c", "ollama pull qwen2.5:7b && ollama pull nomic-embed-text"]
+    restart: "no"
 
 
   
@@ -61,3 +80,4 @@ services:
 
 volumes:
   pgadmin_storage:
+  ollama_data:

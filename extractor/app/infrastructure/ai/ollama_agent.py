@@ -9,7 +9,7 @@ class AIAgent:
     def __init__(self, ollama_host: str = "http://ollama:11434"):
         self.ollama_host = ollama_host
         self.endpoint = f"{ollama_host}/api/generate"
-        self.model = "llama3.2"
+        self.model = "qwen2.5:7b"
         
         self.system_prompt = """# Entity
 You are an expert in simplifying and summarizing technical texts.
