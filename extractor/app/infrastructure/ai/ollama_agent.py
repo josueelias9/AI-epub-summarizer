@@ -4,14 +4,16 @@ from typing import List
 
 from app.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
 
+from app.core.config import settings
 
 class AIAgent:
     """AI Agent for text simplification and summarization using Ollama"""
     
-    def __init__(self, ollama_host: str = "http://ollama:11434"):
+    def __init__(self, ollama_host: str = settings.LLM_HOST):
+
         self.ollama_host = ollama_host
         self.endpoint = f"{ollama_host}/api/generate"
-        self.model = "qwen2.5:7b"
+        self.model = settings.LLM_MODEL
         self.system_prompt = SUMMARIZE_SYSTEM_PROMPT
     
     def summarize_content(self, content: str) -> str:

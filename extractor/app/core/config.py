@@ -19,6 +19,11 @@ class Settings:
     API_V1_STR: str = "/api/v1"
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
     
+    LLM_MODEL: str = os.getenv("LLM_MODEL")
+    LLM_HOST: str = os.getenv("LLM_HOST")
+
+
+
     @property
     def database_url(self) -> str:
         """Get the complete database URL"""
