@@ -49,3 +49,17 @@ class MarpExporterPort(ABC):
         max_depth: int = 3,
     ) -> None:
         ...
+
+
+class StructureRepositoryPort(ABC):
+    """Port for persisting and loading the hierarchical book structure extracted from an EPUB."""
+
+    @abstractmethod
+    def load(self, book_key: str) -> Optional[Dict[str, Any]]:
+        """Return the stored structure, or None if not found."""
+        ...
+
+    @abstractmethod
+    def save(self, book_key: str, structure: Dict[str, Any]) -> None:
+        """Persist the structure, overwriting any existing entry."""
+        ...

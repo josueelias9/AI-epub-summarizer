@@ -18,6 +18,7 @@ from app.application.use_cases.epub_use_cases import (
 from app.infrastructure.epub.epub_extractor import EPUBExtractor
 from app.infrastructure.ai.ollama_agent import AIAgent
 from app.infrastructure.export.marp_exporter import MarpExporter
+from app.infrastructure.repositories.structure_repositories import JsonFileStructureRepository
 from app.api.schemas.schemas import (
     ExtractRequest, ExtractResponse,
     SummarizeRequest, SummarizeResponse,
@@ -31,11 +32,11 @@ router = APIRouter(prefix="/epub", tags=["epub"])
 
 
 def _extract_use_case() -> ExtractEpubUseCase:
-    return ExtractEpubUseCase(extractor=EPUBExtractor())
+    return ExtractEpubUseCase(extractor=EPUBExtractor(), repository=JsonFileStructureRepository())
 
 
 def _summarize_use_case() -> SummarizeEpubUseCase:
-    return SummarizeEpubUseCase(ai_agent=AIAgent())
+    return SummarizeEpubUseCase(ai_agent=AIAgent(), repository=JsonFileStructureRepository())
 
 
 def _marp_use_case() -> GenerateMarpUseCase:
@@ -56,7 +57,12 @@ async def extract_epub(
         raise HTTPException(status_code=404, detail=f"EPUB file not found: {body.epub_path}")
 
     try:
-        structure = use_case.execute(epub_path=body.epub_path, json_output=body.json_output)
+        images_output_dir = os.path.join(os.path.dirname(os.path.abspath(body.json_output)), "images")
+        structure = use_case.execute(
+            epub_path=body.epub_path,
+            book_key=body.json_output,
+            images_output_dir=images_output_dir,
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -75,14 +81,10 @@ async def summarize_epub(
     use_case: SummarizeEpubUseCase = Depends(_summarize_use_case),
 ):
     """Add AI-generated summaries to an existing JSON structure (requires Ollama)."""
-    if not os.path.exists(body.json_path):
-        raise HTTPException(
-            status_code=404,
-            detail=f"JSON structure not found: {body.json_path}. Run POST /epub/extract first.",
-        )
-
     try:
-        structure = use_case.execute(json_path=body.json_path)
+        structure = use_case.execute(book_key=body.json_path)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

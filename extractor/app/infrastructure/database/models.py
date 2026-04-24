@@ -3,6 +3,7 @@ SQLModel ORM models — infrastructure concern only.
 These map to the database tables and are separate from domain entities.
 """
 from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import Column, Text
 from typing import Optional, List
 from datetime import datetime
 
@@ -69,3 +70,12 @@ class ProcessingJobORM(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     completed_at: Optional[datetime] = Field(default=None)
+
+
+class BookStructureORM(SQLModel, table=True):
+    __tablename__ = "book_structures"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    book_key: str = Field(max_length=1000, unique=True, index=True)
+    structure_json: str = Field(sa_column=Column(Text, nullable=False))
+    updated_at: datetime = Field(default_factory=datetime.utcnow)

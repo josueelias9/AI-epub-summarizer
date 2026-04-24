@@ -4,10 +4,9 @@ Each class has a single responsibility and depends on injected infrastructure.
 """
 import logging
 from typing import Dict, Any, Optional
-import json
 import os
 
-from app.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort
+from app.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort, StructureRepositoryPort
 
 logger = logging.getLogger(__name__)
 
@@ -15,23 +14,23 @@ logger = logging.getLogger(__name__)
 class ExtractEpubUseCase:
     """Extract hierarchical structure from an EPUB and save as JSON. No AI involved."""
 
-    def __init__(self, extractor: EpubExtractorPort):
+    def __init__(self, extractor: EpubExtractorPort, repository: StructureRepositoryPort):
         self._extractor = extractor
+        self._repository = repository
 
-    def execute(self, epub_path: str, json_output: str) -> Dict[str, Any]:
-        output_dir = os.path.dirname(os.path.abspath(json_output))
-        images_output_dir = os.path.join(output_dir, "images")
+    def execute(
+        self,
+        epub_path: str,
+        book_key: str,
+        images_output_dir: Optional[str] = None,
+    ) -> Dict[str, Any]:
         structure = self._extractor.extract_structure(epub_path, images_output_dir=images_output_dir)
 
-        # Preserve existing summaries so a re-extract does not wipe AI work
-        if os.path.exists(json_output):
-            with open(json_output, "r", encoding="utf-8") as f:
-                existing = json.load(f)
+        existing = self._repository.load(book_key)
+        if existing:
             self._merge_summaries(existing, structure)
 
-        os.makedirs(os.path.dirname(json_output) or ".", exist_ok=True)
-        with open(json_output, "w", encoding="utf-8") as f:
-            json.dump(structure, f, ensure_ascii=False, indent=2)
+        self._repository.save(book_key, structure)
         return structure
 
     # TODO: validate that it only works if the content is empty
@@ -64,22 +63,22 @@ class ExtractEpubUseCase:
 
 
 class SummarizeEpubUseCase:
-    """Load an existing JSON structure, generate AI summaries, and overwrite the file."""
+    """Load an existing structure, generate AI summaries, and persist it back."""
 
-    def __init__(self, ai_agent: AIServicePort):
+    def __init__(self, ai_agent: AIServicePort, repository: StructureRepositoryPort):
         self._ai_agent = ai_agent
+        self._repository = repository
 
-    def execute(self, json_path: str) -> Dict[str, Any]:
-        logger.info("Starting summary generation from: %s", json_path)
-        with open(json_path, "r", encoding="utf-8") as f:
-            structure = json.load(f)
+    def execute(self, book_key: str) -> Dict[str, Any]:
+        logger.info("Starting summary generation for: %s", book_key)
+        structure = self._repository.load(book_key)
+        if structure is None:
+            raise ValueError(f"No structure found for {book_key!r}. Run extract first.")
 
         self._summarize_recursive(structure)
         logger.info("Summary generation completed")
 
-        with open(json_path, "w", encoding="utf-8") as f:
-            json.dump(structure, f, ensure_ascii=False, indent=2)
-
+        self._repository.save(book_key, structure)
         return structure
     def _summarize_recursive(self, structure: Dict[str, Any]) -> None:
         for info in structure.values():
