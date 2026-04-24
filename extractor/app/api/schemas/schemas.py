@@ -129,3 +129,29 @@ class LLMStatusResponse(BaseModel):
     connected: bool
     host: str
     model: str
+
+
+# ---- Section listing / exclusion schemas ----
+
+class SectionInfo(BaseModel):
+    id: str
+    title: str
+    depth: int
+    excluded: bool
+    has_summary: bool
+
+
+class SectionsListResponse(BaseModel):
+    book_key: str
+    total: int
+    sections: list[SectionInfo]
+
+
+class SetExcludedRequest(BaseModel):
+    book_key: str
+    excluded_ids: list[str]
+
+
+class SetExcludedResponse(BaseModel):
+    book_key: str
+    excluded_count: int

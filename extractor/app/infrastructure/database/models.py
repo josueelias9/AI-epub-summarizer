@@ -79,3 +79,11 @@ class BookStructureORM(SQLModel, table=True):
     book_key: str = Field(max_length=1000, unique=True, index=True)
     structure_json: str = Field(sa_column=Column(Text, nullable=False))
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class BookExclusionORM(SQLModel, table=True):
+    __tablename__ = "book_exclusions"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    book_key: str = Field(max_length=1000, index=True)
+    section_id: str = Field(max_length=200)

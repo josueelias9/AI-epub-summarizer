@@ -1,7 +1,7 @@
 import logging
 import os
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from app.application.ports.service_ports import MarpExporterPort
 
@@ -24,6 +24,7 @@ class MarpExporter(MarpExporterPort):
         include_summaries: bool = True,
         include_content: bool = False,
         max_depth: int = 3,
+        excluded_ids: Optional[List[str]] = None,
     ) -> None:
         """
         Load a saved book structure (book_with_summaries.json) and export to Marp.
@@ -68,7 +69,8 @@ class MarpExporter(MarpExporterPort):
             level=1,
             include_summaries=include_summaries,
             include_content=include_content,
-            max_depth=max_depth
+            max_depth=max_depth,
+            excluded_ids=set(excluded_ids or []),
         )
 
         # Prepare front matter
@@ -181,6 +183,7 @@ section.centered {
         include_summaries: bool,
         include_content: bool,
         max_depth: int,
+        excluded_ids: set,
         parent_number: str = ""
     ) -> None:
         """
@@ -200,7 +203,9 @@ section.centered {
         
         for idx, (title, info) in enumerate(structure.items(), 1):
 
-
+            # Skip sections excluded by the user
+            if info.get("id", "") in excluded_ids:
+                continue
 
             # Skip excluded titles
             if self._should_skip_title(title):
@@ -235,8 +240,10 @@ section.centered {
                     include_summaries,
                     include_content,
                     max_depth,
+                    excluded_ids,
                     section_number
                 )
+                
     
     def _generate_section_slide(self, title: str, level: int, section_number: str) -> str:
         """Generate a section title slide"""

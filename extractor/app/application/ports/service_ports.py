@@ -5,7 +5,7 @@ These ABCs define what the application layer needs from the outside world
 (AI, file parsing, export).  Infrastructure provides the concrete adapters.
 """
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 class AIServicePort(ABC):
@@ -47,19 +47,35 @@ class MarpExporterPort(ABC):
         include_summaries: bool = True,
         include_content: bool = False,
         max_depth: int = 3,
+        excluded_ids: Optional[List[str]] = None,
     ) -> None:
         ...
 
 
-class StructureRepositoryPort(ABC):
-    """Port for persisting and loading the hierarchical book structure extracted from an EPUB."""
+class BookRepositoryPort(ABC):
+    """Unified port for all book data: structure + excluded sections.
+
+    Two concrete implementations exist:
+      - LocalBookRepository  : JSON file (structure) + CSV file (exclusions)
+      - PostgresBookRepository: Postgres tables for both
+    """
 
     @abstractmethod
-    def load(self, book_key: str) -> Optional[Dict[str, Any]]:
+    def load_structure(self, book_key: str) -> Optional[Dict[str, Any]]:
         """Return the stored structure, or None if not found."""
         ...
 
     @abstractmethod
-    def save(self, book_key: str, structure: Dict[str, Any]) -> None:
+    def save_structure(self, book_key: str, structure: Dict[str, Any]) -> None:
         """Persist the structure, overwriting any existing entry."""
+        ...
+
+    @abstractmethod
+    def load_exclusions(self, book_key: str) -> List[str]:
+        """Return the list of excluded section IDs, or [] if none saved."""
+        ...
+
+    @abstractmethod
+    def save_exclusions(self, book_key: str, excluded_ids: List[str]) -> None:
+        """Persist the list of excluded section IDs, overwriting any existing entry."""
         ...

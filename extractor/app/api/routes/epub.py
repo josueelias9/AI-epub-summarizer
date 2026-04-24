@@ -14,16 +14,20 @@ from app.application.use_cases.epub_use_cases import (
     SummarizeEpubUseCase,
     GenerateMarpUseCase,
     CheckLLMConnectionUseCase,
+    ListSectionsUseCase,
+    SetExcludedSectionsUseCase,
 )
 from app.infrastructure.epub.epub_extractor import EPUBExtractor
 from app.infrastructure.ai.ollama_agent import AIAgent
 from app.infrastructure.export.marp_exporter import MarpExporter
-from app.infrastructure.repositories.structure_repositories import JsonFileStructureRepository
+from app.infrastructure.repositories.local_repository import LocalBookRepository
 from app.api.schemas.schemas import (
     ExtractRequest, ExtractResponse,
     SummarizeRequest, SummarizeResponse,
     MarpRequest, MarpResponse,
     LLMStatusResponse,
+    SectionsListResponse, SectionInfo,
+    SetExcludedRequest, SetExcludedResponse,
 )
 
 logger = logging.getLogger(__name__)
@@ -32,19 +36,27 @@ router = APIRouter(prefix="/epub", tags=["epub"])
 
 
 def _extract_use_case() -> ExtractEpubUseCase:
-    return ExtractEpubUseCase(extractor=EPUBExtractor(), repository=JsonFileStructureRepository())
+    return ExtractEpubUseCase(extractor=EPUBExtractor(), repository=LocalBookRepository())
 
 
 def _summarize_use_case() -> SummarizeEpubUseCase:
-    return SummarizeEpubUseCase(ai_agent=AIAgent(), repository=JsonFileStructureRepository())
+    return SummarizeEpubUseCase(ai_agent=AIAgent(), repository=LocalBookRepository())
 
 
 def _marp_use_case() -> GenerateMarpUseCase:
-    return GenerateMarpUseCase(marp_exporter=MarpExporter())
+    return GenerateMarpUseCase(marp_exporter=MarpExporter(), repository=LocalBookRepository())
 
 
 def _llm_use_case() -> CheckLLMConnectionUseCase:
     return CheckLLMConnectionUseCase(ai_agent=AIAgent())
+
+
+def _list_sections_use_case() -> ListSectionsUseCase:
+    return ListSectionsUseCase(repository=LocalBookRepository())
+
+
+def _set_excluded_use_case() -> SetExcludedSectionsUseCase:
+    return SetExcludedSectionsUseCase(repository=LocalBookRepository())
 
 
 @router.post("/extract", response_model=ExtractResponse)
@@ -123,6 +135,48 @@ async def generate_marp(
 async def llm_status(use_case: CheckLLMConnectionUseCase = Depends(_llm_use_case)):
     """Check whether the Ollama LLM service is reachable."""
     return use_case.execute()
+
+
+@router.get("/sections", response_model=SectionsListResponse)
+async def list_sections(
+    book_key: str,
+    use_case: ListSectionsUseCase = Depends(_list_sections_use_case),
+):
+    """Return a flat list of all sections for a previously extracted book structure."""
+    try:
+        sections = use_case.execute(book_key=book_key)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return SectionsListResponse(
+        book_key=book_key,
+        total=len(sections),
+        sections=[SectionInfo(**s) for s in sections],
+    )
+
+
+@router.post("/sections/exclude", response_model=SetExcludedResponse)
+async def set_excluded_sections(
+    body: SetExcludedRequest,
+    use_case: SetExcludedSectionsUseCase = Depends(_set_excluded_use_case),
+):
+    """Set which sections are excluded from summarization and Marp generation.
+
+    Provide the list of section IDs (e.g. '1', '1.2', '3.1') that should be
+    excluded. All other sections will be marked as included.
+    """
+    try:
+        excluded_count = use_case.execute(
+            book_key=body.book_key, excluded_ids=body.excluded_ids
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return SetExcludedResponse(book_key=body.book_key, excluded_count=excluded_count)
 
 
 # ---------------------------------------------------------------------------
