@@ -1,9 +1,11 @@
 """
 EPUB processing routes:
-  POST /epub/extract    — parse EPUB → JSON structure
-  POST /epub/summarize  — add AI summaries to existing JSON (requires Ollama)
-  POST /epub/marp       — JSON structure → Marp presentation
-  GET  /epub/llm/status — check Ollama connectivity
+  POST /epub/extract          — parse EPUB → structure
+  POST /epub/summarize        — add AI summaries (requires Ollama)
+  POST /epub/marp             — structure → Marp presentation
+  GET  /epub/llm/status       — check Ollama connectivity
+  GET  /epub/sections         — list all sections
+  POST /epub/sections/exclude — set excluded section IDs
 """
 import logging
 import os
@@ -17,6 +19,13 @@ from app.application.use_cases.epub_use_cases import (
     ListSectionsUseCase,
     SetExcludedSectionsUseCase,
 )
+from app.application.dtos.epub_dtos import (
+    ExtractEpubRequest,
+    SummarizeEpubRequest,
+    GenerateMarpRequest,
+    ListSectionsRequest,
+    SetExcludedSectionsRequest,
+)
 from app.infrastructure.epub.epub_extractor import EPUBExtractor
 from app.infrastructure.ai.ollama_agent import AIAgent
 from app.infrastructure.export.marp_exporter import MarpExporter
@@ -26,7 +35,7 @@ from app.api.schemas.schemas import (
     SummarizeRequest, SummarizeResponse,
     MarpRequest, MarpResponse,
     LLMStatusResponse,
-    SectionsListResponse, SectionInfo,
+    SectionsListResponse,
     SetExcludedRequest, SetExcludedResponse,
 )
 
@@ -64,27 +73,26 @@ async def extract_epub(
     body: ExtractRequest,
     use_case: ExtractEpubUseCase = Depends(_extract_use_case),
 ):
-    """Parse an EPUB file and save its hierarchical structure as JSON."""
+    """Parse an EPUB file and save its hierarchical structure."""
     if not os.path.exists(body.epub_path):
         raise HTTPException(status_code=404, detail=f"EPUB file not found: {body.epub_path}")
 
+    images_output_dir = os.path.join(os.path.dirname(os.path.abspath(body.json_output)), "images")
     try:
-        images_output_dir = os.path.join(os.path.dirname(os.path.abspath(body.json_output)), "images")
-        structure = use_case.execute(
+        response = use_case.execute(ExtractEpubRequest(
             epub_path=body.epub_path,
             book_key=body.json_output,
             images_output_dir=images_output_dir,
-        )
+        ))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    stats = use_case.get_statistics(structure)
-    return ExtractResponse(
-        json_output=body.json_output,
-        total_sections=stats["total_sections"],
-        total_content_chars=stats["total_content_chars"],
-        sections_with_summaries=stats["sections_with_summaries"],
-    )
+    return {
+        "json_output": response.book_key,
+        "total_sections": response.total_sections,
+        "total_content_chars": response.total_content_chars,
+        "sections_with_summaries": response.sections_with_summaries,
+    }
 
 
 @router.post("/summarize", response_model=SummarizeResponse)
@@ -92,16 +100,15 @@ async def summarize_epub(
     body: SummarizeRequest,
     use_case: SummarizeEpubUseCase = Depends(_summarize_use_case),
 ):
-    """Add AI-generated summaries to an existing JSON structure (requires Ollama)."""
+    """Add AI-generated summaries to an existing structure (requires Ollama)."""
     try:
-        structure = use_case.execute(book_key=body.json_path)
+        response = use_case.execute(SummarizeEpubRequest(book_key=body.json_path))
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    count = sum(1 for _ in _iter_sections(structure) if _.get("summary"))
-    return SummarizeResponse(json_path=body.json_path, sections_summarized=count)
+    return {"json_path": response.book_key, "sections_summarized": response.sections_summarized}
 
 
 @router.post("/marp", response_model=MarpResponse)
@@ -109,32 +116,29 @@ async def generate_marp(
     body: MarpRequest,
     use_case: GenerateMarpUseCase = Depends(_marp_use_case),
 ):
-    """Generate a Marp markdown presentation from a previously extracted JSON structure."""
-    if not os.path.exists(body.json_path):
-        raise HTTPException(
-            status_code=404,
-            detail=f"JSON structure not found: {body.json_path}. Run POST /epub/extract first.",
-        )
-
+    """Generate a Marp markdown presentation from a previously extracted structure."""
     try:
-        use_case.execute(
-            json_path=body.json_path,
+        response = use_case.execute(GenerateMarpRequest(
+            book_key=body.json_path,
             marp_output_path=body.marp_output,
             title=body.title,
             include_summaries=body.include_summaries,
             include_content=body.include_content,
             max_depth=body.max_depth,
-        )
+        ))
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return MarpResponse(marp_output=body.marp_output)
+    return {"marp_output": response.marp_output_path}
 
 
 @router.get("/llm/status", response_model=LLMStatusResponse)
 async def llm_status(use_case: CheckLLMConnectionUseCase = Depends(_llm_use_case)):
     """Check whether the Ollama LLM service is reachable."""
-    return use_case.execute()
+    response = use_case.execute()
+    return {"connected": response.connected, "host": response.host, "model": response.model}
 
 
 @router.get("/sections", response_model=SectionsListResponse)
@@ -144,17 +148,20 @@ async def list_sections(
 ):
     """Return a flat list of all sections for a previously extracted book structure."""
     try:
-        sections = use_case.execute(book_key=book_key)
+        response = use_case.execute(ListSectionsRequest(book_key=book_key))
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return SectionsListResponse(
-        book_key=book_key,
-        total=len(sections),
-        sections=[SectionInfo(**s) for s in sections],
-    )
+    return {
+        "book_key": response.book_key,
+        "total": len(response.sections),
+        "sections": [
+            {"id": s.id, "title": s.title, "depth": s.depth, "excluded": s.excluded, "has_summary": s.has_summary}
+            for s in response.sections
+        ],
+    }
 
 
 @router.post("/sections/exclude", response_model=SetExcludedResponse)
@@ -164,32 +171,17 @@ async def set_excluded_sections(
 ):
     """Set which sections are excluded from summarization and Marp generation.
 
-    Provide the list of section IDs (e.g. '1', '1.2', '3.1') that should be
-    excluded. All other sections will be marked as included.
+    Provide the list of section IDs (e.g. '1', '1.2', '3.1') to exclude.
+    All other sections will be treated as included.
     """
     try:
-        excluded_count = use_case.execute(
-            book_key=body.book_key, excluded_ids=body.excluded_ids
-        )
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        response = use_case.execute(SetExcludedSectionsRequest(
+            book_key=body.book_key,
+            excluded_ids=body.excluded_ids,
+        ))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return SetExcludedResponse(book_key=body.book_key, excluded_count=excluded_count)
+    return {"book_key": response.book_key, "excluded_count": response.excluded_count}
 
-
-# ---------------------------------------------------------------------------
-# Helper
-# ---------------------------------------------------------------------------
-
-def _iter_sections(structure: dict):
-    for info in structure.values():
-        yield info
-        if info.get("subsections"):
-            yield from _iter_sections(info["subsections"])
-
-        yield info
-        if info.get("subsections"):
-            yield from _iter_sections(info["subsections"])
 
