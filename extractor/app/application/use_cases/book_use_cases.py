@@ -2,10 +2,13 @@
 Use case: list, get, create, and delete Books.
 Depends only on domain abstractions.
 """
+import logging
 from typing import List, Optional
 
 from app.domain.entities.book import Book
 from app.domain.repositories.interfaces import BookRepository, ChapterRepository
+
+logger = logging.getLogger(__name__)
 
 
 class GetBooksUseCase:

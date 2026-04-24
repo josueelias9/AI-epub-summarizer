@@ -1,10 +1,12 @@
+import logging
 import requests
 import json
 from typing import List
 
 from app.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
-
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 class AIAgent:
     """AI Agent for text simplification and summarization using Ollama"""
@@ -56,13 +58,13 @@ class AIAgent:
             return summary.strip()
             
         except requests.exceptions.RequestException as e:
-            print(f"Error communicating with Ollama: {e}")
+            logger.error("Error communicating with Ollama: %s", e)
             return f"[Error generating summary: {str(e)}]"
         except json.JSONDecodeError as e:
-            print(f"Error decoding JSON response: {e}")
+            logger.error("Error decoding JSON response: %s", e)
             return "[Error: Invalid server response]"
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            logger.exception("Unexpected error during summarization")
             return f"[Unexpected error: {str(e)}]"
     
     def summarize_batch(self, contents: List[str]) -> List[str]:
@@ -77,7 +79,7 @@ class AIAgent:
         """
         summaries = []
         for i, content in enumerate(contents):
-            print(f"Processing summary {i+1}/{len(contents)}...")
+            logger.debug("Processing summary %d/%d", i + 1, len(contents))
             summary = self.summarize_content(content)
             summaries.append(summary)
         return summaries
@@ -92,10 +94,10 @@ class AIAgent:
         try:
             response = requests.get(f"{self.ollama_host}/api/tags", timeout=5)
             response.raise_for_status()
-            print("✓ Successful connection to Ollama")
+            logger.info("Successful connection to Ollama")
             return True
         except Exception as e:
-            print(f"✗ Connection error with Ollama: {e}")
+            logger.warning("Connection error with Ollama: %s", e)
             return False
 
 
@@ -114,5 +116,4 @@ if __name__ == "__main__":
         """
         
         summary = agent.summarize_content(test_content)
-        print("\n--- Generated Summary ---")
-        print(summary)
+        logger.info("Generated summary: %s", summary)

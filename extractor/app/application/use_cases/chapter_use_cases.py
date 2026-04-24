@@ -1,6 +1,7 @@
 """
 Use cases for chapters, metadata, and search.
 """
+import logging
 from typing import List, Optional
 
 from app.domain.entities.book import Chapter, BookMetadata
@@ -9,6 +10,8 @@ from app.domain.repositories.interfaces import (
     ChapterRepository,
     MetadataRepository,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class GetChaptersUseCase:

@@ -1,6 +1,7 @@
 """
 Jobs, stats, and search API routes.
 """
+import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List, Optional
@@ -15,6 +16,8 @@ from app.infrastructure.repositories.sqlmodel_repositories import (
     SQLModelJobRepository,
 )
 from app.api.schemas.schemas import BookResponse, ChapterResponse, JobResponse
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["jobs"])
 

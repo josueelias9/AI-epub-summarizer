@@ -1,6 +1,7 @@
 """
 Books API routes.
 """
+import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List
@@ -13,6 +14,8 @@ from app.application.use_cases.book_use_cases import (
     DeleteBookUseCase,
 )
 from app.infrastructure.database.session import get_session
+
+logger = logging.getLogger(__name__)
 from app.infrastructure.repositories.sqlmodel_repositories import SQLModelBookRepository
 from app.api.schemas.schemas import BookCreate, BookResponse
 

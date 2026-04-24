@@ -1,6 +1,7 @@
 """
 Chapters and metadata API routes.
 """
+import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import Session
 from typing import List, Optional
@@ -18,6 +19,8 @@ from app.infrastructure.repositories.sqlmodel_repositories import (
     SQLModelMetadataRepository,
 )
 from app.api.schemas.schemas import ChapterResponse, MetadataResponse
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["chapters"])
 

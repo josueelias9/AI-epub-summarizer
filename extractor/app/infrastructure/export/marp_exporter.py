@@ -1,6 +1,9 @@
-from typing import Dict, Any, Optional
+import logging
 import os
 import json
+from typing import Dict, Any, Optional
+
+logger = logging.getLogger(__name__)
 
 
 class MarpExporter:
@@ -75,10 +78,8 @@ class MarpExporter:
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(final_content)
 
-        print(f"✓ Marp presentation exported from JSON to: {output_path}")
-        print(f"  Source JSON: {json_path}")
-        print(f"  Total slides: {len(slides)}")
-        print(f"\n💡 To preview: Open {output_path} in VSCode with Marp extension")
+        logger.info("Marp presentation exported to: %s (%d slides)", output_path, len(slides))
+        logger.debug("Source JSON: %s", json_path)
     
     def _generate_front_matter(self) -> str:
         """Generate Marp front matter configuration"""
@@ -197,8 +198,6 @@ section.centered {
         
         for idx, (title, info) in enumerate(structure.items(), 1):
 
-            if "Supervised, Unsupervised, and Semi‐supervised Learning" in title:
-                print("Found it!")
 
 
             # Skip excluded titles

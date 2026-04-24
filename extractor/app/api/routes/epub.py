@@ -5,6 +5,7 @@ EPUB processing routes:
   POST /epub/marp       — JSON structure → Marp presentation
   GET  /epub/llm/status — check Ollama connectivity
 """
+import logging
 import os
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -23,6 +24,8 @@ from app.api.schemas.schemas import (
     MarpRequest, MarpResponse,
     LLMStatusResponse,
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/epub", tags=["epub"])
 

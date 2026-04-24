@@ -1,11 +1,14 @@
 """
 Use cases for processing jobs and statistics.
 """
+import logging
 from typing import List, Optional
 
 from app.domain.entities.book import ProcessingJob
 from app.domain.repositories.interfaces import BookRepository, ChapterRepository, JobRepository
 from app.infrastructure.database.models import ProcessingJobORM
+
+logger = logging.getLogger(__name__)
 
 
 class GetJobsUseCase:

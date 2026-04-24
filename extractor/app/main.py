@@ -2,11 +2,17 @@
 Main FastAPI application for EPUB Structure Extractor.
 Wires together all Clean Architecture layers.
 """
+import logging
+
 from fastapi import FastAPI
 from app.core.config import settings
+from app.core.logging_config import setup_logging
 from app.infrastructure.database.session import init_db
 from app.api.main import api_router
 import uvicorn
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="EPUB Structure Extractor API",
@@ -38,9 +44,9 @@ async def health_check():
 
 
 if __name__ == "__main__":
-    print("Starting EPUB Structure Extractor API...")
-    print(f"Database: {settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}")
-    print(f"API will be available at: http://{settings.API_HOST}:{settings.API_PORT}")
+    logger.info("Starting EPUB Structure Extractor API...")
+    logger.info("Database: %s:%s/%s", settings.DB_HOST, settings.DB_PORT, settings.DB_NAME)
+    logger.info("API will be available at: http://%s:%s", settings.API_HOST, settings.API_PORT)
     uvicorn.run(
         "app.main:app",
         host=settings.API_HOST,

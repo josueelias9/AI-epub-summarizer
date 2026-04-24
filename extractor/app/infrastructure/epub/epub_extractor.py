@@ -1,9 +1,13 @@
+import logging
+import os
+import re
+from typing import Dict, Any, List
+
 from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
-from typing import Dict, Any, List
 import html2text
-import re
-import os
+
+logger = logging.getLogger(__name__)
 
 
 class EPUBExtractor:
@@ -59,7 +63,7 @@ class EPUBExtractor:
         Returns:
             Dict with book structure (content, images, and subsections)
         """
-        print(f"📖 Reading EPUB file: {epub_path}")
+        logger.info("Reading EPUB file: %s", epub_path)
         book = epub.read_epub(epub_path)
         structure = {}
         
@@ -84,7 +88,7 @@ class EPUBExtractor:
                     # Map by full epub path and by basename for flexible lookup
                     image_map[item.get_name()] = rel_path
                     image_map[img_filename] = rel_path
-            print(f"  📷 Extracted {len(image_map) // 2} images to: {images_output_dir}")
+            logger.info("Extracted %d images to: %s", len(image_map) // 2, images_output_dir)
 
         for item in book.get_items():
             if item.get_type() == ITEM_DOCUMENT:
@@ -161,7 +165,7 @@ class EPUBExtractor:
                                 break
                             parent_level -= 1
 
-        print(f"✓ Extraction complete: {len(structure)} main sections found")
+        logger.info("Extraction complete: %d main sections found", len(structure))
         return structure
     
     def _parse_html_to_text(self, html_content: str) -> str:
@@ -259,7 +263,7 @@ class EPUBExtractor:
             subsection_count = len(info.get("subsections", {}))
             content_length = len(info.get("content", ""))
             section_id = info.get("id", "no-id")
-            print(f"{prefix}→ [{section_id}] {title} ({subsection_count} subsections, {content_length} chars)")
+            logger.debug("%s-> [%s] %s (%d subsections, %d chars)", prefix, section_id, title, subsection_count, content_length)
             
             if info.get("subsections"):
                 self.print_structure(info["subsections"], indent + 1)

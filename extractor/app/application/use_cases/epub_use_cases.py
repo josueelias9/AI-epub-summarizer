@@ -2,6 +2,7 @@
 Use cases for EPUB extraction, AI summarization, and Marp generation.
 Each class has a single responsibility and depends on injected infrastructure.
 """
+import logging
 from typing import Dict, Any, Optional
 import json
 import os
@@ -9,6 +10,8 @@ import os
 from app.infrastructure.epub.epub_extractor import EPUBExtractor
 from app.infrastructure.ai.ollama_agent import AIAgent
 from app.infrastructure.export.marp_exporter import MarpExporter
+
+logger = logging.getLogger(__name__)
 
 
 class ExtractEpubUseCase:
@@ -69,18 +72,20 @@ class SummarizeEpubUseCase:
         self._ai_agent = ai_agent
 
     def execute(self, json_path: str) -> Dict[str, Any]:
+        logger.info("Starting summary generation from: %s", json_path)
         with open(json_path, "r", encoding="utf-8") as f:
             structure = json.load(f)
 
         self._summarize_recursive(structure)
+        logger.info("Summary generation completed")
 
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(structure, f, ensure_ascii=False, indent=2)
 
         return structure
-
     def _summarize_recursive(self, structure: Dict[str, Any]) -> None:
         for info in structure.values():
+            logger.info("Summarizing section id: %s", info.get("id"))
             info["summary"] = (
                 self._ai_agent.summarize_content(info["content"])
                 if info.get("content")
@@ -123,6 +128,7 @@ class CheckLLMConnectionUseCase:
         self._ai_agent = ai_agent
 
     def execute(self) -> Dict[str, Any]:
+        logger.info("Checking LLM connection to %s (model: %s)", self._ai_agent.ollama_host, self._ai_agent.model)
         ok = self._ai_agent.test_connection()
         return {
             "connected": ok,
