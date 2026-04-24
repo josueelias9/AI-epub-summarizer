@@ -1,12 +1,14 @@
 import logging
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+from app.application.ports.service_ports import MarpExporterPort
 
 logger = logging.getLogger(__name__)
 
 
-class MarpExporter:
+class MarpExporter(MarpExporterPort):
     """Exporter that converts book structure to Marp presentation format"""
     
     def __init__(self):

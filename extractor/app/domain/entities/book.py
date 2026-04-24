@@ -1,3 +1,4 @@
+# TODO: what is all these? is it really needed? 
 """
 Domain entities - pure Python dataclasses with no framework dependencies.
 These represent the core business objects of the application.

@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: Scaffold a new use case following Clean Architecture conventions
 ---
 

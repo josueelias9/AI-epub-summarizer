@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: End-to-end workflow for processing a new EPUB file via the API
 ---
 

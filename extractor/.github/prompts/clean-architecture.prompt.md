@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: 'agent'
 description: >
   Expert reviewer and implementer of Clean Architecture (Robert C. Martin).
   Use this skill when adding features, reviewing code, or refactoring any part of the codebase.

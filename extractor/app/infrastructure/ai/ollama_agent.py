@@ -1,14 +1,15 @@
 import logging
 import requests
 import json
-from typing import List
+from typing import Dict, List
 
+from app.application.ports.service_ports import AIServicePort
 from app.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-class AIAgent:
+class AIAgent(AIServicePort):
     """AI Agent for text simplification and summarization using Ollama"""
     
     def __init__(self, ollama_host: str = settings.LLM_HOST):
@@ -99,6 +100,9 @@ class AIAgent:
         except Exception as e:
             logger.warning("Connection error with Ollama: %s", e)
             return False
+
+    def get_connection_info(self) -> Dict[str, str]:
+        return {"host": self.ollama_host, "model": self.model}
 
 
 # Usage example

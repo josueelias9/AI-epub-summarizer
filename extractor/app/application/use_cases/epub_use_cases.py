@@ -7,9 +7,7 @@ from typing import Dict, Any, Optional
 import json
 import os
 
-from app.infrastructure.epub.epub_extractor import EPUBExtractor
-from app.infrastructure.ai.ollama_agent import AIAgent
-from app.infrastructure.export.marp_exporter import MarpExporter
+from app.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +15,7 @@ logger = logging.getLogger(__name__)
 class ExtractEpubUseCase:
     """Extract hierarchical structure from an EPUB and save as JSON. No AI involved."""
 
-    def __init__(self, extractor: EPUBExtractor):
+    def __init__(self, extractor: EpubExtractorPort):
         self._extractor = extractor
 
     def execute(self, epub_path: str, json_output: str) -> Dict[str, Any]:
@@ -68,7 +66,7 @@ class ExtractEpubUseCase:
 class SummarizeEpubUseCase:
     """Load an existing JSON structure, generate AI summaries, and overwrite the file."""
 
-    def __init__(self, ai_agent: AIAgent):
+    def __init__(self, ai_agent: AIServicePort):
         self._ai_agent = ai_agent
 
     def execute(self, json_path: str) -> Dict[str, Any]:
@@ -98,7 +96,7 @@ class SummarizeEpubUseCase:
 class GenerateMarpUseCase:
     """Generate a Marp markdown presentation from a previously saved JSON structure."""
 
-    def __init__(self, marp_exporter: MarpExporter):
+    def __init__(self, marp_exporter: MarpExporterPort):
         self._marp_exporter = marp_exporter
 
     def execute(
@@ -124,14 +122,15 @@ class GenerateMarpUseCase:
 class CheckLLMConnectionUseCase:
     """Verify that the Ollama LLM service is reachable."""
 
-    def __init__(self, ai_agent: AIAgent):
+    def __init__(self, ai_agent: AIServicePort):
         self._ai_agent = ai_agent
 
     def execute(self) -> Dict[str, Any]:
-        logger.info("Checking LLM connection to %s (model: %s)", self._ai_agent.ollama_host, self._ai_agent.model)
+        info = self._ai_agent.get_connection_info()
+        logger.info("Checking LLM connection to %s (model: %s)", info["host"], info["model"])
         ok = self._ai_agent.test_connection()
         return {
             "connected": ok,
-            "host": self._ai_agent.ollama_host,
-            "model": self._ai_agent.model,
+            "host": info["host"],
+            "model": info["model"],
         }
