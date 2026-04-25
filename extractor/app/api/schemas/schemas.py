@@ -149,7 +149,8 @@ class SectionsListResponse(BaseModel):
 
 class SetExcludedRequest(BaseModel):
     book_key: str
-    excluded_ids: list[str]
+    excluded_ids: list[str] = []
+    excluded_titles: list[str] = []
 
 
 class SetExcludedResponse(BaseModel):

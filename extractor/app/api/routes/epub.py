@@ -178,6 +178,7 @@ async def set_excluded_sections(
         response = use_case.execute(SetExcludedSectionsRequest(
             book_key=body.book_key,
             excluded_ids=body.excluded_ids,
+            excluded_titles=body.excluded_titles,
         ))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

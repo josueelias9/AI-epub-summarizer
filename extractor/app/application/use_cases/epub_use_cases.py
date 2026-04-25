@@ -183,9 +183,30 @@ class SetExcludedSectionsUseCase:
         self._repository = repository
 
     def execute(self, request: SetExcludedSectionsRequest) -> SetExcludedSectionsResponse:
-        self._repository.save_exclusions(request.book_key, request.excluded_ids)
+        excluded_ids = list(request.excluded_ids)
+
+        if request.excluded_titles:
+            structure = self._repository.load_structure(request.book_key)
+            if structure is None:
+                raise ValueError(f"No structure found for {request.book_key!r}. Run extract first.")
+            title_set = set(request.excluded_titles)
+            ids_from_titles = self._ids_for_titles(structure, title_set)
+            excluded_ids = list(set(excluded_ids) | ids_from_titles)
+
+        self._repository.save_exclusions(request.book_key, excluded_ids)
         return SetExcludedSectionsResponse(
             book_key=request.book_key,
-            excluded_count=len(request.excluded_ids),
+            excluded_count=len(excluded_ids),
         )
+
+    def _ids_for_titles(
+        self, structure: Dict[str, Any], title_set: Set[str]
+    ) -> Set[str]:
+        found: Set[str] = set()
+        for title, info in structure.items():
+            if title in title_set and info.get("id"):
+                found.add(info["id"])
+            if info.get("subsections"):
+                found |= self._ids_for_titles(info["subsections"], title_set)
+        return found
 

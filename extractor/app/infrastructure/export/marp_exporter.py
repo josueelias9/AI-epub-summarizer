@@ -139,41 +139,7 @@ section.centered {
 ---"""
     
 
-    
-    def _should_skip_title(self, title: str) -> bool:
-        """
-        Check if a title should be skipped based on exclusion criteria
-        
-        Args:
-            title: The section title to check
-            
-        Returns:
-            True if the title should be skipped, False otherwise
-        """
-        # Clean the title for comparison
-        clean_title = title.strip()
-        
-        # Skip titles containing specific keywords/phrases
-        excluded_titles = {
-            "Assessment Test",
-            "Review Questions", 
-            "Table of Contents",
-            "Answers to Assessment Test",
-            "Index",
-            "About the Author",
-            "Acknowledgments",
-            "About the Technical Editors",
-            "Introduction",
-            "Book Summary Presentation",
-            "AppendixAnswers to Review Questions"
-        }
-        
-        # Check if title contains any of the excluded keywords
-                # Check if title matches excluded titles
-        if clean_title in excluded_titles:
-            return True
-        
-        return False
+
     
     def _process_structure_recursive(
         self,
@@ -205,10 +171,6 @@ section.centered {
 
             # Skip sections excluded by the user
             if info.get("id", "") in excluded_ids:
-                continue
-
-            # Skip excluded titles
-            if self._should_skip_title(title):
                 continue
             
             # Generate section number

@@ -101,6 +101,7 @@ class ListSectionsResponse:
 class SetExcludedSectionsRequest:
     book_key: str
     excluded_ids: List[str] = field(default_factory=list)
+    excluded_titles: List[str] = field(default_factory=list)
 
 
 @dataclass
