@@ -10,7 +10,9 @@
         "hediet.vscode-drawio",
         "ms-python.python",
         "tomoki1207.pdf",
-        "marp-team.marp-vscode"
+        "marp-team.marp-vscode",
+        "humao.rest-client",
+        "Gruntfuggly.todo-tree"
       ],
       "settings": {
         "workbench.colorTheme": "Monokai"
@@ -18,6 +20,7 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {}
   }
 }

@@ -52,10 +52,12 @@ docker-compose up
 
 ### Variables de entorno
 
-- `EPUB_FILE`: Nombre del archivo EPUB a procesar (requerido)
-- `OUTPUT_FILE`: Nombre del archivo PDF de salida (opcional)
-- `INPUT_PATH`: Directorio donde están los archivos EPUB (default: ./)
-- `OUTPUT_PATH`: Directorio donde guardar los PDFs (default: ./output)
+- `DB_HOST`, `DB_PORT`: PostgreSQL host y puerto
+- `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`: Credenciales de base de datos
+- `API_HOST`, `API_PORT`: Dirección de bind de Uvicorn
+- `DEBUG`: `true`/`false`
+
+Las rutas de archivos EPUB y de salida se pasan directamente como parámetros en cada request al API.
 
 ## Ejemplo de salida
 
@@ -183,3 +185,6 @@ Las contribuciones son bienvenidas. Por favor:
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+
+TODO: check if it is possible to extract the image name without using LLM

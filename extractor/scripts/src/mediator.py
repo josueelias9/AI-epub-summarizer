@@ -1,6 +1,6 @@
-from src.extractor import EPUBExtractor
-from src.ia_agent import AIAgent
-from src.marp_exporter import MarpExporter
+from scripts.src.extractor import EPUBExtractor
+from scripts.src.ia_agent import AIAgent
+from scripts.src.marp_exporter import MarpExporter
 from typing import Dict, Any
 import json
 import os
