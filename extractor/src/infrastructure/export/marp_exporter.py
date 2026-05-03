@@ -38,7 +38,7 @@ class MarpExporter(MarpExporterPort):
 
         # Build parent → children lookup (preserving order)
         children_map: Dict[Optional[str], List[Chapter]] = {}
-        for ch in sorted(chapters, key=lambda c: c.order):
+        for ch in sorted(chapters, key=lambda c: [int(x) for x in c.number.split(".")]):
             children_map.setdefault(ch.chapter_id, []).append(ch)
 
         title = book.name

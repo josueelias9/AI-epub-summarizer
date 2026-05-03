@@ -42,7 +42,7 @@ class ChapterORM(SQLModel, table=True):
     chapter_id: Optional[str] = Field(default=None, foreign_key="chapter.id")
     summary_date: Optional[datetime] = None
     ai_generated: bool = Field(default=False)
-    order: int
+    number: str                                            # e.g. "1", "2.3", "1.2.1"
     include: bool = Field(default=True)
 
     book: Optional[BookORM] = Relationship(back_populates="chapters")

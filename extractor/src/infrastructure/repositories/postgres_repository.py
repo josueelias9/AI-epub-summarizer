@@ -62,7 +62,7 @@ class PostgresBookRepository(BookRepositoryPort):
                 existing.chapter_id = ch.chapter_id
                 existing.summary_date = ch.summary_date
                 existing.ai_generated = ch.ai_generated
-                existing.order = ch.order
+                existing.number = ch.number
                 existing.include = ch.include
             else:
                 self._session.add(
@@ -76,7 +76,7 @@ class PostgresBookRepository(BookRepositoryPort):
                         chapter_id=ch.chapter_id,
                         summary_date=ch.summary_date,
                         ai_generated=ch.ai_generated,
-                        order=ch.order,
+                        number=ch.number,
                         include=ch.include,
                     )
                 )
@@ -89,9 +89,11 @@ class PostgresBookRepository(BookRepositoryPort):
         query = select(ChapterORM).where(ChapterORM.book_id == book_id)
         if include_only is not None:
             query = query.where(ChapterORM.include == include_only)
-        query = query.order_by(ChapterORM.order)
         results = self._session.exec(query).all()
-        return [self._to_entity(orm) for orm in results]
+        return sorted(
+            [self._to_entity(orm) for orm in results],
+            key=lambda c: [int(x) for x in c.number.split(".")],
+        )
 
     def get_chapter(self, chapter_id: str) -> Optional[Chapter]:
         orm = self._session.get(ChapterORM, chapter_id)
@@ -133,7 +135,7 @@ class PostgresBookRepository(BookRepositoryPort):
             book_id=orm.book_id,
             title=orm.title,
             content=orm.content,
-            order=orm.order,
+            number=orm.number,
             include=orm.include,
             summary=orm.summary,
             list_of_images=images,

@@ -17,7 +17,6 @@ from typing import List, Optional
 @dataclass
 class ExtractEpubRequest:
     epub_path: str
-    book_id: str
     book_name: str
     images_output_dir: Optional[str] = None
     language: Optional[str] = None
@@ -85,8 +84,7 @@ class CheckLLMConnectionResponse:
 class ChapterDTO:
     id: str
     title: str
-    order: int
-    depth: int
+    number: str                   # e.g. "1", "2.3", "1.2.1"
     include: bool
     has_summary: bool
     chapter_id: Optional[str]     # parent chapter id

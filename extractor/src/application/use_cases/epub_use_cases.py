@@ -45,7 +45,6 @@ class ExtractEpubUseCase:
     def execute(self, request: ExtractEpubRequest) -> ExtractEpubResponse:
         book, chapters = self._extractor.extract(
             request.epub_path,
-            request.book_id,
             request.images_output_dir,
         )
 
@@ -63,10 +62,10 @@ class ExtractEpubUseCase:
         total_chars = sum(len(ch.content) for ch in chapters)
         logger.info(
             "Extracted %d chapters (%d chars) for book %r",
-            len(chapters), total_chars, request.book_id,
+            len(chapters), total_chars, book.id,
         )
         return ExtractEpubResponse(
-            book_id=request.book_id,
+            book_id=book.id,
             total_chapters=len(chapters),
             total_content_chars=total_chars,
         )
@@ -183,8 +182,7 @@ class ListChaptersUseCase:
             ChapterDTO(
                 id=ch.id,
                 title=ch.title,
-                order=ch.order,
-                depth=self._depth_from_id(ch.id),
+                number=ch.number,
                 include=ch.include,
                 has_summary=bool(ch.summary),
                 chapter_id=ch.chapter_id,
@@ -192,11 +190,6 @@ class ListChaptersUseCase:
             for ch in chapters
         ]
         return ListChaptersResponse(book_id=request.book_id, chapters=dtos)
-
-    @staticmethod
-    def _depth_from_id(chapter_id: str) -> int:
-        """Derive nesting depth from a hierarchical id like '1.2.3' → 3."""
-        return len(chapter_id.split("."))
 
 
 # ---------------------------------------------------------------------------

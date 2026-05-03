@@ -78,7 +78,7 @@ class LocalBookRepository(BookRepositoryPort):
                 ch.include = old.include  # preserve manual include flag
             existing[ch.id] = ch
 
-        ordered = sorted(existing.values(), key=lambda c: c.order)
+        ordered = sorted(existing.values(), key=lambda c: [int(x) for x in c.number.split(".")])
         with open(self._chapters_path(book_id), "w", encoding="utf-8") as f:
             json.dump([self._ch_to_dict(c) for c in ordered], f, ensure_ascii=False, indent=2)
         logger.debug("Saved %d chapters for book %r", len(ordered), book_id)
@@ -87,7 +87,7 @@ class LocalBookRepository(BookRepositoryPort):
         chapters = self._load_chapters_raw(book_id)
         if include_only is not None:
             chapters = [ch for ch in chapters if ch.include == include_only]
-        return sorted(chapters, key=lambda c: c.order)
+        return sorted(chapters, key=lambda c: [int(x) for x in c.number.split(".")])
 
     def get_chapter(self, chapter_id: str) -> Optional[Chapter]:
         # chapter_id format: "<book_id>/<section_id>" — but we stored plain section ids.
@@ -151,7 +151,7 @@ class LocalBookRepository(BookRepositoryPort):
             "book_id": ch.book_id,
             "title": ch.title,
             "content": ch.content,
-            "order": ch.order,
+            "number": ch.number,
             "include": ch.include,
             "summary": ch.summary,
             "list_of_images": ch.list_of_images,
@@ -168,7 +168,7 @@ class LocalBookRepository(BookRepositoryPort):
             book_id=d["book_id"],
             title=d["title"],
             content=d.get("content", ""),
-            order=d.get("order", 0),
+            number=d.get("number", "0"),
             include=d.get("include", True),
             summary=d.get("summary"),
             list_of_images=d.get("list_of_images", []),

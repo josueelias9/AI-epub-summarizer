@@ -25,13 +25,14 @@ class Chapter:
 
     ``chapter_id`` points to the parent chapter's id; None means root level.
     ``include`` controls whether this chapter participates in AI summarisation.
+    ``number`` encodes both depth and order as a dotted string, e.g. "1", "2.3", "1.2.1".
     """
 
     id: str
     book_id: str
     title: str
     content: str
-    order: int
+    number: str                               # e.g. "1", "2.3", "1.2.1"
     include: bool = True
     summary: Optional[str] = None
     list_of_images: List[str] = field(default_factory=list)

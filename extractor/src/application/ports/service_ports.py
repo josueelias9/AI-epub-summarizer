@@ -69,10 +69,9 @@ class EpubExtractorPort(ABC):
     def extract(
         self,
         epub_path: str,
-        book_id: str,
         images_output_dir: Optional[str] = None,
     ) -> Tuple[Book, List[Chapter]]:
-        """Parse the EPUB and return a Book entity plus a flat Chapter list."""
+        """Parse the EPUB, generate a UUID for the book, and return Book + Chapter list."""
         ...
 
 

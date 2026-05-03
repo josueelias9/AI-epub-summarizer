@@ -2,6 +2,7 @@ import logging
 import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
+from uuid import uuid4
 
 from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
@@ -60,12 +61,13 @@ class EPUBExtractor(EpubExtractorPort):
     def extract(
         self,
         epub_path: str,
-        book_id: str,
         images_output_dir: Optional[str] = None,
     ) -> Tuple[Book, List[Chapter]]:
-        """Parse the EPUB and return a Book entity plus a flat ordered Chapter list.
+        """Parse the EPUB, generate a UUID for the book, and return Book + Chapter list.
 
         The chapter hierarchy is preserved via ``Chapter.chapter_id`` (parent FK).
+        Chapter ordering and depth are encoded together in ``Chapter.number``
+        (e.g. "1", "2.3", "1.2.1").
         """
         epub_book = epub.read_epub(epub_path)
 
@@ -77,13 +79,13 @@ class EPUBExtractor(EpubExtractorPort):
         language_meta = epub_book.get_metadata("DC", "language")
         language = language_meta[0][0] if language_meta else None
 
+        book_id = str(uuid4())
         book = Book(id=book_id, name=book_name, language=language, author=author)
 
         structure = self.extract_structure(epub_path, images_output_dir)
 
         chapters: List[Chapter] = []
-        order_counter = [0]
-        self._flatten_structure(structure, chapters, book_id, parent_id=None, order_counter=order_counter)
+        self._flatten_structure(structure, chapters, book_id, parent_id=None, number_prefix="")
 
         return book, chapters
 
@@ -93,18 +95,24 @@ class EPUBExtractor(EpubExtractorPort):
         chapters: List[Chapter],
         book_id: str,
         parent_id: Optional[str],
-        order_counter: List[int],
+        number_prefix: str,
     ) -> None:
-        """Recursively convert the nested structure dict into flat Chapter entities."""
-        for title, info in structure.items():
-            order_counter[0] += 1
+        """Recursively convert the nested structure dict into flat Chapter entities.
+
+        Each chapter receives a UUID as its id. ``parent_id`` carries the UUID of
+        the parent chapter so the hierarchy is preserved via ``chapter_id``.
+        ``number`` encodes both position and depth (e.g. "1", "2.3", "1.2.1").
+        """
+        for idx, (title, info) in enumerate(structure.items(), 1):
+            number = f"{number_prefix}.{idx}" if number_prefix else str(idx)
+            chapter_uuid = str(uuid4())
             chapters.append(
                 Chapter(
-                    id=info["id"],
+                    id=chapter_uuid,
                     book_id=book_id,
                     title=title,
                     content=info.get("content", ""),
-                    order=order_counter[0],
+                    number=number,
                     include=True,
                     list_of_images=info.get("images", []),
                     chapter_id=parent_id,
@@ -115,8 +123,8 @@ class EPUBExtractor(EpubExtractorPort):
                     info["subsections"],
                     chapters,
                     book_id,
-                    parent_id=info["id"],
-                    order_counter=order_counter,
+                    parent_id=chapter_uuid,
+                    number_prefix=number,
                 )
 
     def extract_structure(self, epub_path: str, images_output_dir: str = None) -> Dict[str, Any]:
