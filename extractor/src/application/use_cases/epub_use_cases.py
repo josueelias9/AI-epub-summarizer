@@ -2,6 +2,7 @@
 Use cases for EPUB extraction, AI summarisation, and Marp generation
 (Clean Architecture — single responsibility per class).
 """
+
 import logging
 import os
 from datetime import datetime
@@ -41,6 +42,7 @@ logger = logging.getLogger(__name__)
 # Extract
 # ---------------------------------------------------------------------------
 
+
 class ExtractEpubUseCase:
     """Parse an EPUB file and persist Book + Chapter entities to the repository."""
 
@@ -70,7 +72,9 @@ class ExtractEpubUseCase:
         total_chars = sum(len(ch.content) for ch in chapters)
         logger.info(
             "Extracted %d chapters (%d chars) for book %r",
-            len(chapters), total_chars, book.id,
+            len(chapters),
+            total_chars,
+            book.id,
         )
         return ExtractEpubResponse(
             book_id=book.id,
@@ -82,6 +86,7 @@ class ExtractEpubUseCase:
 # ---------------------------------------------------------------------------
 # Summarize
 # ---------------------------------------------------------------------------
+
 
 class SummarizeEpubUseCase:
     """Generate AI summaries for included chapters and persist them."""
@@ -131,6 +136,7 @@ class SummarizeEpubUseCase:
 # Generate Marp
 # ---------------------------------------------------------------------------
 
+
 class GenerateMarpUseCase:
     """Fetch book data from the repository and generate a Marp presentation."""
 
@@ -161,6 +167,7 @@ class GenerateMarpUseCase:
 # Check LLM connection
 # ---------------------------------------------------------------------------
 
+
 class CheckLLMConnectionUseCase:
     """Verify that the Ollama LLM service is reachable."""
 
@@ -169,14 +176,19 @@ class CheckLLMConnectionUseCase:
 
     def execute(self) -> CheckLLMConnectionResponse:
         info = self._ai_agent.get_connection_info()
-        logger.info("Checking LLM connection to %s (model: %s)", info["host"], info["model"])
+        logger.info(
+            "Checking LLM connection to %s (model: %s)", info["host"], info["model"]
+        )
         ok = self._ai_agent.test_connection()
-        return CheckLLMConnectionResponse(connected=ok, host=info["host"], model=info["model"])
+        return CheckLLMConnectionResponse(
+            connected=ok, host=info["host"], model=info["model"]
+        )
 
 
 # ---------------------------------------------------------------------------
 # List chapters
 # ---------------------------------------------------------------------------
+
 
 class ListChaptersUseCase:
     """Return a flat, ordered list of all chapters for a book."""
@@ -208,13 +220,16 @@ class ListChaptersUseCase:
 # Set inclusion / exclusion
 # ---------------------------------------------------------------------------
 
+
 class SetExcludedSectionsUseCase:
     """Toggle the ``include`` flag on a set of chapters."""
 
     def __init__(self, repository: BookRepositoryPort):
         self._repository = repository
 
-    def execute(self, request: SetExcludedSectionsRequest) -> SetExcludedSectionsResponse:
+    def execute(
+        self, request: SetExcludedSectionsRequest
+    ) -> SetExcludedSectionsResponse:
         all_chapters = self._repository.get_chapters(request.book_id)
 
         def _matches(chapter_number: str) -> bool:
@@ -226,7 +241,9 @@ class SetExcludedSectionsUseCase:
         matched = [ch for ch in all_chapters if _matches(ch.number)]
         for ch in matched:
             self._repository.update_chapter_include(ch.id, request.include)
-            logger.info("Chapter %r (number=%r) include=%s", ch.id, ch.number, request.include)
+            logger.info(
+                "Chapter %r (number=%r) include=%s", ch.id, ch.number, request.include
+            )
 
         return SetExcludedSectionsResponse(
             book_id=request.book_id,
@@ -237,6 +254,7 @@ class SetExcludedSectionsUseCase:
 # ---------------------------------------------------------------------------
 # List books
 # ---------------------------------------------------------------------------
+
 
 class ListBooksUseCase:
     """Return all books stored in the repository."""
@@ -257,6 +275,7 @@ class ListBooksUseCase:
 # ---------------------------------------------------------------------------
 # Delete book
 # ---------------------------------------------------------------------------
+
 
 class DeleteBookUseCase:
     """Delete a book (DB records + epub file if tracked)."""
@@ -282,6 +301,7 @@ class DeleteBookUseCase:
 # Get slides
 # ---------------------------------------------------------------------------
 
+
 class GetSlidesUseCase:
     """Return included chapters as structured slide data."""
 
@@ -306,4 +326,3 @@ class GetSlidesUseCase:
             for ch in chapters
         ]
         return GetSlidesResponse(book_id=book.id, book_name=book.name, slides=slides)
-

@@ -2,6 +2,7 @@
 Centralized logging configuration for the EPUB Structure Extractor.
 Call setup_logging() once at application startup.
 """
+
 import logging
 import sys
 

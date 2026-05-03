@@ -5,14 +5,15 @@ Plain dataclasses — no framework dependency.
 The API layer maps its Pydantic schemas into these before calling a use case,
 and maps the returned response DTOs back to Pydantic schemas for the HTTP response.
 """
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
 
-
 # ---------------------------------------------------------------------------
 # Extract
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class ExtractEpubRequest:
@@ -35,6 +36,7 @@ class ExtractEpubResponse:
 # Summarize
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class SummarizeEpubRequest:
     book_id: str
@@ -50,6 +52,7 @@ class SummarizeEpubResponse:
 # ---------------------------------------------------------------------------
 # Marp
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class GenerateMarpRequest:
@@ -70,6 +73,7 @@ class GenerateMarpResponse:
 # LLM connectivity
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CheckLLMConnectionResponse:
     connected: bool
@@ -81,14 +85,15 @@ class CheckLLMConnectionResponse:
 # Chapter listing
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class ChapterDTO:
     id: str
     title: str
-    number: str                   # e.g. "1", "2.3", "1.2.1"
+    number: str  # e.g. "1", "2.3", "1.2.1"
     include: bool
     has_summary: bool
-    chapter_id: Optional[str]     # parent chapter id
+    chapter_id: Optional[str]  # parent chapter id
 
 
 @dataclass
@@ -106,6 +111,7 @@ class ListChaptersResponse:
 # Inclusion / exclusion
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class SetExcludedSectionsRequest:
     """Set the ``include`` flag for chapters matching the given number prefixes.
@@ -114,6 +120,7 @@ class SetExcludedSectionsRequest:
     A value of "2" also matches "2.1", "2.2", "2.2.1", i.e. the whole subtree.
     Pass ``include=False`` to exclude from AI summarisation, ``True`` to re-include.
     """
+
     book_id: str
     chapter_numbers: List[str]
     include: bool
@@ -128,6 +135,7 @@ class SetExcludedSectionsResponse:
 # ---------------------------------------------------------------------------
 # Books listing
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class BookDTO:
@@ -146,6 +154,7 @@ class ListBooksResponse:
 # Delete book
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class DeleteBookRequest:
     book_id: str
@@ -160,6 +169,7 @@ class DeleteBookResponse:
 # ---------------------------------------------------------------------------
 # Slides
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class SlideDTO:

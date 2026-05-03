@@ -4,6 +4,7 @@ SQLModel ORM models — infrastructure concern only.
 These map directly to the ERD tables (BOOK and CHAPTER) and are kept
 separate from the enterprise entities.
 """
+
 from datetime import datetime
 from typing import List, Optional
 
@@ -39,11 +40,11 @@ class ChapterORM(SQLModel, table=True):
     title: str
     content: str = Field(sa_column=Column(Text, nullable=False))
     summary: Optional[str] = Field(default=None, sa_column=Column(Text))
-    list_of_images: Optional[str] = Field(default=None)   # JSON-encoded list
+    list_of_images: Optional[str] = Field(default=None)  # JSON-encoded list
     chapter_id: Optional[str] = Field(default=None, foreign_key="chapter.id")
     summary_date: Optional[datetime] = None
     ai_generated: bool = Field(default=False)
-    number: str                                            # e.g. "1", "2.3", "1.2.1"
+    number: str  # e.g. "1", "2.3", "1.2.1"
     include: bool = Field(default=True)
 
     book: Optional[BookORM] = Relationship(back_populates="chapters")

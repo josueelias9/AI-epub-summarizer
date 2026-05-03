@@ -5,6 +5,7 @@ Storage layout (all relative to ``base_dir``, default "output/"):
   output/<book_id>/book.json        — Book metadata
   output/<book_id>/chapters.json    — List of serialised Chapter objects
 """
+
 import json
 import logging
 import os
@@ -43,7 +44,12 @@ class LocalBookRepository(BookRepositoryPort):
 
     def save_book(self, book: Book) -> None:
         os.makedirs(self._book_dir(book.id), exist_ok=True)
-        data = {"id": book.id, "name": book.name, "language": book.language, "author": book.author}
+        data = {
+            "id": book.id,
+            "name": book.name,
+            "language": book.language,
+            "author": book.author,
+        }
         with open(self._book_path(book.id), "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         logger.debug("Saved book %r to %s", book.id, self._book_path(book.id))
@@ -54,7 +60,12 @@ class LocalBookRepository(BookRepositoryPort):
             return None
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return Book(id=data["id"], name=data["name"], language=data.get("language"), author=data.get("author"))
+        return Book(
+            id=data["id"],
+            name=data["name"],
+            language=data.get("language"),
+            author=data.get("author"),
+        )
 
     # ------------------------------------------------------------------
     # Chapters
@@ -78,12 +89,18 @@ class LocalBookRepository(BookRepositoryPort):
                 ch.include = old.include  # preserve manual include flag
             existing[ch.id] = ch
 
-        ordered = sorted(existing.values(), key=lambda c: [int(x) for x in c.number.split(".")])
+        ordered = sorted(
+            existing.values(), key=lambda c: [int(x) for x in c.number.split(".")]
+        )
         with open(self._chapters_path(book_id), "w", encoding="utf-8") as f:
-            json.dump([self._ch_to_dict(c) for c in ordered], f, ensure_ascii=False, indent=2)
+            json.dump(
+                [self._ch_to_dict(c) for c in ordered], f, ensure_ascii=False, indent=2
+            )
         logger.debug("Saved %d chapters for book %r", len(ordered), book_id)
 
-    def get_chapters(self, book_id: str, include_only: Optional[bool] = None) -> List[Chapter]:
+    def get_chapters(
+        self, book_id: str, include_only: Optional[bool] = None
+    ) -> List[Chapter]:
         chapters = self._load_chapters_raw(book_id)
         if include_only is not None:
             chapters = [ch for ch in chapters if ch.include == include_only]
@@ -131,6 +148,7 @@ class LocalBookRepository(BookRepositoryPort):
 
     def delete_book(self, book_id: str) -> None:
         import shutil
+
         book_dir = self._book_dir(book_id)
         if os.path.isdir(book_dir):
             shutil.rmtree(book_dir)
@@ -157,8 +175,15 @@ class LocalBookRepository(BookRepositoryPort):
                 if ch.id == chapter_id:
                     for k, v in kwargs.items():
                         setattr(ch, k, v)
-                    with open(self._chapters_path(entry.name), "w", encoding="utf-8") as f:
-                        json.dump([self._ch_to_dict(c) for c in chapters], f, ensure_ascii=False, indent=2)
+                    with open(
+                        self._chapters_path(entry.name), "w", encoding="utf-8"
+                    ) as f:
+                        json.dump(
+                            [self._ch_to_dict(c) for c in chapters],
+                            f,
+                            ensure_ascii=False,
+                            indent=2,
+                        )
                     return
         raise ValueError(f"Chapter {chapter_id!r} not found in local repository.")
 
@@ -174,7 +199,9 @@ class LocalBookRepository(BookRepositoryPort):
             "summary": ch.summary,
             "list_of_images": ch.list_of_images,
             "chapter_id": ch.chapter_id,
-            "summary_date": ch.summary_date.strftime(_DT_FMT) if ch.summary_date else None,
+            "summary_date": (
+                ch.summary_date.strftime(_DT_FMT) if ch.summary_date else None
+            ),
             "ai_generated": ch.ai_generated,
         }
 

@@ -11,6 +11,7 @@ EPUB processing routes:
   POST /epub/chapters/include    — toggle include flag on chapters
   GET  /epub/slides/{book_id}    — get chapters as slide data
 """
+
 import logging
 import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
@@ -45,12 +46,17 @@ from app.api.schemas.schemas import (
     BooksListResponse,
     ChaptersListResponse,
     DeleteBookResponse,
-    ExtractRequest, ExtractResponse,
+    ExtractRequest,
+    ExtractResponse,
     LLMStatusResponse,
-    MarpRequest, MarpResponse,
-    SetInclusionRequest, SetInclusionResponse,
-    SlideInfo, SlidesResponse,
-    SummarizeRequest, SummarizeResponse,
+    MarpRequest,
+    MarpResponse,
+    SetInclusionRequest,
+    SetInclusionResponse,
+    SlideInfo,
+    SlidesResponse,
+    SummarizeRequest,
+    SummarizeResponse,
     UploadEpubResponse,
 )
 
@@ -110,7 +116,10 @@ async def list_books(use_case: ListBooksUseCase = Depends(_list_books_use_case))
     response = use_case.execute()
     return {
         "total": len(response.books),
-        "books": [{"id": b.id, "name": b.name, "language": b.language, "author": b.author} for b in response.books],
+        "books": [
+            {"id": b.id, "name": b.name, "language": b.language, "author": b.author}
+            for b in response.books
+        ],
     }
 
 
@@ -148,7 +157,11 @@ async def upload_epub(
             os.remove(file_path)
         raise HTTPException(status_code=500, detail=str(e))
 
-    return {"book_id": response.book_id, "book_name": display_name, "total_chapters": response.total_chapters}
+    return {
+        "book_id": response.book_id,
+        "book_name": display_name,
+        "total_chapters": response.total_chapters,
+    }
 
 
 @router.delete("/books/{book_id}", response_model=DeleteBookResponse)
@@ -203,7 +216,9 @@ async def extract_epub(
 ):
     """Parse an EPUB file and persist Book + Chapter entities to the database."""
     if not os.path.exists(body.epub_path):
-        raise HTTPException(status_code=404, detail=f"EPUB file not found: {body.epub_path}")
+        raise HTTPException(
+            status_code=404, detail=f"EPUB file not found: {body.epub_path}"
+        )
     try:
         response = use_case.execute(
             ExtractEpubRequest(
@@ -216,7 +231,11 @@ async def extract_epub(
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    return {"book_id": response.book_id, "total_chapters": response.total_chapters, "total_content_chars": response.total_content_chars}
+    return {
+        "book_id": response.book_id,
+        "total_chapters": response.total_chapters,
+        "total_content_chars": response.total_content_chars,
+    }
 
 
 @router.post("/summarize", response_model=SummarizeResponse)
@@ -236,7 +255,10 @@ async def summarize_epub(
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    return {"book_id": response.book_id, "chapters_summarized": response.chapters_summarized}
+    return {
+        "book_id": response.book_id,
+        "chapters_summarized": response.chapters_summarized,
+    }
 
 
 @router.post("/marp", response_model=MarpResponse)
@@ -267,7 +289,11 @@ async def generate_marp(
 async def llm_status(use_case: CheckLLMConnectionUseCase = Depends(_llm_use_case)):
     """Check whether the Ollama LLM service is reachable."""
     response = use_case.execute()
-    return {"connected": response.connected, "host": response.host, "model": response.model}
+    return {
+        "connected": response.connected,
+        "host": response.host,
+        "model": response.model,
+    }
 
 
 @router.get("/chapters", response_model=ChaptersListResponse)
@@ -320,4 +346,3 @@ async def set_chapter_inclusion(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return {"book_id": response.book_id, "updated_count": response.updated_count}
-

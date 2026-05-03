@@ -35,12 +35,14 @@ python-multipart>=0.0.9
 sqlmodel>=0.0.14
 psycopg2-binary>=2.9.0
 
-# Development and testing
-pytest>=6.0.0
-black>=23.0.0
-flake8>=6.0.0
 
 EbookLib
 
 
 tenacity==9.1.2
+
+
+# ===== Development and testing
+pytest>=6.0.0
+black
+flake8>=6.0.0

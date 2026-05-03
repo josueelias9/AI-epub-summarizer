@@ -4,6 +4,7 @@ Enterprise layer — pure domain entities.
 No framework dependencies. These represent the core business concepts
 as defined in the ERD.
 """
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
@@ -33,10 +34,10 @@ class Chapter:
     book_id: str
     title: str
     content: str
-    number: str                               # e.g. "1", "2.3", "1.2.1"
+    number: str  # e.g. "1", "2.3", "1.2.1"
     include: bool = True
     summary: Optional[str] = None
     list_of_images: List[str] = field(default_factory=list)
-    chapter_id: Optional[str] = None          # FK → parent Chapter.id
+    chapter_id: Optional[str] = None  # FK → parent Chapter.id
     summary_date: Optional[datetime] = None
     ai_generated: bool = False

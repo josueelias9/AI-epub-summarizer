@@ -4,6 +4,7 @@ Postgres implementation of BookRepositoryPort (Clean Architecture).
 Stores BOOK and CHAPTER entities in Postgres via SQLModel.
 Inject a SQLModel ``Session`` (e.g. from FastAPI's ``get_session`` dependency).
 """
+
 import json
 import logging
 from datetime import datetime
@@ -36,7 +37,13 @@ class PostgresBookRepository(BookRepositoryPort):
             existing.epub_path = book.epub_path
         else:
             self._session.add(
-                BookORM(id=book.id, name=book.name, language=book.language, author=book.author, epub_path=book.epub_path)
+                BookORM(
+                    id=book.id,
+                    name=book.name,
+                    language=book.language,
+                    author=book.author,
+                    epub_path=book.epub_path,
+                )
             )
         self._session.commit()
         logger.debug("Saved book %r", book.id)
@@ -45,7 +52,13 @@ class PostgresBookRepository(BookRepositoryPort):
         orm = self._session.get(BookORM, book_id)
         if orm is None:
             return None
-        return Book(id=orm.id, name=orm.name, language=orm.language, author=orm.author, epub_path=orm.epub_path)
+        return Book(
+            id=orm.id,
+            name=orm.name,
+            language=orm.language,
+            author=orm.author,
+            epub_path=orm.epub_path,
+        )
 
     # ------------------------------------------------------------------
     # Chapters
@@ -148,7 +161,13 @@ class PostgresBookRepository(BookRepositoryPort):
     def list_books(self) -> List[Book]:
         results = self._session.exec(select(BookORM)).all()
         return [
-            Book(id=o.id, name=o.name, language=o.language, author=o.author, epub_path=o.epub_path)
+            Book(
+                id=o.id,
+                name=o.name,
+                language=o.language,
+                author=o.author,
+                epub_path=o.epub_path,
+            )
             for o in results
         ]
 

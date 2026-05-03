@@ -4,27 +4,26 @@ Application-layer service ports (Clean Architecture).
 ABCs define what the application layer needs from the outside world.
 Infrastructure provides the concrete adapters.
 """
+
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 from src.enterprise.entities import Book, Chapter
 
-
 # ---------------------------------------------------------------------------
 # Repository
 # ---------------------------------------------------------------------------
+
 
 class BookRepositoryPort(ABC):
     """Persistence port for books and chapters."""
 
     @abstractmethod
-    def save_book(self, book: Book) -> None:
-        ...
+    def save_book(self, book: Book) -> None: ...
 
     @abstractmethod
-    def get_book(self, book_id: str) -> Optional[Book]:
-        ...
+    def get_book(self, book_id: str) -> Optional[Book]: ...
 
     @abstractmethod
     def save_chapters(self, chapters: List[Chapter]) -> None:
@@ -39,8 +38,7 @@ class BookRepositoryPort(ABC):
         ...
 
     @abstractmethod
-    def get_chapter(self, chapter_id: str) -> Optional[Chapter]:
-        ...
+    def get_chapter(self, chapter_id: str) -> Optional[Chapter]: ...
 
     @abstractmethod
     def update_chapter_include(self, chapter_id: str, include: bool) -> None:
@@ -54,8 +52,7 @@ class BookRepositoryPort(ABC):
         summary: str,
         summary_date: datetime,
         ai_generated: bool,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
     def list_books(self) -> List[Book]:
@@ -71,6 +68,7 @@ class BookRepositoryPort(ABC):
 # ---------------------------------------------------------------------------
 # EPUB extractor
 # ---------------------------------------------------------------------------
+
 
 class EpubExtractorPort(ABC):
     """Port for parsing an EPUB file into domain entities."""
@@ -89,16 +87,15 @@ class EpubExtractorPort(ABC):
 # AI service
 # ---------------------------------------------------------------------------
 
+
 class AIServicePort(ABC):
     """Port for AI text summarisation and connectivity checks."""
 
     @abstractmethod
-    def summarize_content(self, content: str) -> str:
-        ...
+    def summarize_content(self, content: str) -> str: ...
 
     @abstractmethod
-    def test_connection(self) -> bool:
-        ...
+    def test_connection(self) -> bool: ...
 
     @abstractmethod
     def get_connection_info(self) -> Dict[str, str]:
@@ -109,6 +106,7 @@ class AIServicePort(ABC):
 # ---------------------------------------------------------------------------
 # Marp exporter
 # ---------------------------------------------------------------------------
+
 
 class MarpExporterPort(ABC):
     """Port for rendering book entities as a Marp presentation."""
@@ -122,6 +120,4 @@ class MarpExporterPort(ABC):
         include_summaries: bool = True,
         include_content: bool = False,
         max_depth: int = 3,
-    ) -> None:
-        ...
-
+    ) -> None: ...

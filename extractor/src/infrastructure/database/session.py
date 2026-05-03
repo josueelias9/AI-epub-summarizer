@@ -1,6 +1,7 @@
 """
 Database engine and session factory.
 """
+
 import logging
 
 from sqlmodel import SQLModel, create_engine, Session
@@ -26,5 +27,6 @@ def init_db() -> None:
     """Create all tables."""
     # Import ORM models so SQLModel registers them before create_all
     import src.infrastructure.database.models  # noqa: F401
+
     SQLModel.metadata.create_all(engine)
     logger.info("Database tables created successfully.")

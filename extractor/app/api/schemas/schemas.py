@@ -2,8 +2,10 @@
 Pydantic schemas for request/response serialization.
 These live at the interface boundary and are separate from domain entities.
 """
+
 from pydantic import BaseModel
-from typing import Optional# ---- EPUB processing schemas ----
+from typing import Optional  # ---- EPUB processing schemas ----
+
 
 class ExtractRequest(BaseModel):
     epub_path: str
@@ -50,6 +52,7 @@ class LLMStatusResponse(BaseModel):
 
 # ---- Chapter listing / inclusion schemas ----
 
+
 class ChapterInfo(BaseModel):
     id: str
     title: str
@@ -78,6 +81,7 @@ class SetInclusionResponse(BaseModel):
 
 # ---- Book listing / upload / delete ----
 
+
 class BookInfo(BaseModel):
     id: str
     name: str
@@ -102,6 +106,7 @@ class DeleteBookResponse(BaseModel):
 
 
 # ---- Slides ----
+
 
 class SlideInfo(BaseModel):
     chapter_id: str

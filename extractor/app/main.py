@@ -4,6 +4,7 @@ Wires together all Clean Architecture layers.
 
 DB initialisation is handled by scripts/prestart.sh before the server starts.
 """
+
 import logging
 import os
 
@@ -59,8 +60,12 @@ async def health_check():
 
 if __name__ == "__main__":
     logger.info("Starting EPUB Structure Extractor API...")
-    logger.info("Database: %s:%s/%s", settings.DB_HOST, settings.DB_PORT, settings.DB_NAME)
-    logger.info("API will be available at: http://%s:%s", settings.API_HOST, settings.API_PORT)
+    logger.info(
+        "Database: %s:%s/%s", settings.DB_HOST, settings.DB_PORT, settings.DB_NAME
+    )
+    logger.info(
+        "API will be available at: http://%s:%s", settings.API_HOST, settings.API_PORT
+    )
     uvicorn.run(
         "app.main:app",
         host=settings.API_HOST,
