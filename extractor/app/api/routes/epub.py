@@ -11,7 +11,7 @@ import logging
 import os
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.application.use_cases.epub_use_cases import (
+from src.application.use_cases.epub_use_cases import (
     ExtractEpubUseCase,
     SummarizeEpubUseCase,
     GenerateMarpUseCase,
@@ -19,17 +19,17 @@ from app.application.use_cases.epub_use_cases import (
     ListSectionsUseCase,
     SetExcludedSectionsUseCase,
 )
-from app.application.dtos.epub_dtos import (
+from src.application.dtos.epub_dtos import (
     ExtractEpubRequest,
     SummarizeEpubRequest,
     GenerateMarpRequest,
     ListSectionsRequest,
     SetExcludedSectionsRequest,
 )
-from app.infrastructure.epub.epub_extractor import EPUBExtractor
-from app.infrastructure.ai.ollama_agent import AIAgent
-from app.infrastructure.export.marp_exporter import MarpExporter
-from app.infrastructure.repositories.local_repository import LocalBookRepository
+from src.infrastructure.epub.epub_extractor import EPUBExtractor
+from src.infrastructure.ai.ollama_agent import AIAgent
+from src.infrastructure.export.marp_exporter import MarpExporter
+from src.infrastructure.repositories.local_repository import LocalBookRepository
 from app.api.schemas.schemas import (
     ExtractRequest, ExtractResponse,
     SummarizeRequest, SummarizeResponse,

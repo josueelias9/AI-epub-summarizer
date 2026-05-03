@@ -7,7 +7,7 @@ import logging
 from fastapi import FastAPI
 from app.core.config import settings
 from app.core.logging_config import setup_logging
-from app.infrastructure.database.session import init_db
+from src.infrastructure.database.session import init_db
 from app.api.main import api_router
 import uvicorn
 

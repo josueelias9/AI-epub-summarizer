@@ -7,7 +7,7 @@ from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
 import html2text
 
-from app.application.ports.service_ports import EpubExtractorPort
+from src.application.ports.service_ports import EpubExtractorPort
 
 logger = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@ import os
 import json
 from typing import Any, Dict, List, Optional
 
-from app.application.ports.service_ports import MarpExporterPort
+from src.application.ports.service_ports import MarpExporterPort
 
 logger = logging.getLogger(__name__)
 

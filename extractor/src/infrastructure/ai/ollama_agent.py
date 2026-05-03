@@ -3,8 +3,8 @@ import requests
 import json
 from typing import Dict, List
 
-from app.application.ports.service_ports import AIServicePort
-from app.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
+from src.application.ports.service_ports import AIServicePort
+from src.infrastructure.ai.prompts import SUMMARIZE_SYSTEM_PROMPT
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)

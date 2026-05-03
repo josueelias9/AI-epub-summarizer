@@ -10,8 +10,8 @@ from typing import Any, Dict, List, Optional
 
 from sqlmodel import Session, select
 
-from app.application.ports.service_ports import BookRepositoryPort
-from app.infrastructure.database.models import BookStructureORM, BookExclusionORM
+from src.application.ports.service_ports import BookRepositoryPort
+from src.infrastructure.database.models import BookStructureORM, BookExclusionORM
 
 
 class PostgresBookRepository(BookRepositoryPort):

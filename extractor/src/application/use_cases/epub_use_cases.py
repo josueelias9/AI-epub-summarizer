@@ -6,8 +6,8 @@ import logging
 import os
 from typing import Dict, Any, List, Set
 
-from app.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort, BookRepositoryPort
-from app.application.dtos.epub_dtos import (
+from src.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort, BookRepositoryPort
+from src.application.dtos.epub_dtos import (
     ExtractEpubRequest, ExtractEpubResponse,
     SummarizeEpubRequest, SummarizeEpubResponse,
     GenerateMarpRequest, GenerateMarpResponse,

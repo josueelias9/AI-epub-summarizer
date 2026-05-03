@@ -10,7 +10,7 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from app.application.ports.service_ports import BookRepositoryPort
+from src.application.ports.service_ports import BookRepositoryPort
 
 
 class LocalBookRepository(BookRepositoryPort):

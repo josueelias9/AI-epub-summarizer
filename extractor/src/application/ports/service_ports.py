@@ -51,31 +51,3 @@ class MarpExporterPort(ABC):
     ) -> None:
         ...
 
-
-class BookRepositoryPort(ABC):
-    """Unified port for all book data: structure + excluded sections.
-
-    Two concrete implementations exist:
-      - LocalBookRepository  : JSON file (structure) + CSV file (exclusions)
-      - PostgresBookRepository: Postgres tables for both
-    """
-
-    @abstractmethod
-    def load_structure(self, book_key: str) -> Optional[Dict[str, Any]]:
-        """Return the stored structure, or None if not found."""
-        ...
-
-    @abstractmethod
-    def save_structure(self, book_key: str, structure: Dict[str, Any]) -> None:
-        """Persist the structure, overwriting any existing entry."""
-        ...
-
-    @abstractmethod
-    def load_exclusions(self, book_key: str) -> List[str]:
-        """Return the list of excluded section IDs, or [] if none saved."""
-        ...
-
-    @abstractmethod
-    def save_exclusions(self, book_key: str, excluded_ids: List[str]) -> None:
-        """Persist the list of excluded section IDs, overwriting any existing entry."""
-        ...
