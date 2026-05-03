@@ -4,6 +4,7 @@ import json
 from typing import Any, Dict, List, Optional
 
 from src.application.ports.service_ports import MarpExporterPort
+from src.enterprise.entities import Book, Chapter
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,79 @@ class MarpExporter(MarpExporterPort):
     def __init__(self):
         """Initialize Marp exporter with static configuration"""
         pass
+
+    # ------------------------------------------------------------------
+    # Clean Architecture port implementation
+    # ------------------------------------------------------------------
+
+    def export(
+        self,
+        book: Book,
+        chapters: List[Chapter],
+        output_path: str,
+        include_summaries: bool = True,
+        include_content: bool = False,
+        max_depth: int = 3,
+    ) -> None:
+        """Render a Marp presentation from Book and Chapter entities.
+
+        The chapter hierarchy is reconstructed from ``Chapter.chapter_id``
+        before rendering.
+        """
+        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+
+        # Build parent → children lookup (preserving order)
+        children_map: Dict[Optional[str], List[Chapter]] = {}
+        for ch in sorted(chapters, key=lambda c: c.order):
+            children_map.setdefault(ch.chapter_id, []).append(ch)
+
+        title = book.name
+        slides: list = [self._generate_title_slide(title)]
+
+        self._render_chapters(
+            children_map.get(None, []),
+            slides,
+            children_map,
+            level=1,
+            max_depth=max_depth,
+            include_summaries=include_summaries,
+            include_content=include_content,
+        )
+
+        final_content = self._generate_front_matter() + "\n" + "".join(slides)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(final_content)
+
+        logger.info("Marp presentation exported to: %s (%d slides)", output_path, len(slides))
+
+    def _render_chapters(
+        self,
+        chapters: List[Chapter],
+        slides: list,
+        children_map: Dict[Optional[str], List[Chapter]],
+        level: int,
+        max_depth: int,
+        include_summaries: bool,
+        include_content: bool,
+    ) -> None:
+        if level > max_depth:
+            return
+        for ch in chapters:
+            slides.append(self._generate_section_slide(ch.title, level, ""))
+            if include_summaries and ch.summary:
+                slides.append(self._generate_summary_slide(ch.summary))
+            for img_path in ch.list_of_images:
+                slides.append(self._generate_image_slide(img_path))
+            if ch.content:
+                tables = self._extract_tables_from_content(ch.content)
+                for idx, table in enumerate(tables, 1):
+                    slides.append(self._generate_table_slide(table, idx, ch.title))
+            children = children_map.get(ch.id, [])
+            if children:
+                self._render_chapters(
+                    children, slides, children_map,
+                    level + 1, max_depth, include_summaries, include_content,
+                )
 
 
     def export_from_json(

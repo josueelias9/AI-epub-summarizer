@@ -93,27 +93,31 @@ class JobResponse(BaseModel):
 
 class ExtractRequest(BaseModel):
     epub_path: str
-    json_output: str
+    book_id: str
+    book_name: str
+    images_output_dir: Optional[str] = None
+    language: Optional[str] = None
+    author: Optional[str] = None
 
 
 class ExtractResponse(BaseModel):
-    json_output: str
-    total_sections: int
+    book_id: str
+    total_chapters: int
     total_content_chars: int
-    sections_with_summaries: int
 
 
 class SummarizeRequest(BaseModel):
-    json_path: str
+    book_id: str
+    chapter_ids: Optional[list[str]] = None  # None → all included chapters
 
 
 class SummarizeResponse(BaseModel):
-    json_path: str
-    sections_summarized: int
+    book_id: str
+    chapters_summarized: int
 
 
 class MarpRequest(BaseModel):
-    json_path: str
+    book_id: str
     marp_output: str
     title: Optional[str] = None
     include_summaries: bool = True
@@ -131,28 +135,30 @@ class LLMStatusResponse(BaseModel):
     model: str
 
 
-# ---- Section listing / exclusion schemas ----
+# ---- Chapter listing / inclusion schemas ----
 
-class SectionInfo(BaseModel):
+class ChapterInfo(BaseModel):
     id: str
     title: str
+    order: int
     depth: int
-    excluded: bool
+    include: bool
     has_summary: bool
+    chapter_id: Optional[str]
 
 
-class SectionsListResponse(BaseModel):
-    book_key: str
+class ChaptersListResponse(BaseModel):
+    book_id: str
     total: int
-    sections: list[SectionInfo]
+    chapters: list[ChapterInfo]
 
 
-class SetExcludedRequest(BaseModel):
-    book_key: str
-    excluded_ids: list[str] = []
-    excluded_titles: list[str] = []
+class SetInclusionRequest(BaseModel):
+    book_id: str
+    chapter_ids: list[str]
+    include: bool
 
 
-class SetExcludedResponse(BaseModel):
-    book_key: str
-    excluded_count: int
+class SetInclusionResponse(BaseModel):
+    book_id: str
+    updated_count: int

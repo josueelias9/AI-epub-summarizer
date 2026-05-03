@@ -1,133 +1,154 @@
 """
-Use cases for EPUB extraction, AI summarization, and Marp generation.
-Each class has a single responsibility and depends on injected infrastructure.
+Use cases for EPUB extraction, AI summarisation, and Marp generation
+(Clean Architecture — single responsibility per class).
 """
 import logging
 import os
-from typing import Dict, Any, List, Set
+from datetime import datetime
+from typing import List, Optional
 
-from src.application.ports.service_ports import AIServicePort, EpubExtractorPort, MarpExporterPort, BookRepositoryPort
+from src.application.ports.service_ports import (
+    AIServicePort,
+    BookRepositoryPort,
+    EpubExtractorPort,
+    MarpExporterPort,
+)
 from src.application.dtos.epub_dtos import (
-    ExtractEpubRequest, ExtractEpubResponse,
-    SummarizeEpubRequest, SummarizeEpubResponse,
-    GenerateMarpRequest, GenerateMarpResponse,
+    ChapterDTO,
     CheckLLMConnectionResponse,
-    ListSectionsRequest, ListSectionsResponse, SectionDTO,
-    SetExcludedSectionsRequest, SetExcludedSectionsResponse,
+    ExtractEpubRequest,
+    ExtractEpubResponse,
+    GenerateMarpRequest,
+    GenerateMarpResponse,
+    ListChaptersRequest,
+    ListChaptersResponse,
+    SetExcludedSectionsRequest,
+    SetExcludedSectionsResponse,
+    SummarizeEpubRequest,
+    SummarizeEpubResponse,
 )
 
 logger = logging.getLogger(__name__)
 
 
+# ---------------------------------------------------------------------------
+# Extract
+# ---------------------------------------------------------------------------
+
 class ExtractEpubUseCase:
-    """Extract hierarchical structure from an EPUB and save it. No AI involved."""
+    """Parse an EPUB file and persist Book + Chapter entities to the repository."""
 
     def __init__(self, extractor: EpubExtractorPort, repository: BookRepositoryPort):
         self._extractor = extractor
         self._repository = repository
 
     def execute(self, request: ExtractEpubRequest) -> ExtractEpubResponse:
-        structure = self._extractor.extract_structure(
-            request.epub_path, images_output_dir=request.images_output_dir
+        book, chapters = self._extractor.extract(
+            request.epub_path,
+            request.book_id,
+            request.images_output_dir,
         )
 
-        existing = self._repository.load_structure(request.book_key)
-        if existing:
-            self._merge_summaries(existing, structure)
+        # Allow caller to override EPUB metadata
+        if request.book_name:
+            book.name = request.book_name
+        if request.language:
+            book.language = request.language
+        if request.author:
+            book.author = request.author
 
-        self._repository.save_structure(request.book_key, structure)
+        self._repository.save_book(book)
+        self._repository.save_chapters(chapters)
 
-        stats = self._get_statistics(structure)
+        total_chars = sum(len(ch.content) for ch in chapters)
+        logger.info(
+            "Extracted %d chapters (%d chars) for book %r",
+            len(chapters), total_chars, request.book_id,
+        )
         return ExtractEpubResponse(
-            book_key=request.book_key,
-            total_sections=stats["total_sections"],
-            total_content_chars=stats["total_content_chars"],
-            sections_with_summaries=stats["sections_with_summaries"],
+            book_id=request.book_id,
+            total_chapters=len(chapters),
+            total_content_chars=total_chars,
         )
 
-    # TODO: validate that it only works if the content is empty
-    def _merge_summaries(self, source: Dict[str, Any], target: Dict[str, Any]) -> None:
-        """Copy summaries from an existing structure into the freshly extracted one."""
-        for key, info in target.items():
-            if key in source and source[key].get("summary"):
-                info["summary"] = source[key]["summary"]
-            if info.get("subsections") and key in source:
-                self._merge_summaries(source[key].get("subsections", {}), info["subsections"])
 
-    def _get_statistics(self, structure: Dict[str, Any]) -> Dict[str, int]:
-        stats = {"total_sections": 0, "total_content_chars": 0, "sections_with_summaries": 0}
-
-        def _count(struct: Dict[str, Any]) -> None:
-            for info in struct.values():
-                stats["total_sections"] += 1
-                stats["total_content_chars"] += len(info.get("content", ""))
-                if info.get("summary"):
-                    stats["sections_with_summaries"] += 1
-                if info.get("subsections"):
-                    _count(info["subsections"])
-
-        _count(structure)
-        return stats
-
+# ---------------------------------------------------------------------------
+# Summarize
+# ---------------------------------------------------------------------------
 
 class SummarizeEpubUseCase:
-    """Load an existing structure, generate AI summaries, and persist it back."""
+    """Generate AI summaries for included chapters and persist them."""
 
     def __init__(self, ai_agent: AIServicePort, repository: BookRepositoryPort):
         self._ai_agent = ai_agent
         self._repository = repository
 
     def execute(self, request: SummarizeEpubRequest) -> SummarizeEpubResponse:
-        logger.info("Starting summary generation for: %s", request.book_key)
-        structure = self._repository.load_structure(request.book_key)
-        if structure is None:
-            raise ValueError(f"No structure found for {request.book_key!r}. Run extract first.")
+        logger.info("Starting summarisation for book %r", request.book_id)
 
-        excluded_ids = set(self._repository.load_exclusions(request.book_key))
-        summarized_count = self._summarize_recursive(structure, excluded_ids)
-        logger.info("Summary generation completed")
+        if request.chapter_ids:
+            # Summarise a specific subset — still honour the include flag
+            chapters = [
+                ch
+                for cid in request.chapter_ids
+                if (ch := self._repository.get_chapter(cid)) is not None and ch.include
+            ]
+        else:
+            # Summarise all chapters that are flagged for inclusion
+            chapters = self._repository.get_chapters(request.book_id, include_only=True)
 
-        self._repository.save_structure(request.book_key, structure)
-        return SummarizeEpubResponse(book_key=request.book_key, sections_summarized=summarized_count)
-
-    def _summarize_recursive(self, structure: Dict[str, Any], excluded_ids: Set[str]) -> int:
         count = 0
-        for info in structure.values():
-            if info.get("id", "") in excluded_ids:
-                logger.info("Skipping excluded section id: %s", info.get("id"))
+        for chapter in chapters:
+            if not chapter.content:
+                logger.info("Skipping chapter %r (no content)", chapter.id)
                 continue
-            logger.info("Summarizing section id: %s", info.get("id"))
-            if info.get("content"):
-                info["summary"] = self._ai_agent.summarize_content(info["content"])
-                count += 1
-            else:
-                info["summary"] = ""
-            if info.get("subsections"):
-                count += self._summarize_recursive(info["subsections"], excluded_ids)
-        return count
+            logger.info("Summarising chapter %r — %s", chapter.id, chapter.title)
+            summary = self._ai_agent.summarize_content(chapter.content)
+            self._repository.update_chapter_summary(
+                chapter_id=chapter.id,
+                summary=summary,
+                summary_date=datetime.utcnow(),
+                ai_generated=True,
+            )
+            count += 1
 
+        logger.info("Summarisation complete — %d chapters processed", count)
+        return SummarizeEpubResponse(book_id=request.book_id, chapters_summarized=count)
+
+
+# ---------------------------------------------------------------------------
+# Generate Marp
+# ---------------------------------------------------------------------------
 
 class GenerateMarpUseCase:
-    """Generate a Marp markdown presentation from a previously saved structure."""
+    """Fetch book data from the repository and generate a Marp presentation."""
 
     def __init__(self, marp_exporter: MarpExporterPort, repository: BookRepositoryPort):
         self._marp_exporter = marp_exporter
         self._repository = repository
 
     def execute(self, request: GenerateMarpRequest) -> GenerateMarpResponse:
+        book = self._repository.get_book(request.book_id)
+        if book is None:
+            raise ValueError(f"Book {request.book_id!r} not found. Run extract first.")
+
+        chapters = self._repository.get_chapters(request.book_id)
+
         os.makedirs(os.path.dirname(request.marp_output_path) or ".", exist_ok=True)
-        excluded_ids = self._repository.load_exclusions(request.book_key)
-        self._marp_exporter.export_from_json(
-            json_path=request.book_key,
+        self._marp_exporter.export(
+            book=book,
+            chapters=chapters,
             output_path=request.marp_output_path,
-            title=request.title,
             include_summaries=request.include_summaries,
             include_content=request.include_content,
             max_depth=request.max_depth,
-            excluded_ids=excluded_ids,
         )
         return GenerateMarpResponse(marp_output_path=request.marp_output_path)
 
+
+# ---------------------------------------------------------------------------
+# Check LLM connection
+# ---------------------------------------------------------------------------
 
 class CheckLLMConnectionUseCase:
     """Verify that the Ollama LLM service is reachable."""
@@ -142,71 +163,60 @@ class CheckLLMConnectionUseCase:
         return CheckLLMConnectionResponse(connected=ok, host=info["host"], model=info["model"])
 
 
-class ListSectionsUseCase:
-    """Return a flat list of all sections in a book structure."""
+# ---------------------------------------------------------------------------
+# List chapters
+# ---------------------------------------------------------------------------
+
+class ListChaptersUseCase:
+    """Return a flat, ordered list of all chapters for a book."""
 
     def __init__(self, repository: BookRepositoryPort):
         self._repository = repository
 
-    def execute(self, request: ListSectionsRequest) -> ListSectionsResponse:
-        structure = self._repository.load_structure(request.book_key)
-        if structure is None:
-            raise ValueError(f"No structure found for {request.book_key!r}. Run extract first.")
-        excluded_ids = set(self._repository.load_exclusions(request.book_key))
-        sections: List[SectionDTO] = []
-        self._collect_recursive(structure, sections, depth=1, excluded_ids=excluded_ids)
-        return ListSectionsResponse(book_key=request.book_key, sections=sections)
+    def execute(self, request: ListChaptersRequest) -> ListChaptersResponse:
+        book = self._repository.get_book(request.book_id)
+        if book is None:
+            raise ValueError(f"Book {request.book_id!r} not found. Run extract first.")
 
-    def _collect_recursive(
-        self,
-        structure: Dict[str, Any],
-        sections: List[SectionDTO],
-        depth: int,
-        excluded_ids: Set[str],
-    ) -> None:
-        for title, info in structure.items():
-            sections.append(SectionDTO(
-                id=info.get("id", ""),
-                title=title,
-                depth=depth,
-                excluded=info.get("id", "") in excluded_ids,
-                has_summary=bool(info.get("summary")),
-            ))
-            if info.get("subsections"):
-                self._collect_recursive(info["subsections"], sections, depth + 1, excluded_ids)
+        chapters = self._repository.get_chapters(request.book_id)
+        dtos = [
+            ChapterDTO(
+                id=ch.id,
+                title=ch.title,
+                order=ch.order,
+                depth=self._depth_from_id(ch.id),
+                include=ch.include,
+                has_summary=bool(ch.summary),
+                chapter_id=ch.chapter_id,
+            )
+            for ch in chapters
+        ]
+        return ListChaptersResponse(book_id=request.book_id, chapters=dtos)
 
+    @staticmethod
+    def _depth_from_id(chapter_id: str) -> int:
+        """Derive nesting depth from a hierarchical id like '1.2.3' → 3."""
+        return len(chapter_id.split("."))
+
+
+# ---------------------------------------------------------------------------
+# Set inclusion / exclusion
+# ---------------------------------------------------------------------------
 
 class SetExcludedSectionsUseCase:
-    """Persist a set of section IDs that should be excluded from summarization and export."""
+    """Toggle the ``include`` flag on a set of chapters."""
 
     def __init__(self, repository: BookRepositoryPort):
         self._repository = repository
 
     def execute(self, request: SetExcludedSectionsRequest) -> SetExcludedSectionsResponse:
-        excluded_ids = list(request.excluded_ids)
-
-        if request.excluded_titles:
-            structure = self._repository.load_structure(request.book_key)
-            if structure is None:
-                raise ValueError(f"No structure found for {request.book_key!r}. Run extract first.")
-            title_set = set(request.excluded_titles)
-            ids_from_titles = self._ids_for_titles(structure, title_set)
-            excluded_ids = list(set(excluded_ids) | ids_from_titles)
-
-        self._repository.save_exclusions(request.book_key, excluded_ids)
+        for chapter_id in request.chapter_ids:
+            self._repository.update_chapter_include(chapter_id, request.include)
+            logger.info(
+                "Chapter %r include=%s", chapter_id, request.include
+            )
         return SetExcludedSectionsResponse(
-            book_key=request.book_key,
-            excluded_count=len(excluded_ids),
+            book_id=request.book_id,
+            updated_count=len(request.chapter_ids),
         )
-
-    def _ids_for_titles(
-        self, structure: Dict[str, Any], title_set: Set[str]
-    ) -> Set[str]:
-        found: Set[str] = set()
-        for title, info in structure.items():
-            if title in title_set and info.get("id"):
-                found.add(info["id"])
-            if info.get("subsections"):
-                found |= self._ids_for_titles(info["subsections"], title_set)
-        return found
 

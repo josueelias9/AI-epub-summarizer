@@ -1,11 +1,12 @@
 """
-Application-layer DTOs for EPUB use cases.
+Application-layer DTOs for EPUB use cases (Clean Architecture).
 
-These are plain dataclasses — no framework dependency.
+Plain dataclasses — no framework dependency.
 The API layer maps its Pydantic schemas into these before calling a use case,
 and maps the returned response DTOs back to Pydantic schemas for the HTTP response.
 """
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import List, Optional
 
 
@@ -16,16 +17,18 @@ from typing import List, Optional
 @dataclass
 class ExtractEpubRequest:
     epub_path: str
-    book_key: str
+    book_id: str
+    book_name: str
     images_output_dir: Optional[str] = None
+    language: Optional[str] = None
+    author: Optional[str] = None
 
 
 @dataclass
 class ExtractEpubResponse:
-    book_key: str
-    total_sections: int
+    book_id: str
+    total_chapters: int
     total_content_chars: int
-    sections_with_summaries: int
 
 
 # ---------------------------------------------------------------------------
@@ -34,13 +37,14 @@ class ExtractEpubResponse:
 
 @dataclass
 class SummarizeEpubRequest:
-    book_key: str
+    book_id: str
+    chapter_ids: Optional[List[str]] = None  # None → all included chapters
 
 
 @dataclass
 class SummarizeEpubResponse:
-    book_key: str
-    sections_summarized: int
+    book_id: str
+    chapters_summarized: int
 
 
 # ---------------------------------------------------------------------------
@@ -49,7 +53,7 @@ class SummarizeEpubResponse:
 
 @dataclass
 class GenerateMarpRequest:
-    book_key: str
+    book_id: str
     marp_output_path: str
     title: Optional[str] = None
     include_summaries: bool = True
@@ -74,37 +78,48 @@ class CheckLLMConnectionResponse:
 
 
 # ---------------------------------------------------------------------------
-# Sections
+# Chapter listing
 # ---------------------------------------------------------------------------
 
 @dataclass
-class SectionDTO:
+class ChapterDTO:
     id: str
     title: str
+    order: int
     depth: int
-    excluded: bool
+    include: bool
     has_summary: bool
+    chapter_id: Optional[str]     # parent chapter id
 
 
 @dataclass
-class ListSectionsRequest:
-    book_key: str
+class ListChaptersRequest:
+    book_id: str
 
 
 @dataclass
-class ListSectionsResponse:
-    book_key: str
-    sections: List[SectionDTO] = field(default_factory=list)
+class ListChaptersResponse:
+    book_id: str
+    chapters: List[ChapterDTO] = field(default_factory=list)
 
+
+# ---------------------------------------------------------------------------
+# Inclusion / exclusion
+# ---------------------------------------------------------------------------
 
 @dataclass
 class SetExcludedSectionsRequest:
-    book_key: str
-    excluded_ids: List[str] = field(default_factory=list)
-    excluded_titles: List[str] = field(default_factory=list)
+    """Set the ``include`` flag for a list of chapters.
+
+    Pass ``include=False`` to exclude chapters from AI summarisation,
+    ``include=True`` to re-include them.
+    """
+    book_id: str
+    chapter_ids: List[str]
+    include: bool
 
 
 @dataclass
 class SetExcludedSectionsResponse:
-    book_key: str
-    excluded_count: int
+    book_id: str
+    updated_count: int

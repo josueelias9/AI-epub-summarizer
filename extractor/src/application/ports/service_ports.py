@@ -1,12 +1,84 @@
 """
-Application-layer service ports.
+Application-layer service ports (Clean Architecture).
 
-These ABCs define what the application layer needs from the outside world
-(AI, file parsing, export).  Infrastructure provides the concrete adapters.
+ABCs define what the application layer needs from the outside world.
+Infrastructure provides the concrete adapters.
 """
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
+from src.enterprise.entities import Book, Chapter
+
+
+# ---------------------------------------------------------------------------
+# Repository
+# ---------------------------------------------------------------------------
+
+class BookRepositoryPort(ABC):
+    """Persistence port for books and chapters."""
+
+    @abstractmethod
+    def save_book(self, book: Book) -> None:
+        ...
+
+    @abstractmethod
+    def get_book(self, book_id: str) -> Optional[Book]:
+        ...
+
+    @abstractmethod
+    def save_chapters(self, chapters: List[Chapter]) -> None:
+        """Upsert a batch of chapters."""
+        ...
+
+    @abstractmethod
+    def get_chapters(
+        self, book_id: str, include_only: Optional[bool] = None
+    ) -> List[Chapter]:
+        """Return chapters for a book, optionally filtered by the include flag."""
+        ...
+
+    @abstractmethod
+    def get_chapter(self, chapter_id: str) -> Optional[Chapter]:
+        ...
+
+    @abstractmethod
+    def update_chapter_include(self, chapter_id: str, include: bool) -> None:
+        """Toggle the include flag on a single chapter."""
+        ...
+
+    @abstractmethod
+    def update_chapter_summary(
+        self,
+        chapter_id: str,
+        summary: str,
+        summary_date: datetime,
+        ai_generated: bool,
+    ) -> None:
+        ...
+
+
+# ---------------------------------------------------------------------------
+# EPUB extractor
+# ---------------------------------------------------------------------------
+
+class EpubExtractorPort(ABC):
+    """Port for parsing an EPUB file into domain entities."""
+
+    @abstractmethod
+    def extract(
+        self,
+        epub_path: str,
+        book_id: str,
+        images_output_dir: Optional[str] = None,
+    ) -> Tuple[Book, List[Chapter]]:
+        """Parse the EPUB and return a Book entity plus a flat Chapter list."""
+        ...
+
+
+# ---------------------------------------------------------------------------
+# AI service
+# ---------------------------------------------------------------------------
 
 class AIServicePort(ABC):
     """Port for AI text summarisation and connectivity checks."""
@@ -25,29 +97,22 @@ class AIServicePort(ABC):
         ...
 
 
-class EpubExtractorPort(ABC):
-    """Port for parsing an EPUB file into a hierarchical dict structure."""
-
-    @abstractmethod
-    def extract_structure(
-        self, epub_path: str, images_output_dir: Optional[str] = None
-    ) -> Dict[str, Any]:
-        ...
-
+# ---------------------------------------------------------------------------
+# Marp exporter
+# ---------------------------------------------------------------------------
 
 class MarpExporterPort(ABC):
-    """Port for rendering a JSON book structure as a Marp presentation."""
+    """Port for rendering book entities as a Marp presentation."""
 
     @abstractmethod
-    def export_from_json(
+    def export(
         self,
-        json_path: str,
+        book: Book,
+        chapters: List[Chapter],
         output_path: str,
-        title: Optional[str] = None,
         include_summaries: bool = True,
         include_content: bool = False,
         max_depth: int = 3,
-        excluded_ids: Optional[List[str]] = None,
     ) -> None:
         ...
 

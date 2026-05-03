@@ -1,13 +1,14 @@
 import logging
 import os
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from ebooklib import epub, ITEM_DOCUMENT
 from bs4 import BeautifulSoup
 import html2text
 
 from src.application.ports.service_ports import EpubExtractorPort
+from src.enterprise.entities import Book, Chapter
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,72 @@ class EPUBExtractor(EpubExtractorPort):
         
         return section_id
     
+    # ------------------------------------------------------------------
+    # Clean Architecture port implementation
+    # ------------------------------------------------------------------
+
+    def extract(
+        self,
+        epub_path: str,
+        book_id: str,
+        images_output_dir: Optional[str] = None,
+    ) -> Tuple[Book, List[Chapter]]:
+        """Parse the EPUB and return a Book entity plus a flat ordered Chapter list.
+
+        The chapter hierarchy is preserved via ``Chapter.chapter_id`` (parent FK).
+        """
+        epub_book = epub.read_epub(epub_path)
+
+        # Read Dublin Core metadata
+        title_meta = epub_book.get_metadata("DC", "title")
+        book_name = title_meta[0][0] if title_meta else os.path.basename(epub_path)
+        author_meta = epub_book.get_metadata("DC", "creator")
+        author = author_meta[0][0] if author_meta else None
+        language_meta = epub_book.get_metadata("DC", "language")
+        language = language_meta[0][0] if language_meta else None
+
+        book = Book(id=book_id, name=book_name, language=language, author=author)
+
+        structure = self.extract_structure(epub_path, images_output_dir)
+
+        chapters: List[Chapter] = []
+        order_counter = [0]
+        self._flatten_structure(structure, chapters, book_id, parent_id=None, order_counter=order_counter)
+
+        return book, chapters
+
+    def _flatten_structure(
+        self,
+        structure: Dict[str, Any],
+        chapters: List[Chapter],
+        book_id: str,
+        parent_id: Optional[str],
+        order_counter: List[int],
+    ) -> None:
+        """Recursively convert the nested structure dict into flat Chapter entities."""
+        for title, info in structure.items():
+            order_counter[0] += 1
+            chapters.append(
+                Chapter(
+                    id=info["id"],
+                    book_id=book_id,
+                    title=title,
+                    content=info.get("content", ""),
+                    order=order_counter[0],
+                    include=True,
+                    list_of_images=info.get("images", []),
+                    chapter_id=parent_id,
+                )
+            )
+            if info.get("subsections"):
+                self._flatten_structure(
+                    info["subsections"],
+                    chapters,
+                    book_id,
+                    parent_id=info["id"],
+                    order_counter=order_counter,
+                )
+
     def extract_structure(self, epub_path: str, images_output_dir: str = None) -> Dict[str, Any]:
         """
         Extract hierarchical structure from EPUB file
