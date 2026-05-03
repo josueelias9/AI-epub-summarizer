@@ -195,7 +195,7 @@ async def set_chapter_inclusion(
         response = use_case.execute(
             SetExcludedSectionsRequest(
                 book_id=body.book_id,
-                chapter_ids=body.chapter_ids,
+                chapter_numbers=body.chapter_numbers,
                 include=body.include,
             )
         )

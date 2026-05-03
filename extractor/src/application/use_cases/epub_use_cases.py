@@ -203,13 +203,21 @@ class SetExcludedSectionsUseCase:
         self._repository = repository
 
     def execute(self, request: SetExcludedSectionsRequest) -> SetExcludedSectionsResponse:
-        for chapter_id in request.chapter_ids:
-            self._repository.update_chapter_include(chapter_id, request.include)
-            logger.info(
-                "Chapter %r include=%s", chapter_id, request.include
+        all_chapters = self._repository.get_chapters(request.book_id)
+
+        def _matches(chapter_number: str) -> bool:
+            return any(
+                chapter_number == n or chapter_number.startswith(n + ".")
+                for n in request.chapter_numbers
             )
+
+        matched = [ch for ch in all_chapters if _matches(ch.number)]
+        for ch in matched:
+            self._repository.update_chapter_include(ch.id, request.include)
+            logger.info("Chapter %r (number=%r) include=%s", ch.id, ch.number, request.include)
+
         return SetExcludedSectionsResponse(
             book_id=request.book_id,
-            updated_count=len(request.chapter_ids),
+            updated_count=len(matched),
         )
 

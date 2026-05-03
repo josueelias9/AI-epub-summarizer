@@ -107,13 +107,14 @@ class ListChaptersResponse:
 
 @dataclass
 class SetExcludedSectionsRequest:
-    """Set the ``include`` flag for a list of chapters.
+    """Set the ``include`` flag for chapters matching the given number prefixes.
 
-    Pass ``include=False`` to exclude chapters from AI summarisation,
-    ``include=True`` to re-include them.
+    ``chapter_numbers`` is a list of dotted number strings (e.g. "2", "2.1").
+    A value of "2" also matches "2.1", "2.2", "2.2.1", i.e. the whole subtree.
+    Pass ``include=False`` to exclude from AI summarisation, ``True`` to re-include.
     """
     book_id: str
-    chapter_ids: List[str]
+    chapter_numbers: List[str]
     include: bool
 
 

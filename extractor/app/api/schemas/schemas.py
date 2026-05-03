@@ -67,7 +67,7 @@ class ChaptersListResponse(BaseModel):
 
 class SetInclusionRequest(BaseModel):
     book_id: str
-    chapter_ids: list[str]
+    chapter_numbers: list[str]
     include: bool
 
 
