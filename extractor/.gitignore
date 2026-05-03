@@ -1,0 +1,5 @@
+my_epub_detailed_structure.pdf
+my_epub_structure.pdf
+*.pyc
+
+images/

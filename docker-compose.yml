@@ -2,13 +2,16 @@ services:
   extractor:
     build: ./extractor
     container_name: extractor-container
-    volumes:
-      # Mount the root folder that contains .git
-      - .:/workspace
-    command: sleep infinity
     env_file:
       - .env
 
+  frontend:
+    build: ./frontend
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
 
   ollama:
     image: ollama/ollama:latest
@@ -42,7 +45,7 @@ services:
       - ollama_data:/root/.ollama
     environment:
       - OLLAMA_HOST=http://ollama:11434
-    entrypoint: ["/bin/sh", "-c", "ollama pull qwen3:8b && ollama pull nomic-embed-text"]
+    entrypoint: ["/bin/sh", "-c", "ollama pull qwen2.5:7b && ollama pull nomic-embed-text"]
     restart: "no"
 
 

@@ -1,0 +1,22 @@
+services:
+  frontend:
+    volumes:
+      # Mount the root folder that contains .git
+      - .:/workspace
+    command: sleep infinity
+
+  extractor:
+    profiles:
+      - avoid
+
+  ollama:
+    profiles:
+      - avoid
+
+  ollama-init:
+    profiles:
+      - avoid
+
+  db:
+    profiles:
+      - avoid
