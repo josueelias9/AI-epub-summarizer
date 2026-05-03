@@ -90,7 +90,6 @@ async def extract_epub(
         response = use_case.execute(
             ExtractEpubRequest(
                 epub_path=body.epub_path,
-                book_id=body.book_id,
                 book_name=body.book_name,
                 images_output_dir=body.images_output_dir,
                 language=body.language,
@@ -172,8 +171,7 @@ async def list_chapters(
             {
                 "id": ch.id,
                 "title": ch.title,
-                "order": ch.order,
-                "depth": ch.depth,
+                "number": ch.number,
                 "include": ch.include,
                 "has_summary": ch.has_summary,
                 "chapter_id": ch.chapter_id,
