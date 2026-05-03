@@ -40,3 +40,6 @@ black>=23.0.0
 flake8>=6.0.0
 
 EbookLib
+
+
+tenacity==9.1.2

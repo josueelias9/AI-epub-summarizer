@@ -1,13 +1,14 @@
 """
 Main FastAPI application for EPUB Structure Extractor.
 Wires together all Clean Architecture layers.
+
+DB initialisation is handled by scripts/prestart.sh before the server starts.
 """
 import logging
 
 from fastapi import FastAPI
 from app.core.config import settings
 from app.core.logging_config import setup_logging
-from src.infrastructure.database.session import init_db
 from app.api.main import api_router
 import uvicorn
 
@@ -22,11 +23,6 @@ app = FastAPI(
 
 PREFIX = settings.API_V1_STR
 app.include_router(api_router, prefix=PREFIX)
-
-
-@app.on_event("startup")
-async def startup_event():
-    init_db()
 
 
 @app.get("/")

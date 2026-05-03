@@ -4,6 +4,19 @@ services:
     container_name: extractor-container
     env_file:
       - .env
+    depends_on:
+      extractor-init:
+        condition: service_completed_successfully
+      
+  extractor-init:
+    build: ./extractor
+    command: bash scripts/prestart.sh
+    env_file:
+      - .env
+    container_name: extractor-init-container
+    depends_on:
+      db:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
@@ -66,7 +79,11 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pgadmin4:
     image: dpage/pgadmin4
