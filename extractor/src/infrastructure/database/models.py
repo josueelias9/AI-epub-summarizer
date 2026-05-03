@@ -20,6 +20,7 @@ class BookORM(SQLModel, table=True):
     name: str
     language: Optional[str] = None
     author: Optional[str] = None
+    epub_path: Optional[str] = Field(default=None)
 
     chapters: List["ChapterORM"] = Relationship(back_populates="book")
 

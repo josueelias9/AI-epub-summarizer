@@ -29,6 +29,7 @@ python-magic>=0.4.27
 
 # FastAPI and web framework dependencies
 fastapi[standard]
+python-multipart>=0.0.9
 
 # Database dependencies
 sqlmodel>=0.0.14

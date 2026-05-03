@@ -5,8 +5,11 @@ Wires together all Clean Architecture layers.
 DB initialisation is handled by scripts/prestart.sh before the server starts.
 """
 import logging
+import os
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.api.main import api_router
@@ -21,8 +24,23 @@ app = FastAPI(
     version="2.0.0",
 )
 
+# CORS — allow the Next.js frontend
+_allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 PREFIX = settings.API_V1_STR
 app.include_router(api_router, prefix=PREFIX)
+
+# Serve extracted images and other output files as static assets
+_output_dir = "/app/output"
+os.makedirs(_output_dir, exist_ok=True)
+app.mount("/static", StaticFiles(directory=_output_dir), name="static")
 
 
 @app.get("/")

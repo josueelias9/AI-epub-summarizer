@@ -118,6 +118,24 @@ class LocalBookRepository(BookRepositoryPort):
             ai_generated=ai_generated,
         )
 
+    def list_books(self) -> List[Book]:
+        books = []
+        if not os.path.isdir(self._base):
+            return books
+        for entry in os.scandir(self._base):
+            if entry.is_dir():
+                book = self.get_book(entry.name)
+                if book:
+                    books.append(book)
+        return books
+
+    def delete_book(self, book_id: str) -> None:
+        import shutil
+        book_dir = self._book_dir(book_id)
+        if os.path.isdir(book_dir):
+            shutil.rmtree(book_dir)
+        logger.debug("Deleted local book directory %r", book_dir)
+
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------

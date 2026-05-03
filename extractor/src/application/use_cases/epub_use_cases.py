@@ -15,14 +15,21 @@ from src.application.ports.service_ports import (
 from src.application.dtos.epub_dtos import (
     ChapterDTO,
     CheckLLMConnectionResponse,
+    DeleteBookRequest,
+    DeleteBookResponse,
     ExtractEpubRequest,
     ExtractEpubResponse,
     GenerateMarpRequest,
     GenerateMarpResponse,
+    GetSlidesRequest,
+    GetSlidesResponse,
+    BookDTO,
+    ListBooksResponse,
     ListChaptersRequest,
     ListChaptersResponse,
     SetExcludedSectionsRequest,
     SetExcludedSectionsResponse,
+    SlideDTO,
     SummarizeEpubRequest,
     SummarizeEpubResponse,
 )
@@ -54,6 +61,8 @@ class ExtractEpubUseCase:
             book.language = request.language
         if request.author:
             book.author = request.author
+        if request.save_epub_path:
+            book.epub_path = request.save_epub_path
 
         self._repository.save_book(book)
         self._repository.save_chapters(chapters)
@@ -223,4 +232,78 @@ class SetExcludedSectionsUseCase:
             book_id=request.book_id,
             updated_count=len(matched),
         )
+
+
+# ---------------------------------------------------------------------------
+# List books
+# ---------------------------------------------------------------------------
+
+class ListBooksUseCase:
+    """Return all books stored in the repository."""
+
+    def __init__(self, repository: BookRepositoryPort):
+        self._repository = repository
+
+    def execute(self) -> ListBooksResponse:
+        books = self._repository.list_books()
+        return ListBooksResponse(
+            books=[
+                BookDTO(id=b.id, name=b.name, language=b.language, author=b.author)
+                for b in books
+            ]
+        )
+
+
+# ---------------------------------------------------------------------------
+# Delete book
+# ---------------------------------------------------------------------------
+
+class DeleteBookUseCase:
+    """Delete a book (DB records + epub file if tracked)."""
+
+    def __init__(self, repository: BookRepositoryPort):
+        self._repository = repository
+
+    def execute(self, request: DeleteBookRequest) -> DeleteBookResponse:
+        book = self._repository.get_book(request.book_id)
+        if book is None:
+            raise ValueError(f"Book {request.book_id!r} not found.")
+        if book.epub_path and os.path.exists(book.epub_path):
+            try:
+                os.remove(book.epub_path)
+                logger.info("Deleted epub file %r", book.epub_path)
+            except OSError as exc:
+                logger.warning("Could not delete epub file %r: %s", book.epub_path, exc)
+        self._repository.delete_book(request.book_id)
+        return DeleteBookResponse(book_id=request.book_id, success=True)
+
+
+# ---------------------------------------------------------------------------
+# Get slides
+# ---------------------------------------------------------------------------
+
+class GetSlidesUseCase:
+    """Return included chapters as structured slide data."""
+
+    def __init__(self, repository: BookRepositoryPort):
+        self._repository = repository
+
+    def execute(self, request: GetSlidesRequest) -> GetSlidesResponse:
+        book = self._repository.get_book(request.book_id)
+        if book is None:
+            raise ValueError(f"Book {request.book_id!r} not found.")
+        chapters = self._repository.get_chapters(request.book_id, include_only=True)
+        slides = [
+            SlideDTO(
+                chapter_id=ch.id,
+                title=ch.title,
+                number=ch.number,
+                summary=ch.summary,
+                content=ch.content,
+                images=ch.list_of_images,
+                depth=len(ch.number.split(".")),
+            )
+            for ch in chapters
+        ]
+        return GetSlidesResponse(book_id=book.id, book_name=book.name, slides=slides)
 

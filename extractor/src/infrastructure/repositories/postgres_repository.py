@@ -33,9 +33,10 @@ class PostgresBookRepository(BookRepositoryPort):
             existing.name = book.name
             existing.language = book.language
             existing.author = book.author
+            existing.epub_path = book.epub_path
         else:
             self._session.add(
-                BookORM(id=book.id, name=book.name, language=book.language, author=book.author)
+                BookORM(id=book.id, name=book.name, language=book.language, author=book.author, epub_path=book.epub_path)
             )
         self._session.commit()
         logger.debug("Saved book %r", book.id)
@@ -44,7 +45,7 @@ class PostgresBookRepository(BookRepositoryPort):
         orm = self._session.get(BookORM, book_id)
         if orm is None:
             return None
-        return Book(id=orm.id, name=orm.name, language=orm.language, author=orm.author)
+        return Book(id=orm.id, name=orm.name, language=orm.language, author=orm.author, epub_path=orm.epub_path)
 
     # ------------------------------------------------------------------
     # Chapters
@@ -143,3 +144,22 @@ class PostgresBookRepository(BookRepositoryPort):
             summary_date=orm.summary_date,
             ai_generated=orm.ai_generated,
         )
+
+    def list_books(self) -> List[Book]:
+        results = self._session.exec(select(BookORM)).all()
+        return [
+            Book(id=o.id, name=o.name, language=o.language, author=o.author, epub_path=o.epub_path)
+            for o in results
+        ]
+
+    def delete_book(self, book_id: str) -> None:
+        chapters = self._session.exec(
+            select(ChapterORM).where(ChapterORM.book_id == book_id)
+        ).all()
+        for ch in chapters:
+            self._session.delete(ch)
+        book = self._session.get(BookORM, book_id)
+        if book:
+            self._session.delete(book)
+        self._session.commit()
+        logger.debug("Deleted book %r and its chapters", book_id)

@@ -21,6 +21,7 @@ class ExtractEpubRequest:
     images_output_dir: Optional[str] = None
     language: Optional[str] = None
     author: Optional[str] = None
+    save_epub_path: Optional[str] = None  # path to store in the Book record
 
 
 @dataclass
@@ -122,3 +123,62 @@ class SetExcludedSectionsRequest:
 class SetExcludedSectionsResponse:
     book_id: str
     updated_count: int
+
+
+# ---------------------------------------------------------------------------
+# Books listing
+# ---------------------------------------------------------------------------
+
+@dataclass
+class BookDTO:
+    id: str
+    name: str
+    language: Optional[str]
+    author: Optional[str]
+
+
+@dataclass
+class ListBooksResponse:
+    books: List[BookDTO]
+
+
+# ---------------------------------------------------------------------------
+# Delete book
+# ---------------------------------------------------------------------------
+
+@dataclass
+class DeleteBookRequest:
+    book_id: str
+
+
+@dataclass
+class DeleteBookResponse:
+    book_id: str
+    success: bool
+
+
+# ---------------------------------------------------------------------------
+# Slides
+# ---------------------------------------------------------------------------
+
+@dataclass
+class SlideDTO:
+    chapter_id: str
+    title: str
+    number: str
+    summary: Optional[str]
+    content: str
+    images: List[str]
+    depth: int
+
+
+@dataclass
+class GetSlidesRequest:
+    book_id: str
+
+
+@dataclass
+class GetSlidesResponse:
+    book_id: str
+    book_name: str
+    slides: List[SlideDTO]

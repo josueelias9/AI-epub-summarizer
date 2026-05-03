@@ -10,5 +10,7 @@ COPY . .
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-CMD ["fastapi", "dev"]
-# fastapi dev
+# Create directories for uploads and output
+RUN mkdir -p /app/uploads /app/output/images
+
+CMD ["fastapi", "dev", "--host", "0.0.0.0", "--port", "8000", "app/main.py"]

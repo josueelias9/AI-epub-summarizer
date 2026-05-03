@@ -17,6 +17,7 @@ class Book:
     name: str
     language: Optional[str] = None
     author: Optional[str] = None
+    epub_path: Optional[str] = None
 
 
 @dataclass

@@ -57,6 +57,16 @@ class BookRepositoryPort(ABC):
     ) -> None:
         ...
 
+    @abstractmethod
+    def list_books(self) -> List[Book]:
+        """Return all books in the repository."""
+        ...
+
+    @abstractmethod
+    def delete_book(self, book_id: str) -> None:
+        """Delete a book and all its chapters."""
+        ...
+
 
 # ---------------------------------------------------------------------------
 # EPUB extractor

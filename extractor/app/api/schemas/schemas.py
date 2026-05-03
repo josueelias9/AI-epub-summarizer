@@ -74,3 +74,46 @@ class SetInclusionRequest(BaseModel):
 class SetInclusionResponse(BaseModel):
     book_id: str
     updated_count: int
+
+
+# ---- Book listing / upload / delete ----
+
+class BookInfo(BaseModel):
+    id: str
+    name: str
+    language: Optional[str] = None
+    author: Optional[str] = None
+
+
+class BooksListResponse(BaseModel):
+    total: int
+    books: list[BookInfo]
+
+
+class UploadEpubResponse(BaseModel):
+    book_id: str
+    book_name: str
+    total_chapters: int
+
+
+class DeleteBookResponse(BaseModel):
+    book_id: str
+    success: bool
+
+
+# ---- Slides ----
+
+class SlideInfo(BaseModel):
+    chapter_id: str
+    title: str
+    number: str
+    summary: Optional[str] = None
+    content: str
+    images: list[str]
+    depth: int
+
+
+class SlidesResponse(BaseModel):
+    book_id: str
+    book_name: str
+    slides: list[SlideInfo]
