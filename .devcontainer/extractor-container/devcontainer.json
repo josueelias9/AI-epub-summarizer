@@ -12,7 +12,8 @@
         "tomoki1207.pdf",
         "marp-team.marp-vscode",
         "humao.rest-client",
-        "Gruntfuggly.todo-tree"
+        "Gruntfuggly.todo-tree",
+        "bierner.markdown-mermaid"
       ],
       "settings": {
         "workbench.colorTheme": "Monokai"
