@@ -5,7 +5,6 @@ Use cases for EPUB extraction, AI summarisation, and Marp generation
 import logging
 import os
 from datetime import datetime
-from typing import List, Optional
 
 from src.application.ports.service_ports import (
     AIServicePort,
