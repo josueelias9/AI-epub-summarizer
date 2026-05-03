@@ -102,7 +102,11 @@ class SummarizeEpubUseCase:
                 logger.info("Skipping chapter %r (no content)", chapter.id)
                 continue
             logger.info("Summarising chapter %r — %s", chapter.id, chapter.title)
-            summary = self._ai_agent.summarize_content(chapter.content)
+            try:
+                summary = self._ai_agent.summarize_content(chapter.content)
+            except Exception as e:
+                logger.error("Failed to summarise chapter %r: %s", chapter.id, e)
+                continue
             self._repository.update_chapter_summary(
                 chapter_id=chapter.id,
                 summary=summary,

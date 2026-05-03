@@ -43,7 +43,7 @@ class AIAgent(AIServicePort):
             "prompt": f"Summarize the following content concisely:\n\n{content}",
             "stream": False
         }
-        
+        # TODO migrate to LangChain to have structured response with error handling, token counting, etc.
         try:
             response = requests.post(
                 self.endpoint,
