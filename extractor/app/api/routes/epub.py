@@ -55,7 +55,6 @@ from app.api.schemas.schemas import (
     MarpResponse,
     SetInclusionRequest,
     SetInclusionResponse,
-    SlideInfo,
     SlidesResponse,
     SummarizeRequest,
     SummarizeResponse,
@@ -254,7 +253,7 @@ async def generate_marp(
 @router.get("/llm/status", response_model=LLMStatusResponse)
 async def llm_status():
     """Check whether the Ollama LLM service is reachable."""
-    use_case = CheckLLMConnectionUseCase()
+    use_case = CheckLLMConnectionUseCase(ai_agent=AIAgent())
     response = use_case.execute()
     return {
         "connected": response.connected,
