@@ -2,13 +2,41 @@ services:
   extractor:
     build: ./extractor
     container_name: extractor-container
-    volumes:
-      # Mount the root folder that contains .git
-      - .:/workspace
-    command: sleep infinity
+    ports:
+      - "8000:8000"
     env_file:
       - .env
+    volumes:
+      - epub_uploads:/app/uploads
+      - epub_output:/app/output
+    depends_on:
+      extractor-init:
+        condition: service_completed_successfully
+      
+  extractor-init:
+    build: ./extractor
+    command: bash scripts/prestart.sh
+    env_file:
+      - .env
+    container_name: extractor-init-container
+    volumes:
+      - epub_uploads:/app/uploads
+      - epub_output:/app/output
+    depends_on:
+      db:
+        condition: service_healthy
 
+  frontend:
+    build: ./frontend
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - extractor
 
   ollama:
     image: ollama/ollama:latest
@@ -41,8 +69,8 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     environment:
-      - OLLAMA_HOST=http://ollama:11434
-    entrypoint: ["/bin/sh", "-c", "ollama pull qwen3:8b && ollama pull nomic-embed-text"]
+      - OLLAMA_HOST=${LLM_HOST}
+    entrypoint: ["/bin/sh", "-c", "ollama pull ${LLM_MODEL} && ollama pull ${EMBEDDING_MODEL}"]
     restart: "no"
 
 
@@ -63,7 +91,11 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -81,3 +113,5 @@ services:
 volumes:
   pgadmin_storage:
   ollama_data:
+  epub_uploads:
+  epub_output:

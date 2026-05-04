@@ -2,6 +2,7 @@
 Centralized logging configuration for the EPUB Structure Extractor.
 Call setup_logging() once at application startup.
 """
+
 import logging
 import sys
 
@@ -13,7 +14,7 @@ def setup_logging() -> None:
     level = logging.DEBUG if settings.DEBUG else logging.INFO
 
     formatter = logging.Formatter(
-        fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+        fmt="%(asctime)s | %(levelname)-8s | %(name)s | %(funcName)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 

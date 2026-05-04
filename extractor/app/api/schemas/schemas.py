@@ -2,118 +2,37 @@
 Pydantic schemas for request/response serialization.
 These live at the interface boundary and are separate from domain entities.
 """
+
 from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
+from typing import Optional  # ---- EPUB processing schemas ----
 
-
-# ---- Book schemas ----
-
-class BookCreate(BaseModel):
-    title: str
-    author: Optional[str] = None
-    isbn: Optional[str] = None
-    description: Optional[str] = None
-    language: str = "en"
-    publisher: Optional[str] = None
-    publication_date: Optional[str] = None
-    file_path: Optional[str] = None
-    file_size: Optional[int] = None
-
-
-class BookResponse(BaseModel):
-    id: int
-    title: str
-    author: Optional[str] = None
-    isbn: Optional[str] = None
-    description: Optional[str] = None
-    language: str
-    publisher: Optional[str] = None
-    publication_date: Optional[str] = None
-    file_path: Optional[str] = None
-    file_size: Optional[int] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    chapter_count: int = 0
-
-    class Config:
-        from_attributes = True
-
-
-# ---- Chapter schemas ----
-
-class ChapterResponse(BaseModel):
-    id: int
-    book_id: int
-    title: str
-    chapter_number: Optional[int] = None
-    content: Optional[str] = None
-    word_count: int = 0
-    summary: Optional[str] = None
-    file_name: Optional[str] = None
-    order_index: int = 0
-    created_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
-
-
-# ---- Metadata schemas ----
-
-class MetadataResponse(BaseModel):
-    id: int
-    book_id: int
-    key: str
-    value: Optional[str] = None
-    created_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
-
-
-# ---- Job schemas ----
-
-class JobResponse(BaseModel):
-    id: int
-    book_id: Optional[int] = None
-    job_type: str
-    status: str
-    progress: int = 0
-    error_message: Optional[str] = None
-    result_data: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
-
-
-# ---- EPUB processing schemas ----
 
 class ExtractRequest(BaseModel):
     epub_path: str
-    json_output: str
+    book_name: str
+    images_output_dir: Optional[str] = None
+    language: Optional[str] = None
+    author: Optional[str] = None
 
 
 class ExtractResponse(BaseModel):
-    json_output: str
-    total_sections: int
+    book_id: str
+    total_chapters: int
     total_content_chars: int
-    sections_with_summaries: int
 
 
 class SummarizeRequest(BaseModel):
-    json_path: str
+    book_id: str
+    chapter_ids: Optional[list[str]] = None  # None → all included chapters
 
 
 class SummarizeResponse(BaseModel):
-    json_path: str
-    sections_summarized: int
+    book_id: str
+    chapters_summarized: int
 
 
 class MarpRequest(BaseModel):
-    json_path: str
+    book_id: str
     marp_output: str
     title: Optional[str] = None
     include_summaries: bool = True
@@ -131,28 +50,75 @@ class LLMStatusResponse(BaseModel):
     model: str
 
 
-# ---- Section listing / exclusion schemas ----
+# ---- Chapter listing / inclusion schemas ----
 
-class SectionInfo(BaseModel):
+
+class ChapterInfo(BaseModel):
     id: str
     title: str
-    depth: int
-    excluded: bool
+    number: str
+    include: bool
     has_summary: bool
+    chapter_id: Optional[str]
 
 
-class SectionsListResponse(BaseModel):
-    book_key: str
+class ChaptersListResponse(BaseModel):
+    book_id: str
     total: int
-    sections: list[SectionInfo]
+    chapters: list[ChapterInfo]
 
 
-class SetExcludedRequest(BaseModel):
-    book_key: str
-    excluded_ids: list[str] = []
-    excluded_titles: list[str] = []
+class SetInclusionRequest(BaseModel):
+    book_id: str
+    chapter_numbers: list[str]
+    include: bool
 
 
-class SetExcludedResponse(BaseModel):
-    book_key: str
-    excluded_count: int
+class SetInclusionResponse(BaseModel):
+    book_id: str
+    updated_count: int
+
+
+# ---- Book listing / upload / delete ----
+
+
+class BookInfo(BaseModel):
+    id: str
+    name: str
+    language: Optional[str] = None
+    author: Optional[str] = None
+
+
+class BooksListResponse(BaseModel):
+    total: int
+    books: list[BookInfo]
+
+
+class UploadEpubResponse(BaseModel):
+    book_id: str
+    book_name: str
+    total_chapters: int
+
+
+class DeleteBookResponse(BaseModel):
+    book_id: str
+    success: bool
+
+
+# ---- Slides ----
+
+
+class SlideInfo(BaseModel):
+    chapter_id: str
+    title: str
+    number: str
+    summary: Optional[str] = None
+    content: str
+    images: list[str]
+    depth: int
+
+
+class SlidesResponse(BaseModel):
+    book_id: str
+    book_name: str
+    slides: list[SlideInfo]

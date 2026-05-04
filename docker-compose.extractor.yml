@@ -1,0 +1,10 @@
+services:
+  extractor:
+    volumes:
+      # Mount the root folder that contains .git
+      - .:/workspace
+    command: sleep infinity
+
+  frontend:
+    profiles:
+      - avoid
