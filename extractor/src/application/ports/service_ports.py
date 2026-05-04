@@ -70,6 +70,39 @@ class BookRepositoryPort(ABC):
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# EPUB source
+# ---------------------------------------------------------------------------
+
+
+class EpubSourcePort(ABC):
+    """Port for acquiring an EPUB file from any backing store.
+
+    Implementations are responsible for making the EPUB available on the local
+    filesystem and returning its absolute path.
+    """
+
+    @abstractmethod
+    def resolve(self, source_ref: str, dest_dir: str) -> str:
+        """Ensure the EPUB exists locally and return its absolute path.
+
+        Args:
+            source_ref: An opaque identifier whose meaning depends on the
+                concrete implementation (local path, S3 key, filename …).
+            dest_dir:   Directory where the adapter may write the file if it
+                needs to download or copy it.
+
+        Returns:
+            Absolute path to the EPUB file on the local filesystem.
+        """
+        ...
+
+
+# ---------------------------------------------------------------------------
+# EPUB extractor
+# ---------------------------------------------------------------------------
+
+
 class EpubExtractorPort(ABC):
     """Port for parsing an EPUB file into domain entities."""
 

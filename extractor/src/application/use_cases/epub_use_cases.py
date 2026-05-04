@@ -11,6 +11,7 @@ from src.application.ports.service_ports import (
     AIServicePort,
     BookRepositoryPort,
     EpubExtractorPort,
+    EpubSourcePort,
     MarpExporterPort,
 )
 from src.application.dtos.epub_dtos import (
@@ -43,16 +44,26 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 
+_UPLOADS_DIR = "/app/uploads"
+
+
 class ExtractEpubUseCase:
     """Parse an EPUB file and persist Book + Chapter entities to the repository."""
 
-    def __init__(self, extractor: EpubExtractorPort, repository: BookRepositoryPort):
+    def __init__(
+        self,
+        source: EpubSourcePort,
+        extractor: EpubExtractorPort,
+        repository: BookRepositoryPort,
+    ) -> None:
+        self._source = source
         self._extractor = extractor
         self._repository = repository
 
     def execute(self, request: ExtractEpubRequest) -> ExtractEpubResponse:
+        local_epub_path = self._source.resolve(request.epub_path, _UPLOADS_DIR)
         book, chapters = self._extractor.extract(
-            request.epub_path,
+            local_epub_path,
             request.images_output_dir,
         )
 

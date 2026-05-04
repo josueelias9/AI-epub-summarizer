@@ -1,6 +1,7 @@
 """
 Database engine and session factory.
 """
+
 from collections.abc import Generator
 
 import logging

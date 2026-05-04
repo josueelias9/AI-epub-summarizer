@@ -14,7 +14,7 @@ EPUB processing routes:
 
 import logging
 import os
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from typing import Optional
 
 from src.application.use_cases.epub_use_cases import (
@@ -37,17 +37,13 @@ from src.application.dtos.epub_dtos import (
     SetExcludedSectionsRequest,
     SummarizeEpubRequest,
 )
-from app.api.deps import (
-    _delete_book_use_case,
-    _extract_use_case,
-    _get_slides_use_case,
-    _list_books_use_case,
-    _list_chapters_use_case,
-    _llm_use_case,
-    _marp_use_case,
-    _set_inclusion_use_case,
-    _summarize_use_case,
-)
+from app.api.deps import SessionDep
+from src.infrastructure.ai.ollama_agent import AIAgent
+from src.infrastructure.epub.epub_extractor import EPUBExtractor
+from src.infrastructure.epub.sources.local_source import LocalFileSource
+from src.infrastructure.epub.sources.upload_source import UploadedFileSource
+from src.infrastructure.export.marp_exporter import MarpExporter
+from src.infrastructure.repositories.postgres_repository import PostgresBookRepository
 from app.api.schemas.schemas import (
     BooksListResponse,
     ChaptersListResponse,
@@ -72,8 +68,9 @@ router = APIRouter(prefix="/epub", tags=["epub"])
 
 
 @router.get("/books", response_model=BooksListResponse)
-async def list_books(use_case: ListBooksUseCase = Depends(_list_books_use_case)):
+async def list_books(session: SessionDep):
     """Return all books stored in the database."""
+    use_case = ListBooksUseCase(repository=PostgresBookRepository(session))
     response = use_case.execute()
     return {
         "total": len(response.books),
@@ -88,34 +85,29 @@ async def list_books(use_case: ListBooksUseCase = Depends(_list_books_use_case))
 async def upload_epub(
     file: UploadFile = File(...),
     book_name: Optional[str] = Form(default=None),
-    use_case: ExtractEpubUseCase = Depends(_extract_use_case),
+    session: SessionDep = ...,
 ):
     """Upload an EPUB file, extract its structure and persist to the database."""
     safe_name = os.path.basename(file.filename or "book.epub")
     if not safe_name.lower().endswith(".epub"):
         raise HTTPException(status_code=400, detail="Only .epub files are accepted.")
-
-    upload_dir = "/app/uploads"
-    os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, safe_name)
-
     contents = await file.read()
-    with open(file_path, "wb") as fh:
-        fh.write(contents)
-
+    use_case = ExtractEpubUseCase(
+        source=UploadedFileSource(content=contents, filename=safe_name),
+        extractor=EPUBExtractor(),
+        repository=PostgresBookRepository(session),
+    )
     display_name = book_name or os.path.splitext(safe_name)[0]
     try:
         response = use_case.execute(
             ExtractEpubRequest(
-                epub_path=file_path,
+                epub_path=safe_name,
                 book_name=display_name,
                 images_output_dir="/app/output/images",
-                save_epub_path=file_path,
+                save_epub_path=f"/app/uploads/{safe_name}",
             )
         )
     except Exception as e:
-        if os.path.exists(file_path):
-            os.remove(file_path)
         raise HTTPException(status_code=500, detail=str(e))
 
     return {
@@ -128,9 +120,10 @@ async def upload_epub(
 @router.delete("/books/{book_id}", response_model=DeleteBookResponse)
 async def delete_book(
     book_id: str,
-    use_case: DeleteBookUseCase = Depends(_delete_book_use_case),
+    session: SessionDep,
 ):
     """Delete a book, its chapters, and the epub file from the filesystem."""
+    use_case = DeleteBookUseCase(repository=PostgresBookRepository(session))
     try:
         response = use_case.execute(DeleteBookRequest(book_id=book_id))
     except ValueError as e:
@@ -143,9 +136,10 @@ async def delete_book(
 @router.get("/slides/{book_id}", response_model=SlidesResponse)
 async def get_slides(
     book_id: str,
-    use_case: GetSlidesUseCase = Depends(_get_slides_use_case),
+    session: SessionDep,
 ):
     """Return included chapters as structured slide data for the frontend."""
+    use_case = GetSlidesUseCase(repository=PostgresBookRepository(session))
     try:
         response = use_case.execute(GetSlidesRequest(book_id=book_id))
     except ValueError as e:
@@ -173,13 +167,14 @@ async def get_slides(
 @router.post("/extract", response_model=ExtractResponse)
 async def extract_epub(
     body: ExtractRequest,
-    use_case: ExtractEpubUseCase = Depends(_extract_use_case),
+    session: SessionDep,
 ):
-    """Parse an EPUB file and persist Book + Chapter entities to the database."""
-    if not os.path.exists(body.epub_path):
-        raise HTTPException(
-            status_code=404, detail=f"EPUB file not found: {body.epub_path}"
-        )
+    """Parse a local EPUB file and persist Book + Chapter entities to the database."""
+    use_case = ExtractEpubUseCase(
+        source=LocalFileSource(),
+        extractor=EPUBExtractor(),
+        repository=PostgresBookRepository(session),
+    )
     try:
         response = use_case.execute(
             ExtractEpubRequest(
@@ -190,6 +185,8 @@ async def extract_epub(
                 author=body.author,
             )
         )
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return {
@@ -202,12 +199,16 @@ async def extract_epub(
 @router.post("/summarize", response_model=SummarizeResponse)
 async def summarize_epub(
     body: SummarizeRequest,
-    use_case: SummarizeEpubUseCase = Depends(_summarize_use_case),
+    session: SessionDep,
 ):
     """Generate AI summaries for included chapters (requires Ollama).
 
     Optionally pass ``chapter_ids`` to restrict summarisation to a specific subset.
     """
+    use_case = SummarizeEpubUseCase(
+        ai_agent=AIAgent(),
+        repository=PostgresBookRepository(session),
+    )
     try:
         response = use_case.execute(
             SummarizeEpubRequest(book_id=body.book_id, chapter_ids=body.chapter_ids)
@@ -225,9 +226,13 @@ async def summarize_epub(
 @router.post("/marp", response_model=MarpResponse)
 async def generate_marp(
     body: MarpRequest,
-    use_case: GenerateMarpUseCase = Depends(_marp_use_case),
+    session: SessionDep,
 ):
     """Fetch book data from the database and generate a Marp presentation."""
+    use_case = GenerateMarpUseCase(
+        marp_exporter=MarpExporter(),
+        repository=PostgresBookRepository(session),
+    )
     try:
         response = use_case.execute(
             GenerateMarpRequest(
@@ -247,8 +252,9 @@ async def generate_marp(
 
 
 @router.get("/llm/status", response_model=LLMStatusResponse)
-async def llm_status(use_case: CheckLLMConnectionUseCase = Depends(_llm_use_case)):
+async def llm_status():
     """Check whether the Ollama LLM service is reachable."""
+    use_case = CheckLLMConnectionUseCase()
     response = use_case.execute()
     return {
         "connected": response.connected,
@@ -260,9 +266,10 @@ async def llm_status(use_case: CheckLLMConnectionUseCase = Depends(_llm_use_case
 @router.get("/chapters", response_model=ChaptersListResponse)
 async def list_chapters(
     book_id: str,
-    use_case: ListChaptersUseCase = Depends(_list_chapters_use_case),
+    session: SessionDep,
 ):
     """Return a flat, ordered list of all chapters for a book."""
+    use_case = ListChaptersUseCase(repository=PostgresBookRepository(session))
     try:
         response = use_case.execute(ListChaptersRequest(book_id=book_id))
     except ValueError as e:
@@ -289,13 +296,14 @@ async def list_chapters(
 @router.post("/chapters/include", response_model=SetInclusionResponse)
 async def set_chapter_inclusion(
     body: SetInclusionRequest,
-    use_case: SetExcludedSectionsUseCase = Depends(_set_inclusion_use_case),
+    session: SessionDep,
 ):
     """Toggle the ``include`` flag on a list of chapters.
 
     Set ``include=false`` to exclude chapters from AI summarisation;
     ``include=true`` to re-include them.
     """
+    use_case = SetExcludedSectionsUseCase(repository=PostgresBookRepository(session))
     try:
         response = use_case.execute(
             SetExcludedSectionsRequest(
