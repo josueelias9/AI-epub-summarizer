@@ -1,6 +1,7 @@
 """
 Database engine and session factory.
 """
+from collections.abc import Generator
 
 import logging
 
@@ -17,7 +18,7 @@ engine = create_engine(
 )
 
 
-def get_session() -> Session:
+def get_db() -> Generator[Session, None, None]:
     """Yield a database session (FastAPI dependency)."""
     with Session(engine) as session:
         yield session

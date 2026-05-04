@@ -2,7 +2,7 @@
 Postgres implementation of BookRepositoryPort (Clean Architecture).
 
 Stores BOOK and CHAPTER entities in Postgres via SQLModel.
-Inject a SQLModel ``Session`` (e.g. from FastAPI's ``get_session`` dependency).
+Inject a SQLModel ``Session`` (e.g. from FastAPI's ``get_db`` dependency).
 """
 
 import json

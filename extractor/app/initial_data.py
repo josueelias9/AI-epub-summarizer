@@ -1,6 +1,6 @@
 import logging
 
-from src.infrastructure.database.session import init_db
+from infrastructure.database.db import init_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

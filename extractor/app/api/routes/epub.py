@@ -37,11 +37,17 @@ from src.application.dtos.epub_dtos import (
     SetExcludedSectionsRequest,
     SummarizeEpubRequest,
 )
-from src.infrastructure.ai.ollama_agent import AIAgent
-from src.infrastructure.database.session import get_session
-from src.infrastructure.epub.epub_extractor import EPUBExtractor
-from src.infrastructure.export.marp_exporter import MarpExporter
-from src.infrastructure.repositories.postgres_repository import PostgresBookRepository
+from app.api.deps import (
+    _delete_book_use_case,
+    _extract_use_case,
+    _get_slides_use_case,
+    _list_books_use_case,
+    _list_chapters_use_case,
+    _llm_use_case,
+    _marp_use_case,
+    _set_inclusion_use_case,
+    _summarize_use_case,
+)
 from app.api.schemas.schemas import (
     BooksListResponse,
     ChaptersListResponse,
@@ -63,51 +69,6 @@ from app.api.schemas.schemas import (
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/epub", tags=["epub"])
-
-
-def _extract_use_case(session=Depends(get_session)) -> ExtractEpubUseCase:
-    return ExtractEpubUseCase(
-        extractor=EPUBExtractor(),
-        repository=PostgresBookRepository(session),
-    )
-
-
-def _summarize_use_case(session=Depends(get_session)) -> SummarizeEpubUseCase:
-    return SummarizeEpubUseCase(
-        ai_agent=AIAgent(),
-        repository=PostgresBookRepository(session),
-    )
-
-
-def _marp_use_case(session=Depends(get_session)) -> GenerateMarpUseCase:
-    return GenerateMarpUseCase(
-        marp_exporter=MarpExporter(),
-        repository=PostgresBookRepository(session),
-    )
-
-
-def _llm_use_case() -> CheckLLMConnectionUseCase:
-    return CheckLLMConnectionUseCase()
-
-
-def _list_chapters_use_case(session=Depends(get_session)) -> ListChaptersUseCase:
-    return ListChaptersUseCase(repository=PostgresBookRepository(session))
-
-
-def _set_inclusion_use_case(session=Depends(get_session)) -> SetExcludedSectionsUseCase:
-    return SetExcludedSectionsUseCase(repository=PostgresBookRepository(session))
-
-
-def _list_books_use_case(session=Depends(get_session)) -> ListBooksUseCase:
-    return ListBooksUseCase(repository=PostgresBookRepository(session))
-
-
-def _delete_book_use_case(session=Depends(get_session)) -> DeleteBookUseCase:
-    return DeleteBookUseCase(repository=PostgresBookRepository(session))
-
-
-def _get_slides_use_case(session=Depends(get_session)) -> GetSlidesUseCase:
-    return GetSlidesUseCase(repository=PostgresBookRepository(session))
 
 
 @router.get("/books", response_model=BooksListResponse)
