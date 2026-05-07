@@ -1,14 +1,12 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useActionState, useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { BookInfo, ChapterInfo, SlidesResponse } from '@/app/lib/api'
 import { listBooks, getChapters, getSlides, getLlmStatus } from '@/app/lib/data'
-import { deleteBook, setChapterInclusion, summarizeBook } from '@/app/lib/actions'
+import { deleteBook, setChapterInclusion, summarizeBookAction } from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
-
-type SummarizeState = 'idle' | 'loading' | 'done' | 'error'
 
 export default function BookDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -19,8 +17,10 @@ export default function BookDetailPage() {
     const [loadingChapters, setLoadingChapters] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    const [summarizeState, setSummarizeState] = useState<SummarizeState>('idle')
-    const [summarizeMsg, setSummarizeMsg] = useState<string | null>(null)
+    const [summarizeResult, summarizeDispatch, isSummarizing] = useActionState(
+        summarizeBookAction,
+        { status: 'idle' as const, message: null }
+    )
 
     const [slidesData, setSlidesData] = useState<SlidesResponse | null>(null)
     const [showSlides, setShowSlides] = useState(false)
@@ -51,6 +51,10 @@ export default function BookDetailPage() {
             .catch(() => setLlmConnected(false))
     }, [fetchData])
 
+    useEffect(() => {
+        if (summarizeResult.status === 'done') fetchData()
+    }, [summarizeResult, fetchData])
+
     async function handleToggleChapter(number: string, include: boolean) {
         try {
             await setChapterInclusion(id, [number], include)
@@ -63,20 +67,6 @@ export default function BookDetailPage() {
             )
         } catch (err: unknown) {
             alert(err instanceof Error ? err.message : 'Failed to update chapter')
-        }
-    }
-
-    async function handleSummarize() {
-        setSummarizeState('loading')
-        setSummarizeMsg(null)
-        try {
-            const res = await summarizeBook(id)
-            setSummarizeState('done')
-            setSummarizeMsg(`Summarized ${res.chapters_summarized} chapters.`)
-            await fetchData()
-        } catch (err: unknown) {
-            setSummarizeState('error')
-            setSummarizeMsg(err instanceof Error ? err.message : 'Summarization failed')
         }
     }
 
@@ -133,7 +123,6 @@ export default function BookDetailPage() {
                             <span>{summarizedCount} summarized</span>
                         </div>
                     </div>
-                    {/* TODO: use useActionState instead */}
                     <button
                         onClick={handleDeleteBook}
                         className='text-red-500 hover:text-red-700 text-sm shrink-0'
@@ -173,44 +162,47 @@ export default function BookDetailPage() {
                     <div className='bg-white rounded-2xl shadow p-6 space-y-3'>
                         <h2 className='text-base font-bold text-gray-800'>Actions</h2>
 
-                        <button
-                            onClick={handleSummarize}
-                            disabled={summarizeState === 'loading' || includedCount === 0}
-                            className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors'
-                        >
-                            {summarizeState === 'loading' ? (
-                                <>
-                                    <svg
-                                        className='animate-spin h-4 w-4'
-                                        viewBox='0 0 24 24'
-                                        fill='none'
-                                    >
-                                        <circle
-                                            className='opacity-25'
-                                            cx='12'
-                                            cy='12'
-                                            r='10'
-                                            stroke='currentColor'
-                                            strokeWidth='4'
-                                        />
-                                        <path
-                                            className='opacity-75'
-                                            fill='currentColor'
-                                            d='M4 12a8 8 0 018-8v8H4z'
-                                        />
-                                    </svg>
-                                    Summarizing…
-                                </>
-                            ) : (
-                                '✨ Generate Summary'
-                            )}
-                        </button>
-
-                        {summarizeMsg && (
-                            <p
-                                className={`text-xs px-3 py-2 rounded-lg ${summarizeState === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}
+                        <form action={summarizeDispatch}>
+                            <input type='hidden' name='book_id' value={id} />
+                            <button
+                                type='submit'
+                                disabled={isSummarizing || includedCount === 0}
+                                className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors'
                             >
-                                {summarizeMsg}
+                                {isSummarizing ? (
+                                    <>
+                                        <svg
+                                            className='animate-spin h-4 w-4'
+                                            viewBox='0 0 24 24'
+                                            fill='none'
+                                        >
+                                            <circle
+                                                className='opacity-25'
+                                                cx='12'
+                                                cy='12'
+                                                r='10'
+                                                stroke='currentColor'
+                                                strokeWidth='4'
+                                            />
+                                            <path
+                                                className='opacity-75'
+                                                fill='currentColor'
+                                                d='M4 12a8 8 0 018-8v8H4z'
+                                            />
+                                        </svg>
+                                        Summarizing…
+                                    </>
+                                ) : (
+                                    '✨ Generate Summary'
+                                )}
+                            </button>
+                        </form>
+
+                        {summarizeResult.message && (
+                            <p
+                                className={`text-xs px-3 py-2 rounded-lg ${summarizeResult.status === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}
+                            >
+                                {summarizeResult.message}
                             </p>
                         )}
 

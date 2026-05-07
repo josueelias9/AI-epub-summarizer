@@ -13,6 +13,12 @@ const nextConfig = {
         config.externals = [...(config.externals || []), '@mapbox/node-pre-gyp']
         return config
     },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '50mb',
+        },
+    },
+    middlewareClientMaxBodySize: 52428800,
     images: {
         remotePatterns: [
             {

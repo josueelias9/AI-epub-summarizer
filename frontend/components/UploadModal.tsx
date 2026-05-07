@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { uploadEpub } from '@/app/lib/actions'
+
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1`
 
 interface Props {
     onUploaded: (bookId: string, bookName: string) => void
@@ -11,25 +12,34 @@ interface Props {
 export default function UploadModal({ onUploaded, onClose }: Props) {
     const [file, setFile] = useState<File | null>(null)
     const [bookName, setBookName] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-    // TODO: I think this can be simplified by using the new useFormState or useActionState.
+// This can't be a server action because it needs to handle file uploads, which require streaming the request body. Server actions currently don't support streaming, so we have to handle the upload on the client side and then call the server API.
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         if (!file) return
-        setLoading(true)
+        setIsPending(true)
         setError(null)
         try {
-            const fd = new FormData()
-            fd.append('file', file)
-            if (bookName) fd.append('book_name', bookName)
-            const res = await uploadEpub(fd)
-            onUploaded(res.book_id, res.book_name)
+            const formData = new FormData()
+            formData.append('file', file)
+            if (bookName.trim()) formData.append('book_name', bookName.trim())
+
+            const res = await fetch(`${API_URL}/epub/upload`, { method: 'POST', body: formData })
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({ detail: res.statusText }))
+                const detail = Array.isArray(err.detail)
+                    ? err.detail.map((e: { msg?: string }) => e.msg ?? JSON.stringify(e)).join(', ')
+                    : (err.detail ?? res.statusText)
+                throw new Error(detail)
+            }
+            const data = await res.json()
+            onUploaded(data.book_id, data.book_name)
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Upload failed')
         } finally {
-            setLoading(false)
+            setIsPending(false)
         }
     }
 
@@ -69,7 +79,6 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
                             </>
                         )}
                     </div>
-
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>
                             Book name <span className='text-gray-400'>(optional)</span>
@@ -82,19 +91,17 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
                             className='w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
                         />
                     </div>
-
                     {error && (
                         <p className='text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2'>
                             {error}
                         </p>
                     )}
-
                     <button
                         type='submit'
-                        disabled={!file || loading}
+                        disabled={!file || isPending}
                         className='w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2 rounded-xl transition-colors'
                     >
-                        {loading ? 'Uploading & Extracting…' : 'Upload & Extract'}
+                        {isPending ? 'Uploading & Extracting…' : 'Upload & Extract'}
                     </button>
                 </form>
             </div>
