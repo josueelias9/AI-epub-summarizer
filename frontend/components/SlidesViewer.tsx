@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { SlideInfo, staticUrl } from '@/lib/api'
+import { SlideInfo, staticUrl } from '@/app/lib/api'
 
 interface Props {
     slides: SlideInfo[]

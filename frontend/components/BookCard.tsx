@@ -1,6 +1,6 @@
 'use client'
 
-import { BookInfo } from '@/lib/api'
+import { BookInfo } from '@/app/lib/api'
 import { useRouter } from 'next/navigation'
 
 interface Props {

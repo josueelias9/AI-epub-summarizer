@@ -1,6 +1,6 @@
 'use client'
 
-import { ChapterInfo } from '@/lib/api'
+import { ChapterInfo } from '@/app/lib/api'
 
 interface Props {
     chapters: ChapterInfo[]
