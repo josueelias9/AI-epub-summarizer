@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { api } from '@/lib/api'
+import { uploadEpub } from '@/app/lib/actions'
 
 interface Props {
     onUploaded: (bookId: string, bookName: string) => void
@@ -14,14 +14,17 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-
+    // TODO: I think this can be simplified by using the new useFormState or useActionState.
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         if (!file) return
         setLoading(true)
         setError(null)
         try {
-            const res = await api.epub.upload(file, bookName || undefined)
+            const fd = new FormData()
+            fd.append('file', file)
+            if (bookName) fd.append('book_name', bookName)
+            const res = await uploadEpub(fd)
             onUploaded(res.book_id, res.book_name)
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Upload failed')

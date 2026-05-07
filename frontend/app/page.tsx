@@ -1,7 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { api, BookInfo } from '@/lib/api'
+import { BookInfo } from '@/app/lib/api'
+import { listBooks } from '@/app/lib/data'
+import { deleteBook } from '@/app/lib/actions'
 import BookCard from '@/components/BookCard'
 import UploadModal from '@/components/UploadModal'
 import { useRouter } from 'next/navigation'
@@ -17,7 +19,7 @@ export default function HomePage() {
         setLoading(true)
         setError(null)
         try {
-            const data = await api.books.list()
+            const data = await listBooks()
             setBooks(data.books)
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : 'Failed to load books')
@@ -29,11 +31,11 @@ export default function HomePage() {
     useEffect(() => {
         fetchBooks()
     }, [fetchBooks])
-
+// TODO: does this could be implemented with useActionState?
     async function handleDelete(id: string) {
         if (!confirm('Delete this book and all its data?')) return
         try {
-            await api.books.delete(id)
+            await deleteBook(id)
             setBooks(prev => prev.filter(b => b.id !== id))
         } catch (err: unknown) {
             alert(err instanceof Error ? err.message : 'Delete failed')

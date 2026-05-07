@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { api, BookInfo, ChapterInfo, SlidesResponse } from '@/lib/api'
+import { BookInfo, ChapterInfo, SlidesResponse } from '@/app/lib/api'
+import { listBooks, getChapters, getSlides, getLlmStatus } from '@/app/lib/data'
+import { deleteBook, setChapterInclusion, summarizeBook } from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
 
@@ -31,7 +33,7 @@ export default function BookDetailPage() {
         setLoadingChapters(true)
         setError(null)
         try {
-            const [chData, booksData] = await Promise.all([api.epub.chapters(id), api.books.list()])
+            const [chData, booksData] = await Promise.all([getChapters(id), listBooks()])
             setChapters(chData.chapters)
             const found = booksData.books.find(b => b.id === id) ?? null
             setBook(found)
@@ -44,15 +46,14 @@ export default function BookDetailPage() {
 
     useEffect(() => {
         fetchData()
-        api.epub
-            .llmStatus()
+        getLlmStatus()
             .then(s => setLlmConnected(s.connected))
             .catch(() => setLlmConnected(false))
     }, [fetchData])
 
     async function handleToggleChapter(number: string, include: boolean) {
         try {
-            await api.epub.setInclusion(id, [number], include)
+            await setChapterInclusion(id, [number], include)
             setChapters(prev =>
                 prev.map(ch =>
                     ch.number === number || ch.number.startsWith(number + '.')
@@ -69,7 +70,7 @@ export default function BookDetailPage() {
         setSummarizeState('loading')
         setSummarizeMsg(null)
         try {
-            const res = await api.epub.summarize(id)
+            const res = await summarizeBook(id)
             setSummarizeState('done')
             setSummarizeMsg(`Summarized ${res.chapters_summarized} chapters.`)
             await fetchData()
@@ -82,7 +83,7 @@ export default function BookDetailPage() {
     async function handleViewSlides() {
         setLoadingSlides(true)
         try {
-            const data = await api.epub.slides(id)
+            const data = await getSlides(id)
             setSlidesData(data)
             setShowSlides(true)
         } catch (err: unknown) {
@@ -95,7 +96,7 @@ export default function BookDetailPage() {
     async function handleDeleteBook() {
         if (!confirm('Delete this book and all its data?')) return
         try {
-            await api.books.delete(id)
+            await deleteBook(id)
             router.push('/')
         } catch (err: unknown) {
             alert(err instanceof Error ? err.message : 'Delete failed')
@@ -132,6 +133,7 @@ export default function BookDetailPage() {
                             <span>{summarizedCount} summarized</span>
                         </div>
                     </div>
+                    {/* TODO: use useActionState instead */}
                     <button
                         onClick={handleDeleteBook}
                         className='text-red-500 hover:text-red-700 text-sm shrink-0'
