@@ -60,13 +60,13 @@ class AIAgent(AIServicePort):
 
         except requests.exceptions.RequestException as e:
             logger.error("Error communicating with Ollama: %s", e)
-            return f"[Error generating summary: {str(e)}]"
+            raise RuntimeError(f"Ollama unreachable: {e}") from e
         except json.JSONDecodeError as e:
             logger.error("Error decoding JSON response: %s", e)
-            return "[Error: Invalid server response]"
+            raise RuntimeError("Invalid response from Ollama") from e
         except Exception as e:
             logger.exception("Unexpected error during summarization")
-            return f"[Unexpected error: {str(e)}]"
+            raise
 
     def summarize_batch(self, contents: List[str]) -> List[str]:
         """
