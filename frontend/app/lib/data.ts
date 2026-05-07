@@ -2,7 +2,7 @@
 
 import type { BookInfo, ChapterInfo, SlidesResponse } from './api'
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1`
+const API_URL = `${process.env.NEXT_PRIVATE_API_URL ?? 'http://localhost:8000'}/api/v1`
 
 async function handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {

@@ -31,7 +31,8 @@ export default function HomePage() {
     useEffect(() => {
         fetchBooks()
     }, [fetchBooks])
-// TODO: does this could be implemented with useActionState?
+    // handleDelete is an imperative action (confirm dialog + local state mutation),
+    // not a form submission — useActionState is not a good fit here.
     async function handleDelete(id: string) {
         if (!confirm('Delete this book and all its data?')) return
         try {

@@ -7,12 +7,18 @@ const nextConfig = {
                 ...config.resolve.fallback,
                 fs: false,
                 net: false,
-                tls: false,
-            };
+                tls: false
+            }
         }
-        config.externals = [...(config.externals || []), '@mapbox/node-pre-gyp'];
-        return config;
+        config.externals = [...(config.externals || []), '@mapbox/node-pre-gyp']
+        return config
     },
+    experimental: {
+        serverActions: {
+            bodySizeLimit: '50mb',
+        },
+    },
+    middlewareClientMaxBodySize: 52428800,
     images: {
         remotePatterns: [
             {

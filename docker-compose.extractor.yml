@@ -5,6 +5,8 @@ services:
       - .:/workspace
     command: sleep infinity
     depends_on: !reset []
+    ports:
+      - "8000:8000"
 
     
   frontend:
