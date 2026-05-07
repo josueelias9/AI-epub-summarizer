@@ -4,7 +4,7 @@ import { useActionState, useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { BookInfo, ChapterInfo, SlidesResponse } from '@/app/lib/api'
 import { listBooks, getChapters, getSlides, getLlmStatus } from '@/app/lib/data'
-import { deleteBook, setChapterInclusion, summarizeBookAction } from '@/app/lib/actions'
+import { deleteBook, setChapterInclusion, summarizeBookAction, toggleAllChaptersAction, ToggleAllState } from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
 
@@ -20,6 +20,11 @@ export default function BookDetailPage() {
     const [summarizeResult, summarizeDispatch, isSummarizing] = useActionState(
         summarizeBookAction,
         { status: 'idle' as const, message: null }
+    )
+
+    const [toggleAllResult, toggleAllDispatch, isTogglingAll] = useActionState(
+        toggleAllChaptersAction,
+        { status: 'idle' as const, error: null } satisfies ToggleAllState
     )
 
     const [slidesData, setSlidesData] = useState<SlidesResponse | null>(null)
@@ -54,6 +59,10 @@ export default function BookDetailPage() {
     useEffect(() => {
         if (summarizeResult.status === 'done') fetchData()
     }, [summarizeResult, fetchData])
+
+    useEffect(() => {
+        if (toggleAllResult.status === 'done') fetchData()
+    }, [toggleAllResult, fetchData])
 
     async function handleToggleChapter(number: string, include: boolean) {
         try {
@@ -142,12 +151,41 @@ export default function BookDetailPage() {
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
                 {/* Chapters */}
                 <div className='lg:col-span-2 bg-white rounded-2xl shadow p-6'>
-                    <h2 className='text-base font-bold text-gray-800 mb-4'>
-                        Chapters
-                        <span className='ml-2 text-xs font-normal text-gray-400'>
-                            Toggle to include/exclude from summary
-                        </span>
-                    </h2>
+                    <div className='flex items-center justify-between mb-4'>
+                        <h2 className='text-base font-bold text-gray-800'>
+                            Chapters
+                            <span className='ml-2 text-xs font-normal text-gray-400'>
+                                Toggle to include/exclude from summary
+                            </span>
+                        </h2>
+                        <div className='flex gap-2'>
+                            <form action={toggleAllDispatch}>
+                                <input type='hidden' name='book_id' value={id} />
+                                <input type='hidden' name='include' value='true' />
+                                <input type='hidden' name='chapter_numbers' value={JSON.stringify(chapters.map(c => c.number))} />
+                                <button
+                                    type='submit'
+                                    disabled={isTogglingAll || loadingChapters || chapters.every(c => c.include)}
+                                    className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
+                                >
+                                    Select all
+                                </button>
+                            </form>
+                            <span className='text-gray-300'>|</span>
+                            <form action={toggleAllDispatch}>
+                                <input type='hidden' name='book_id' value={id} />
+                                <input type='hidden' name='include' value='false' />
+                                <input type='hidden' name='chapter_numbers' value={JSON.stringify(chapters.map(c => c.number))} />
+                                <button
+                                    type='submit'
+                                    disabled={isTogglingAll || loadingChapters || chapters.every(c => !c.include)}
+                                    className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
+                                >
+                                    Deselect all
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                     {loadingChapters ? (
                         <p className='text-sm text-gray-400'>Loading chapters…</p>
                     ) : error ? (

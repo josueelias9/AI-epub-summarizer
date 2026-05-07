@@ -95,6 +95,27 @@ export async function summarizeBookAction(
     }
 }
 
+export type ToggleAllState = { status: 'idle' | 'done' | 'error'; error: string | null }
+
+export async function toggleAllChaptersAction(
+    _prev: ToggleAllState,
+    formData: FormData
+): Promise<ToggleAllState> {
+    const bookId = formData.get('book_id') as string
+    const include = formData.get('include') === 'true'
+    const numbers = JSON.parse(formData.get('chapter_numbers') as string) as string[]
+    try {
+        await fetch(`${API_URL}/epub/chapters/include`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ book_id: bookId, chapter_numbers: numbers, include })
+        }).then(r => handleResponse(r))
+        return { status: 'done', error: null }
+    } catch (err: unknown) {
+        return { status: 'error', error: err instanceof Error ? err.message : 'Failed to update chapters' }
+    }
+}
+
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData
