@@ -5,6 +5,7 @@ These map directly to the ERD tables (BOOK and CHAPTER) and are kept
 separate from the enterprise entities.
 """
 
+import uuid
 from datetime import datetime
 from typing import List, Optional
 
@@ -48,3 +49,14 @@ class ChapterORM(SQLModel, table=True):
     include: bool = Field(default=True)
 
     book: Optional[BookORM] = Relationship(back_populates="chapters")
+
+
+class UserORM(SQLModel, table=True):
+    """Auth user for the frontend."""
+
+    __tablename__ = "users"
+
+    id: str = Field(primary_key=True, default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: str = Field(unique=True, index=True)
+    password: str  # bcrypt hash
