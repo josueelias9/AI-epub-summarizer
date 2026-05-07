@@ -7,11 +7,11 @@ const nextConfig = {
                 ...config.resolve.fallback,
                 fs: false,
                 net: false,
-                tls: false,
-            };
+                tls: false
+            }
         }
-        config.externals = [...(config.externals || []), '@mapbox/node-pre-gyp'];
-        return config;
+        config.externals = [...(config.externals || []), '@mapbox/node-pre-gyp']
+        return config
     },
     images: {
         remotePatterns: [

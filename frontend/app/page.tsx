@@ -31,7 +31,7 @@ export default function HomePage() {
     useEffect(() => {
         fetchBooks()
     }, [fetchBooks])
-// TODO: does this could be implemented with useActionState?
+    // TODO: does this could be implemented with useActionState?
     async function handleDelete(id: string) {
         if (!confirm('Delete this book and all its data?')) return
         try {

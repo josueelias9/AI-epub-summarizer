@@ -14,10 +14,7 @@ export default function LoginForm() {
             <input type='hidden' name='redirectTo' value={callbackUrl} />
 
             <div>
-                <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-gray-700 mb-1'
-                >
+                <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1'>
                     Email
                 </label>
                 <input
@@ -31,10 +28,7 @@ export default function LoginForm() {
             </div>
 
             <div>
-                <label
-                    htmlFor='password'
-                    className='block text-sm font-medium text-gray-700 mb-1'
-                >
+                <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-1'>
                     Password
                 </label>
                 <input
@@ -50,9 +44,7 @@ export default function LoginForm() {
 
             <SubmitButton />
 
-            {errorMessage && (
-                <p className='text-sm text-red-600 text-center'>{errorMessage}</p>
-            )}
+            {errorMessage && <p className='text-sm text-red-600 text-center'>{errorMessage}</p>}
         </form>
     )
 }

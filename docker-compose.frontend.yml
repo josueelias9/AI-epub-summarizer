@@ -4,3 +4,29 @@ services:
       # Mount the root folder that contains .git
       - .:/workspace
     command: sleep infinity
+
+
+  extractor:
+    profiles:
+      - avoid
+
+  extractor-init:
+    profiles:
+      - avoid
+  
+  ollama:
+    profiles:
+      - avoid
+
+  ollama-init:
+    profiles:
+      - avoid
+
+  db:
+    profiles:
+      - avoid
+
+  pgadmin4:
+    profiles:
+      - avoid
+  
