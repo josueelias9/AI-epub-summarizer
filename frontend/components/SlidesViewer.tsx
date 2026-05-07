@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { SlideInfo, staticUrl } from '@/app/lib/api'
 
 interface Props {
@@ -77,8 +78,8 @@ export default function SlidesViewer({ slides, bookName, onClose }: Props) {
 
                         {slide.summary ? (
                             <>
-                                <div className='prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap'>
-                                    {slide.summary}
+                                <div className='prose prose-sm max-w-none text-gray-700'>
+                                    <ReactMarkdown>{slide.summary}</ReactMarkdown>
                                 </div>
                                 {!slide.summary && (
                                     <p className='text-gray-400 italic text-sm'>
@@ -151,9 +152,9 @@ export default function SlidesViewer({ slides, bookName, onClose }: Props) {
                         </p>
                         <h2 className='text-3xl font-bold mb-6'>{s.title}</h2>
                         {s.summary ? (
-                            <p className='text-base text-gray-700 whitespace-pre-wrap'>
-                                {s.summary}
-                            </p>
+                            <div className='prose prose-sm max-w-none text-gray-700'>
+                                <ReactMarkdown>{s.summary}</ReactMarkdown>
+                            </div>
                         ) : (
                             <p className='text-gray-400 italic'>No summary.</p>
                         )}
