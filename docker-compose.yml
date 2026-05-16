@@ -31,11 +31,15 @@ services:
     container_name: frontend-container
     ports:
       - "3000:3000"
-    env_file:
-      - .env
     environment:
       - NEXT_PRIVATE_API_URL
       - NEXT_PUBLIC_API_URL
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_HOST
+      - DB_PORT
+      - POSTGRES_DB
+
     # depends_on:
       # - extractor
 

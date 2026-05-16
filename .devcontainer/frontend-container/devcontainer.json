@@ -4,6 +4,7 @@
   "service": "frontend",
   "shutdownAction": "none",
   "workspaceFolder": "/workspace/frontend",
+  "runServices": ["frontend"],
   "customizations": {
     "vscode": {
       "extensions": [
