@@ -13,8 +13,9 @@ export const authConfig = {
             const isLoggedIn = !!auth?.user
             const isAuthPage = nextUrl.pathname.startsWith('/login')
             const isSeedRoute = nextUrl.pathname.startsWith('/seed')
+            const isPublic = nextUrl.pathname === '/'
 
-            if (isSeedRoute) return true
+            if (isSeedRoute || isPublic) return true
 
             if (isAuthPage) {
                 if (isLoggedIn) return Response.redirect(new URL('/', nextUrl))

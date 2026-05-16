@@ -2,11 +2,12 @@ FROM node:20-alpine
 
 WORKDIR /josue_app
 
-COPY package*.json ./
-RUN npm install
-
 COPY . .
+
+RUN npm ci
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+RUN npm run build
+
+CMD ["npm", "run", "start"]

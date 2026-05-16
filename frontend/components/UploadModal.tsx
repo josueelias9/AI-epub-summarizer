@@ -15,7 +15,7 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
-// This can't be a server action because it needs to handle file uploads, which require streaming the request body. Server actions currently don't support streaming, so we have to handle the upload on the client side and then call the server API.
+    // This can't be a server action because it needs to handle file uploads, which require streaming the request body. Server actions currently don't support streaming, so we have to handle the upload on the client side and then call the server API.
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
         if (!file) return

@@ -4,7 +4,13 @@ import { useActionState, useCallback, useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { BookInfo, ChapterInfo, SlidesResponse } from '@/app/lib/api'
 import { listBooks, getChapters, getSlides, getLlmStatus } from '@/app/lib/data'
-import { deleteBook, setChapterInclusion, summarizeBookAction, toggleAllChaptersAction, ToggleAllState } from '@/app/lib/actions'
+import {
+    deleteBook,
+    setChapterInclusion,
+    summarizeBookAction,
+    toggleAllChaptersAction,
+    ToggleAllState
+} from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
 
@@ -162,10 +168,18 @@ export default function BookDetailPage() {
                             <form action={toggleAllDispatch}>
                                 <input type='hidden' name='book_id' value={id} />
                                 <input type='hidden' name='include' value='true' />
-                                <input type='hidden' name='chapter_numbers' value={JSON.stringify(chapters.map(c => c.number))} />
+                                <input
+                                    type='hidden'
+                                    name='chapter_numbers'
+                                    value={JSON.stringify(chapters.map(c => c.number))}
+                                />
                                 <button
                                     type='submit'
-                                    disabled={isTogglingAll || loadingChapters || chapters.every(c => c.include)}
+                                    disabled={
+                                        isTogglingAll ||
+                                        loadingChapters ||
+                                        chapters.every(c => c.include)
+                                    }
                                     className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
                                 >
                                     Select all
@@ -175,10 +189,18 @@ export default function BookDetailPage() {
                             <form action={toggleAllDispatch}>
                                 <input type='hidden' name='book_id' value={id} />
                                 <input type='hidden' name='include' value='false' />
-                                <input type='hidden' name='chapter_numbers' value={JSON.stringify(chapters.map(c => c.number))} />
+                                <input
+                                    type='hidden'
+                                    name='chapter_numbers'
+                                    value={JSON.stringify(chapters.map(c => c.number))}
+                                />
                                 <button
                                     type='submit'
-                                    disabled={isTogglingAll || loadingChapters || chapters.every(c => !c.include)}
+                                    disabled={
+                                        isTogglingAll ||
+                                        loadingChapters ||
+                                        chapters.every(c => !c.include)
+                                    }
                                     className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
                                 >
                                     Deselect all

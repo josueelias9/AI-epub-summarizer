@@ -3,6 +3,10 @@
 import { AuthError } from 'next-auth'
 import { signIn, signOut } from '@/auth'
 
+export async function signOutAction() {
+    await signOut({ redirectTo: '/' })
+}
+
 const API_URL = `${process.env.NEXT_PRIVATE_API_URL ?? 'http://localhost:8000'}/api/v1`
 
 async function handleResponse<T>(res: Response): Promise<T> {
@@ -112,7 +116,10 @@ export async function toggleAllChaptersAction(
         }).then(r => handleResponse(r))
         return { status: 'done', error: null }
     } catch (err: unknown) {
-        return { status: 'error', error: err instanceof Error ? err.message : 'Failed to update chapters' }
+        return {
+            status: 'error',
+            error: err instanceof Error ? err.message : 'Failed to update chapters'
+        }
     }
 }
 
