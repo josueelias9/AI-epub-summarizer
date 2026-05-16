@@ -2,19 +2,22 @@
 
 import { BookInfo } from '@/app/lib/api'
 import { useRouter } from 'next/navigation'
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 
 interface Props {
     book: BookInfo
     onDelete: (id: string) => void
+    lang: string
 }
 
-export default function BookCard({ book, onDelete }: Props) {
+export default function BookCard({ book, onDelete, lang }: Props) {
     const router = useRouter()
+    const t = useDictionary().bookCard
 
     return (
         <div className='bg-white rounded-xl shadow hover:shadow-md transition-shadow border border-gray-100 flex flex-col'>
             <button
-                onClick={() => router.push(`/books/${book.id}`)}
+                onClick={() => router.push(`/${lang}/books/${book.id}`)}
                 className='flex-1 p-5 text-left'
             >
                 <p className='text-xs text-indigo-500 font-semibold uppercase tracking-wide mb-1'>
@@ -30,17 +33,17 @@ export default function BookCard({ book, onDelete }: Props) {
             </button>
             <div className='border-t border-gray-100 px-5 py-3 flex justify-between items-center'>
                 <button
-                    onClick={() => router.push(`/books/${book.id}`)}
+                    onClick={() => router.push(`/${lang}/books/${book.id}`)}
                     className='text-sm text-indigo-600 hover:underline font-medium'
                 >
-                    Open →
+                    {t.open}
                 </button>
                 <button
                     onClick={() => onDelete(book.id)}
                     className='text-sm text-red-500 hover:text-red-700'
                     title='Delete book'
                 >
-                    🗑️ Delete
+                    {t.delete}
                 </button>
             </div>
         </div>

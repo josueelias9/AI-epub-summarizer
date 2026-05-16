@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1`
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function UploadModal({ onUploaded, onClose }: Props) {
+    const t = useDictionary().uploadModal
     const [file, setFile] = useState<File | null>(null)
     const [bookName, setBookName] = useState('')
     const [isPending, setIsPending] = useState(false)
@@ -47,7 +49,7 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
             <div className='bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6'>
                 <div className='flex items-center justify-between mb-4'>
-                    <h2 className='text-lg font-bold text-gray-800'>Upload EPUB</h2>
+                    <h2 className='text-lg font-bold text-gray-800'>{t.title}</h2>
                     <button
                         onClick={onClose}
                         className='text-gray-400 hover:text-gray-600 text-xl leading-none'
@@ -73,21 +75,20 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
                         ) : (
                             <>
                                 <p className='text-3xl mb-2'>📂</p>
-                                <p className='text-sm text-gray-500'>
-                                    Click to select an <strong>.epub</strong> file
-                                </p>
+                                <p className='text-sm text-gray-500'>{t.selectFile}</p>
                             </>
                         )}
                     </div>
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>
-                            Book name <span className='text-gray-400'>(optional)</span>
+                            {t.bookNameLabel}{' '}
+                            <span className='text-gray-400'>{t.bookNameOptional}</span>
                         </label>
                         <input
                             type='text'
                             value={bookName}
                             onChange={e => setBookName(e.target.value)}
-                            placeholder='Leave blank to use EPUB metadata'
+                            placeholder={t.bookNamePlaceholder}
                             className='w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
                         />
                     </div>
@@ -101,7 +102,7 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
                         disabled={!file || isPending}
                         className='w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2 rounded-xl transition-colors'
                     >
-                        {isPending ? 'Uploading & Extracting…' : 'Upload & Extract'}
+                        {isPending ? t.uploading : t.uploadButton}
                     </button>
                 </form>
             </div>

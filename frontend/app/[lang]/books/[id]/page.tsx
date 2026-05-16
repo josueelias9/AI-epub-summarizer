@@ -13,10 +13,13 @@ import {
 } from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
+import { useDictionary } from '../../DictionaryProvider'
 
 export default function BookDetailPage() {
-    const { id } = useParams<{ id: string }>()
+    const { id, lang } = useParams<{ id: string; lang: string }>()
     const router = useRouter()
+    const dict = useDictionary()
+    const t = dict.bookDetail
 
     const [book, setBook] = useState<BookInfo | null>(null)
     const [chapters, setChapters] = useState<ChapterInfo[]>([])
@@ -49,11 +52,11 @@ export default function BookDetailPage() {
             const found = booksData.books.find(b => b.id === id) ?? null
             setBook(found)
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Failed to load data')
+            setError(err instanceof Error ? err.message : t.failedToLoad)
         } finally {
             setLoadingChapters(false)
         }
-    }, [id])
+    }, [id, t.failedToLoad])
 
     useEffect(() => {
         fetchData()
@@ -81,7 +84,7 @@ export default function BookDetailPage() {
                 )
             )
         } catch (err: unknown) {
-            alert(err instanceof Error ? err.message : 'Failed to update chapter')
+            alert(err instanceof Error ? err.message : t.failedToUpdate)
         }
     }
 
@@ -92,19 +95,19 @@ export default function BookDetailPage() {
             setSlidesData(data)
             setShowSlides(true)
         } catch (err: unknown) {
-            alert(err instanceof Error ? err.message : 'Failed to load slides')
+            alert(err instanceof Error ? err.message : t.failedToLoadSlides)
         } finally {
             setLoadingSlides(false)
         }
     }
 
     async function handleDeleteBook() {
-        if (!confirm('Delete this book and all its data?')) return
+        if (!confirm(t.deleteConfirm)) return
         try {
             await deleteBook(id)
-            router.push('/')
+            router.push(`/${lang}/library`)
         } catch (err: unknown) {
-            alert(err instanceof Error ? err.message : 'Delete failed')
+            alert(err instanceof Error ? err.message : t.deleteFailed)
         }
     }
 
@@ -115,10 +118,10 @@ export default function BookDetailPage() {
         <div className='space-y-6'>
             {/* Back */}
             <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push(`/${lang}/library`)}
                 className='text-sm text-indigo-600 hover:underline'
             >
-                ← Back to Library
+                {t.backToLibrary}
             </button>
 
             {/* Book header */}
@@ -126,23 +129,29 @@ export default function BookDetailPage() {
                 <div className='bg-white rounded-2xl shadow p-6 flex items-start justify-between gap-4'>
                     <div>
                         <p className='text-xs text-indigo-500 uppercase tracking-wide font-semibold mb-1'>
-                            EPUB
+                            {t.epub}
                         </p>
                         <h1 className='text-2xl font-bold text-gray-900'>{book.name}</h1>
                         {book.author && <p className='text-sm text-gray-500 mt-1'>{book.author}</p>}
                         <div className='flex gap-3 mt-3 text-sm text-gray-500'>
-                            <span>{chapters.length} chapters</span>
+                            <span>
+                                {chapters.length} {t.chaptersCount}
+                            </span>
                             <span>·</span>
-                            <span>{includedCount} included</span>
+                            <span>
+                                {includedCount} {t.includedCount}
+                            </span>
                             <span>·</span>
-                            <span>{summarizedCount} summarized</span>
+                            <span>
+                                {summarizedCount} {t.summarizedCount}
+                            </span>
                         </div>
                     </div>
                     <button
                         onClick={handleDeleteBook}
                         className='text-red-500 hover:text-red-700 text-sm shrink-0'
                     >
-                        🗑️ Delete Book
+                        {t.deleteBook}
                     </button>
                 </div>
             )}
@@ -150,7 +159,7 @@ export default function BookDetailPage() {
             {/* LLM warning */}
             {llmConnected === false && (
                 <div className='bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700'>
-                    ⚠️ Ollama LLM is not reachable. Summarization will fail until it's connected.
+                    {t.llmWarning}
                 </div>
             )}
 
@@ -159,9 +168,9 @@ export default function BookDetailPage() {
                 <div className='lg:col-span-2 bg-white rounded-2xl shadow p-6'>
                     <div className='flex items-center justify-between mb-4'>
                         <h2 className='text-base font-bold text-gray-800'>
-                            Chapters
+                            {t.chaptersTitle}
                             <span className='ml-2 text-xs font-normal text-gray-400'>
-                                Toggle to include/exclude from summary
+                                {t.chaptersHint}
                             </span>
                         </h2>
                         <div className='flex gap-2'>
@@ -182,7 +191,7 @@ export default function BookDetailPage() {
                                     }
                                     className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
                                 >
-                                    Select all
+                                    {t.selectAll}
                                 </button>
                             </form>
                             <span className='text-gray-300'>|</span>
@@ -203,13 +212,13 @@ export default function BookDetailPage() {
                                     }
                                     className='text-xs text-indigo-600 hover:underline disabled:opacity-40 disabled:no-underline'
                                 >
-                                    Deselect all
+                                    {t.deselectAll}
                                 </button>
                             </form>
                         </div>
                     </div>
                     {loadingChapters ? (
-                        <p className='text-sm text-gray-400'>Loading chapters…</p>
+                        <p className='text-sm text-gray-400'>{t.loadingChapters}</p>
                     ) : error ? (
                         <p className='text-sm text-red-500'>{error}</p>
                     ) : (
@@ -220,7 +229,7 @@ export default function BookDetailPage() {
                 {/* Actions */}
                 <div className='space-y-4'>
                     <div className='bg-white rounded-2xl shadow p-6 space-y-3'>
-                        <h2 className='text-base font-bold text-gray-800'>Actions</h2>
+                        <h2 className='text-base font-bold text-gray-800'>{t.actionsTitle}</h2>
 
                         <form action={summarizeDispatch}>
                             <input type='hidden' name='book_id' value={id} />
@@ -250,10 +259,10 @@ export default function BookDetailPage() {
                                                 d='M4 12a8 8 0 018-8v8H4z'
                                             />
                                         </svg>
-                                        Summarizing…
+                                        {t.summarizing}
                                     </>
                                 ) : (
-                                    '✨ Generate Summary'
+                                    t.generateSummary
                                 )}
                             </button>
                         </form>
@@ -271,18 +280,16 @@ export default function BookDetailPage() {
                             disabled={loadingSlides}
                             className='w-full flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-semibold py-2.5 rounded-xl transition-colors'
                         >
-                            {loadingSlides ? 'Loading…' : '🎞️ View as Slides'}
+                            {loadingSlides ? t.loadingSlides : t.viewSlides}
                         </button>
                     </div>
 
                     <div className='bg-indigo-50 rounded-2xl p-4 text-xs text-indigo-700'>
-                        <p className='font-semibold mb-1'>How it works</p>
+                        <p className='font-semibold mb-1'>{t.howItWorksTitle}</p>
                         <ol className='list-decimal list-inside space-y-1'>
-                            <li>Toggle chapters to include/exclude them</li>
-                            <li>
-                                Click <strong>Generate Summary</strong> to run AI
-                            </li>
-                            <li>View results as slides &amp; export to PDF</li>
+                            {t.howItWorksSteps.map((step, i) => (
+                                <li key={i}>{step}</li>
+                            ))}
                         </ol>
                     </div>
                 </div>

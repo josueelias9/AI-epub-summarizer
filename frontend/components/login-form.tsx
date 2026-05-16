@@ -3,8 +3,10 @@
 import { useActionState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { authenticate } from '@/app/lib/actions'
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 
 export default function LoginForm() {
+    const t = useDictionary().loginForm
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get('callbackUrl') || '/'
     const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined)
@@ -15,7 +17,7 @@ export default function LoginForm() {
 
             <div>
                 <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1'>
-                    Email
+                    {t.emailLabel}
                 </label>
                 <input
                     id='email'
@@ -29,7 +31,7 @@ export default function LoginForm() {
 
             <div>
                 <label htmlFor='password' className='block text-sm font-medium text-gray-700 mb-1'>
-                    Password
+                    {t.passwordLabel}
                 </label>
                 <input
                     id='password'
@@ -48,7 +50,7 @@ export default function LoginForm() {
                 disabled={isPending}
                 className='w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold py-2 rounded-lg transition-colors'
             >
-                {isPending ? 'Signing in…' : 'Sign in'}
+                {isPending ? t.signingIn : t.signIn}
             </button>
 
             {errorMessage && <p className='text-sm text-red-600 text-center'>{errorMessage}</p>}

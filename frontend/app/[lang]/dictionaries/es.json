@@ -1,0 +1,117 @@
+{
+    "nav": {
+        "title": "Resumidor de EPUB",
+        "signOut": "Cerrar sesión"
+    },
+    "landing": {
+        "badge": "Asistente de lectura con IA",
+        "heroLine1": "Entiende cualquier libro,",
+        "heroHighlight": "capítulo por capítulo",
+        "subtitle": "Sube un EPUB y obtén resúmenes con IA para cada capítulo en segundos. Ahorra tiempo, retén más y nunca pierdas el hilo.",
+        "goToLibrary": "Ir a Mi Biblioteca →",
+        "signIn": "Iniciar sesión",
+        "features": [
+            {
+                "icon": "📖",
+                "title": "Resúmenes Capítulo a Capítulo",
+                "description": "Obtén resúmenes concisos generados por IA para cada capítulo — sin más ojear páginas."
+            },
+            {
+                "icon": "⚡",
+                "title": "Procesamiento Instantáneo",
+                "description": "Sube tu EPUB y los resúmenes empiezan a generarse de inmediato, capítulo a capítulo."
+            },
+            {
+                "icon": "🗂️",
+                "title": "Biblioteca Personal",
+                "description": "Todos tus libros en un solo lugar. Consulta los resúmenes en cualquier momento."
+            },
+            {
+                "icon": "🎞️",
+                "title": "Visor de Diapositivas",
+                "description": "Navega cada resumen como una diapositiva limpia — perfecto para repasar rápido."
+            }
+        ],
+        "howItWorks": "Cómo funciona",
+        "steps": [
+            { "step": "1", "label": "Sube", "desc": "Carga tu archivo EPUB en la biblioteca." },
+            { "step": "2", "label": "Procesa", "desc": "La IA lee y resume cada capítulo." },
+            { "step": "3", "label": "Lee", "desc": "Navega resúmenes limpios a tu propio ritmo." }
+        ],
+        "ctaTitle": "¿Listo para leer de manera más inteligente?",
+        "ctaSubtitle": "Inicia sesión y sube tu primer libro en menos de un minuto.",
+        "ctaButton": "Comenzar Gratis"
+    },
+    "library": {
+        "title": "Tu Biblioteca",
+        "subtitle": "Sube un EPUB para resumirlo capítulo por capítulo",
+        "uploadButton": "+ Subir EPUB",
+        "loading": "Cargando…",
+        "retry": "Reintentar",
+        "emptyTitle": "Sin libros aún. Sube tu primer EPUB para comenzar.",
+        "uploadEpub": "Subir EPUB",
+        "failedToLoad": "Error al cargar los libros",
+        "deleteConfirm": "¿Eliminar este libro y todos sus datos?",
+        "deleteFailed": "Error al eliminar"
+    },
+    "bookDetail": {
+        "backToLibrary": "← Volver a la Biblioteca",
+        "epub": "EPUB",
+        "chaptersCount": "capítulos",
+        "includedCount": "incluidos",
+        "summarizedCount": "resumidos",
+        "llmWarning": "⚠️ El modelo LLM de Ollama no está disponible. La resumización fallará hasta que se conecte.",
+        "chaptersTitle": "Capítulos",
+        "chaptersHint": "Activa/desactiva para incluir o excluir del resumen",
+        "selectAll": "Seleccionar todo",
+        "deselectAll": "Deseleccionar todo",
+        "loadingChapters": "Cargando capítulos…",
+        "actionsTitle": "Acciones",
+        "generateSummary": "✨ Generar Resumen",
+        "summarizing": "Resumiendo…",
+        "viewSlides": "🎞️ Ver como Diapositivas",
+        "loadingSlides": "Cargando…",
+        "howItWorksTitle": "Cómo funciona",
+        "howItWorksSteps": [
+            "Activa/desactiva los capítulos a incluir",
+            "Haz clic en \"Generar Resumen\" para ejecutar la IA",
+            "Ve los resultados como diapositivas y expórtalos a PDF"
+        ],
+        "deleteBook": "🗑️ Eliminar Libro",
+        "deleteConfirm": "¿Eliminar este libro y todos sus datos?",
+        "deleteFailed": "Error al eliminar",
+        "failedToLoad": "Error al cargar los datos",
+        "failedToUpdate": "Error al actualizar el capítulo",
+        "failedToLoadSlides": "Error al cargar las diapositivas"
+    },
+    "bookCard": {
+        "open": "Abrir →",
+        "delete": "🗑️ Eliminar"
+    },
+    "uploadModal": {
+        "title": "Subir EPUB",
+        "bookNameLabel": "Nombre del libro",
+        "bookNameOptional": "(opcional)",
+        "bookNamePlaceholder": "Dejar en blanco para usar los metadatos del EPUB",
+        "selectFile": "Haz clic para seleccionar un archivo .epub",
+        "uploadButton": "Subir y Extraer",
+        "uploading": "Subiendo y Extrayendo…"
+    },
+    "loginForm": {
+        "title": "Iniciar sesión",
+        "subtitle": "en tu Resumidor de EPUB",
+        "emailLabel": "Correo electrónico",
+        "passwordLabel": "Contraseña",
+        "signIn": "Iniciar sesión",
+        "signingIn": "Iniciando sesión…"
+    },
+    "chapterList": {
+        "noChapters": "No se encontraron capítulos.",
+        "summarizedBadge": "✓ resumido"
+    },
+    "slidesViewer": {
+        "noSlides": "No hay diapositivas disponibles. Genera un resumen primero.",
+        "close": "Cerrar",
+        "pdf": "⬇ PDF"
+    }
+}

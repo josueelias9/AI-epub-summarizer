@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { SlideInfo, staticUrl } from '@/app/lib/api'
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 
 interface Props {
     slides: SlideInfo[]
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function SlidesViewer({ slides, bookName, onClose }: Props) {
+    const t = useDictionary().slidesViewer
     const [current, setCurrent] = useState(0)
     const total = slides.length
     const slide = slides[current]
@@ -31,9 +33,9 @@ export default function SlidesViewer({ slides, bookName, onClose }: Props) {
     if (!slide) {
         return (
             <div className='fixed inset-0 z-50 bg-gray-900 flex items-center justify-center'>
-                <p className='text-white'>No slides available. Generate a summary first.</p>
+                <p className='text-white'>{t.noSlides}</p>
                 <button onClick={onClose} className='ml-4 text-gray-300 underline'>
-                    Close
+                    {t.close}
                 </button>
             </div>
         )
@@ -57,7 +59,7 @@ export default function SlidesViewer({ slides, bookName, onClose }: Props) {
                             onClick={() => window.print()}
                             className='text-sm bg-indigo-600 hover:bg-indigo-500 px-3 py-1 rounded-lg'
                         >
-                            ⬇ PDF
+                            {t.pdf}
                         </button>
                         <button
                             onClick={onClose}

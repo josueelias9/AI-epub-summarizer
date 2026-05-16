@@ -6,10 +6,15 @@ import { listBooks } from '@/app/lib/data'
 import { deleteBook } from '@/app/lib/actions'
 import BookCard from '@/components/BookCard'
 import UploadModal from '@/components/UploadModal'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { useDictionary } from '../DictionaryProvider'
 
 export default function LibraryPage() {
     const router = useRouter()
+    const { lang } = useParams<{ lang: string }>()
+    const dict = useDictionary()
+    const t = dict.library
+
     const [books, setBooks] = useState<BookInfo[]>([])
     const [loading, setLoading] = useState(true)
     const [showUpload, setShowUpload] = useState(false)
@@ -22,47 +27,43 @@ export default function LibraryPage() {
             const data = await listBooks()
             setBooks(data.books)
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'Failed to load books')
+            setError(err instanceof Error ? err.message : t.failedToLoad)
         } finally {
             setLoading(false)
         }
-    }, [])
+    }, [t.failedToLoad])
 
     useEffect(() => {
         fetchBooks()
     }, [fetchBooks])
 
-    // handleDelete is an imperative action (confirm dialog + local state mutation),
-    // not a form submission — useActionState is not a good fit here.
     async function handleDelete(id: string) {
-        if (!confirm('Delete this book and all its data?')) return
+        if (!confirm(t.deleteConfirm)) return
         try {
             await deleteBook(id)
             setBooks(prev => prev.filter(b => b.id !== id))
         } catch (err: unknown) {
-            alert(err instanceof Error ? err.message : 'Delete failed')
+            alert(err instanceof Error ? err.message : t.deleteFailed)
         }
     }
 
-    function handleUploaded(bookId: string, bookName: string) {
+    function handleUploaded(bookId: string) {
         setShowUpload(false)
-        router.push(`/books/${bookId}`)
+        router.push(`/${lang}/books/${bookId}`)
     }
 
     return (
         <div>
             <div className='flex items-center justify-between mb-6'>
                 <div>
-                    <h1 className='text-2xl font-bold text-gray-900'>Your Library</h1>
-                    <p className='text-sm text-gray-500 mt-0.5'>
-                        Upload an EPUB to summarize it chapter by chapter
-                    </p>
+                    <h1 className='text-2xl font-bold text-gray-900'>{t.title}</h1>
+                    <p className='text-sm text-gray-500 mt-0.5'>{t.subtitle}</p>
                 </div>
                 <button
                     onClick={() => setShowUpload(true)}
                     className='bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl shadow transition-colors'
                 >
-                    + Upload EPUB
+                    {t.uploadButton}
                 </button>
             </div>
 
@@ -83,7 +84,7 @@ export default function LibraryPage() {
                             d='M4 12a8 8 0 018-8v8H4z'
                         />
                     </svg>
-                    Loading…
+                    {t.loading}
                 </div>
             )}
 
@@ -91,7 +92,7 @@ export default function LibraryPage() {
                 <div className='bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700'>
                     {error}{' '}
                     <button onClick={fetchBooks} className='underline ml-1'>
-                        Retry
+                        {t.retry}
                     </button>
                 </div>
             )}
@@ -99,14 +100,12 @@ export default function LibraryPage() {
             {!loading && !error && books.length === 0 && (
                 <div className='text-center py-20'>
                     <p className='text-5xl mb-4'>📚</p>
-                    <p className='text-gray-500 mb-4'>
-                        No books yet. Upload your first EPUB to get started.
-                    </p>
+                    <p className='text-gray-500 mb-4'>{t.emptyTitle}</p>
                     <button
                         onClick={() => setShowUpload(true)}
                         className='bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-xl transition-colors'
                     >
-                        Upload EPUB
+                        {t.uploadEpub}
                     </button>
                 </div>
             )}
@@ -114,7 +113,7 @@ export default function LibraryPage() {
             {!loading && !error && books.length > 0 && (
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
                     {books.map(book => (
-                        <BookCard key={book.id} book={book} onDelete={handleDelete} />
+                        <BookCard key={book.id} book={book} onDelete={handleDelete} lang={lang} />
                     ))}
                 </div>
             )}

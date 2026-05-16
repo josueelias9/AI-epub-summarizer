@@ -1,0 +1,117 @@
+{
+    "nav": {
+        "title": "EPUB Summarizer",
+        "signOut": "Sign out"
+    },
+    "landing": {
+        "badge": "AI-powered reading assistant",
+        "heroLine1": "Understand any book,",
+        "heroHighlight": "chapter by chapter",
+        "subtitle": "Upload an EPUB and get AI summaries for every chapter in seconds. Save time, retain more, and never lose track of where you left off.",
+        "goToLibrary": "Go to My Library →",
+        "signIn": "Sign In",
+        "features": [
+            {
+                "icon": "📖",
+                "title": "Chapter-by-Chapter Summaries",
+                "description": "Get concise AI-generated summaries for every chapter of your book — no more skimming."
+            },
+            {
+                "icon": "⚡",
+                "title": "Instant Processing",
+                "description": "Upload your EPUB and summaries start generating right away, chapter by chapter."
+            },
+            {
+                "icon": "🗂️",
+                "title": "Personal Library",
+                "description": "All your books in one place. Revisit summaries anytime without re-uploading."
+            },
+            {
+                "icon": "🎞️",
+                "title": "Slide Viewer",
+                "description": "Browse each chapter summary as a clean, readable slide — perfect for quick review."
+            }
+        ],
+        "howItWorks": "How it works",
+        "steps": [
+            { "step": "1", "label": "Upload", "desc": "Drop your EPUB file into the library." },
+            { "step": "2", "label": "Process", "desc": "AI reads and summarizes each chapter." },
+            { "step": "3", "label": "Read", "desc": "Browse clean summaries at your own pace." }
+        ],
+        "ctaTitle": "Ready to start reading smarter?",
+        "ctaSubtitle": "Sign in and upload your first book in under a minute.",
+        "ctaButton": "Get Started Free"
+    },
+    "library": {
+        "title": "Your Library",
+        "subtitle": "Upload an EPUB to summarize it chapter by chapter",
+        "uploadButton": "+ Upload EPUB",
+        "loading": "Loading…",
+        "retry": "Retry",
+        "emptyTitle": "No books yet. Upload your first EPUB to get started.",
+        "uploadEpub": "Upload EPUB",
+        "failedToLoad": "Failed to load books",
+        "deleteConfirm": "Delete this book and all its data?",
+        "deleteFailed": "Delete failed"
+    },
+    "bookDetail": {
+        "backToLibrary": "← Back to Library",
+        "epub": "EPUB",
+        "chaptersCount": "chapters",
+        "includedCount": "included",
+        "summarizedCount": "summarized",
+        "llmWarning": "⚠️ Ollama LLM is not reachable. Summarization will fail until it's connected.",
+        "chaptersTitle": "Chapters",
+        "chaptersHint": "Toggle to include/exclude from summary",
+        "selectAll": "Select all",
+        "deselectAll": "Deselect all",
+        "loadingChapters": "Loading chapters…",
+        "actionsTitle": "Actions",
+        "generateSummary": "✨ Generate Summary",
+        "summarizing": "Summarizing…",
+        "viewSlides": "🎞️ View as Slides",
+        "loadingSlides": "Loading…",
+        "howItWorksTitle": "How it works",
+        "howItWorksSteps": [
+            "Toggle chapters to include/exclude them",
+            "Click \"Generate Summary\" to run AI",
+            "View results as slides & export to PDF"
+        ],
+        "deleteBook": "🗑️ Delete Book",
+        "deleteConfirm": "Delete this book and all its data?",
+        "deleteFailed": "Delete failed",
+        "failedToLoad": "Failed to load data",
+        "failedToUpdate": "Failed to update chapter",
+        "failedToLoadSlides": "Failed to load slides"
+    },
+    "bookCard": {
+        "open": "Open →",
+        "delete": "🗑️ Delete"
+    },
+    "uploadModal": {
+        "title": "Upload EPUB",
+        "bookNameLabel": "Book name",
+        "bookNameOptional": "(optional)",
+        "bookNamePlaceholder": "Leave blank to use EPUB metadata",
+        "selectFile": "Click to select an .epub file",
+        "uploadButton": "Upload & Extract",
+        "uploading": "Uploading & Extracting…"
+    },
+    "loginForm": {
+        "title": "Sign in",
+        "subtitle": "to your EPUB Summarizer",
+        "emailLabel": "Email",
+        "passwordLabel": "Password",
+        "signIn": "Sign in",
+        "signingIn": "Signing in…"
+    },
+    "chapterList": {
+        "noChapters": "No chapters found.",
+        "summarizedBadge": "✓ summarized"
+    },
+    "slidesViewer": {
+        "noSlides": "No slides available. Generate a summary first.",
+        "close": "Close",
+        "pdf": "⬇ PDF"
+    }
+}

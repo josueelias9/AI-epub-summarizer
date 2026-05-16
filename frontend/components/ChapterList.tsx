@@ -1,6 +1,7 @@
 'use client'
 
 import { ChapterInfo } from '@/app/lib/api'
+import { useDictionary } from '@/app/[lang]/DictionaryProvider'
 
 interface Props {
     chapters: ChapterInfo[]
@@ -12,8 +13,9 @@ function depthOf(number: string) {
 }
 
 export default function ChapterList({ chapters, onToggle }: Props) {
+    const t = useDictionary().chapterList
     if (chapters.length === 0) {
-        return <p className='text-sm text-gray-400'>No chapters found.</p>
+        return <p className='text-sm text-gray-400'>{t.noChapters}</p>
     }
 
     return (
@@ -41,7 +43,7 @@ export default function ChapterList({ chapters, onToggle }: Props) {
                         </span>
                         {ch.has_summary && (
                             <span className='text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity'>
-                                ✓ summarized
+                                {t.summarizedBadge}
                             </span>
                         )}
                     </li>
