@@ -4,9 +4,9 @@ WORKDIR /josue_app
 
 COPY . .
 
-RUN npm install
+RUN npm ci
 
-# EXPOSE 3000
+EXPOSE 3000
 
 # RUN npm run build
 

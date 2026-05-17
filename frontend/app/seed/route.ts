@@ -1,3 +1,4 @@
+'use server'
 import bcrypt from 'bcrypt'
 import postgres from 'postgres'
 import { randomUUID } from 'crypto'

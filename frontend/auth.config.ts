@@ -2,6 +2,7 @@ import type { NextAuthConfig } from 'next-auth'
 import { locales, defaultLocale } from './lib/i18n-config'
 
 export const authConfig = {
+    trustHost: true,
     pages: {
         signIn: '/login'
     },

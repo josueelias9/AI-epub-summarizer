@@ -1,1 +1,6 @@
 REST Client.http
+README.md
+Dockerfile
+.gitignore
+.vscode/
+ERD.md

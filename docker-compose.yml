@@ -36,9 +36,10 @@ services:
       - NEXT_PUBLIC_API_URL
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - POSTGRES_DB
       - DB_HOST
       - DB_PORT
-      - POSTGRES_DB
+      - AUTH_SECRET
 
     # depends_on:
       # - extractor
