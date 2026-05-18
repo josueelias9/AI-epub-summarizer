@@ -16,12 +16,14 @@
         "bierner.markdown-mermaid"
       ],
       "settings": {
-        "workbench.colorTheme": "Monokai"
+        "workbench.colorTheme": "Abyss"
       }
     }
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {}
-  }
+  },
+  "runServices": ["extractor"]
+
 }

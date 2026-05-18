@@ -1,4 +1,16 @@
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-container
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   extractor:
     build: ./extractor
     container_name: extractor-container
@@ -12,6 +24,25 @@ services:
     depends_on:
       extractor-init:
         condition: service_completed_successfully
+      rabbitmq:
+        condition: service_healthy
+
+  summary-worker:
+    build: ./extractor
+    container_name: summary-worker-container
+    command: python -m app.worker
+    env_file:
+      - .env
+    volumes:
+      - epub_uploads:/app/uploads
+      - epub_output:/app/output
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
       
   extractor-init:
     build: ./extractor
@@ -41,8 +72,8 @@ services:
       - DB_PORT
       - AUTH_SECRET
 
-    # depends_on:
-      # - extractor
+    depends_on:
+      - db
 
   ollama:
     image: ollama/ollama:latest
