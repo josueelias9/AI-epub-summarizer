@@ -32,7 +32,7 @@ services:
   summary-worker:
     build:
       context: .
-      dockerfile: ./extractor/Dockerfile
+      dockerfile: ./worker/Dockerfile
     container_name: summary-worker-container
     command: python -m app.worker
     env_file:
