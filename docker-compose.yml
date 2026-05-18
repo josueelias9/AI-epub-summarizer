@@ -29,11 +29,11 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  summary-worker:
+  worker:
     build:
       context: .
       dockerfile: ./worker/Dockerfile
-    container_name: summary-worker-container
+    container_name: worker-container
     command: python -m app.worker
     env_file:
       - .env
