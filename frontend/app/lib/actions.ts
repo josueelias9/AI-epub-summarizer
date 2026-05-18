@@ -7,7 +7,7 @@ export async function signOutAction() {
     await signOut({ redirectTo: '/' })
 }
 
-const API_URL = `${process.env.NEXT_PRIVATE_API_URL ?? 'http://localhost:8000'}/api/v1`
+const API_URL = `${process.env.NEXT_PRIVATE_API_URL}/api/v1`
 
 async function handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {
@@ -38,6 +38,7 @@ export type UploadState = {
     book_name?: string
 }
 
+// TODO: epub/upload is repeated
 export async function uploadEpubAction(
     _prevState: UploadState | null,
     formData: FormData

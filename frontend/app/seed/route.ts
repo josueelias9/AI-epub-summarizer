@@ -9,8 +9,8 @@ const sql = postgres(connectionString, { ssl: false })
 
 const initialUser = {
     name: 'Admin',
-    email: process.env.SEED_USER_EMAIL ?? 'admin@example.com',
-    password: process.env.SEED_USER_PASSWORD ?? 'password123'
+    email: process.env.SEED_USER_EMAIL ?? 'admin@admin.com',
+    password: process.env.SEED_USER_PASSWORD ?? 'admin'
 }
 
 async function seedUsers() {

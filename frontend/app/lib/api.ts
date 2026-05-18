@@ -32,3 +32,21 @@ export interface SlidesResponse {
     book_name: string
     slides: SlideInfo[]
 }
+
+export interface EnqueueSummaryResponse {
+    job_id: string
+    book_id: string
+    status: 'queued' | 'processing' | 'completed' | 'failed'
+    chapters_total: number
+    chapters_summarized: number
+    error_message: string | null
+}
+
+export interface SummaryJobStatus {
+    job_id: string
+    book_id: string
+    status: 'queued' | 'processing' | 'completed' | 'failed'
+    chapters_total: number
+    chapters_summarized: number
+    error_message: string | null
+}

@@ -1,5 +1,11 @@
 .next
 .vscode
-README.md
 node_modules
-package.json
+
+
+README.md
+.prettierignore
+.prettierrc
+.dockerignore
+Dockerfile
+.gitignore

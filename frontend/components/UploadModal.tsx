@@ -27,7 +27,7 @@ export default function UploadModal({ onUploaded, onClose }: Props) {
             const formData = new FormData()
             formData.append('file', file)
             if (bookName.trim()) formData.append('book_name', bookName.trim())
-
+                // TODO: why not in actions.ts file? it's repeated
             const res = await fetch(`${API_URL}/epub/upload`, { method: 'POST', body: formData })
             if (!res.ok) {
                 const err = await res.json().catch(() => ({ detail: res.statusText }))

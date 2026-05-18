@@ -20,6 +20,7 @@ export default function LibraryPage() {
     const [showUpload, setShowUpload] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
+    // TODO: why we are not using action state here?
     const fetchBooks = useCallback(async () => {
         setLoading(true)
         setError(null)

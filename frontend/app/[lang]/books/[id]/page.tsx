@@ -1,19 +1,56 @@
 'use client'
 
-import { useActionState, useCallback, useEffect, useState } from 'react'
+import { useActionState, useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { BookInfo, ChapterInfo, SlidesResponse } from '@/app/lib/api'
 import { listBooks, getChapters, getSlides, getLlmStatus } from '@/app/lib/data'
 import {
     deleteBook,
     setChapterInclusion,
-    summarizeBookAction,
     toggleAllChaptersAction,
     ToggleAllState
 } from '@/app/lib/actions'
 import ChapterList from '@/components/ChapterList'
 import SlidesViewer from '@/components/SlidesViewer'
 import { useDictionary } from '../../DictionaryProvider'
+
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1`
+
+type SummaryJobStatus = {
+    job_id: string
+    book_id: string
+    status: 'queued' | 'processing' | 'completed' | 'failed'
+    chapters_total: number
+    chapters_summarized: number
+    error_message: string | null
+}
+
+async function handleResponse<T>(res: Response): Promise<T> {
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: res.statusText }))
+        throw new Error(err.detail ?? res.statusText)
+    }
+    return res.json() as Promise<T>
+}
+
+// TODO: why these methods are not in the data layer?
+async function enqueueSummary(bookId: string): Promise<SummaryJobStatus> {
+    return fetch(`${API_URL}/epub/summarize/queue`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ book_id: bookId })
+    }).then(r => handleResponse(r))
+}
+
+async function getSummaryJobStatus(jobId: string): Promise<SummaryJobStatus> {
+    return fetch(`${API_URL}/epub/summarize/jobs/${jobId}`).then(r => handleResponse(r))
+}
+
+async function getLatestSummaryJob(bookId: string): Promise<SummaryJobStatus | null> {
+    const res = await fetch(`${API_URL}/epub/summarize/jobs/latest/${bookId}`)
+    if (res.status === 404) return null
+    return handleResponse(res)
+}
 
 export default function BookDetailPage() {
     const { id, lang } = useParams<{ id: string; lang: string }>()
@@ -26,10 +63,12 @@ export default function BookDetailPage() {
     const [loadingChapters, setLoadingChapters] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    const [summarizeResult, summarizeDispatch, isSummarizing] = useActionState(
-        summarizeBookAction,
-        { status: 'idle' as const, message: null }
-    )
+    const [summaryJob, setSummaryJob] = useState<SummaryJobStatus | null>(null)
+    const [isQueueingSummary, setIsQueueingSummary] = useState(false)
+    const [summaryMessage, setSummaryMessage] = useState<{
+        status: 'idle' | 'info' | 'success' | 'error'
+        message: string | null
+    }>({ status: 'idle', message: null })
 
     const [toggleAllResult, toggleAllDispatch, isTogglingAll] = useActionState(
         toggleAllChaptersAction,
@@ -63,15 +102,73 @@ export default function BookDetailPage() {
         getLlmStatus()
             .then(s => setLlmConnected(s.connected))
             .catch(() => setLlmConnected(false))
-    }, [fetchData])
 
-    useEffect(() => {
-        if (summarizeResult.status === 'done') fetchData()
-    }, [summarizeResult, fetchData])
+        if (!id) return
+        getLatestSummaryJob(id)
+            .then(job => {
+                if (!job) return
+                setSummaryJob(job)
+                if (job.status === 'processing' || job.status === 'queued') {
+                    setSummaryMessage({ status: 'info', message: t.summaryBackgroundInfo })
+                }
+            })
+            .catch(() => {
+                // Non-fatal: page should still load even if job history endpoint fails.
+            })
+    }, [fetchData])
 
     useEffect(() => {
         if (toggleAllResult.status === 'done') fetchData()
     }, [toggleAllResult, fetchData])
+
+    useEffect(() => {
+        if (!summaryJob || (summaryJob.status !== 'queued' && summaryJob.status !== 'processing')) {
+            return
+        }
+
+        const intervalId = setInterval(async () => {
+            try {
+                const next = await getSummaryJobStatus(summaryJob.job_id)
+                setSummaryJob(next)
+                if (next.status === 'completed') {
+                    setSummaryMessage({
+                        status: 'success',
+                        message: t.summaryCompleted.replace('{count}', String(next.chapters_summarized))
+                    })
+                    fetchData()
+                }
+                if (next.status === 'failed') {
+                    setSummaryMessage({
+                        status: 'error',
+                        message: next.error_message || t.summaryFailed
+                    })
+                }
+            } catch (err: unknown) {
+                setSummaryMessage({
+                    status: 'error',
+                    message: err instanceof Error ? err.message : t.summaryStatusError
+                })
+            }
+        }, 3000)
+
+        return () => clearInterval(intervalId)
+    }, [summaryJob, fetchData, t.summaryCompleted, t.summaryFailed, t.summaryStatusError])
+
+    async function handleGenerateSummary() {
+        setIsQueueingSummary(true)
+        try {
+            const queued = await enqueueSummary(id)
+            setSummaryJob(queued)
+            setSummaryMessage({ status: 'info', message: t.summaryQueued })
+        } catch (err: unknown) {
+            setSummaryMessage({
+                status: 'error',
+                message: err instanceof Error ? err.message : t.summaryFailed
+            })
+        } finally {
+            setIsQueueingSummary(false)
+        }
+    }
 
     async function handleToggleChapter(number: string, include: boolean) {
         try {
@@ -113,6 +210,22 @@ export default function BookDetailPage() {
 
     const includedCount = chapters.filter(c => c.include).length
     const summarizedCount = chapters.filter(c => c.has_summary).length
+    const isSummaryActive = summaryJob?.status === 'queued' || summaryJob?.status === 'processing'
+
+    const summaryStatusLabel = useMemo(() => {
+        if (!summaryJob) return ''
+        if (summaryJob.status === 'queued') return t.queued
+        if (summaryJob.status === 'processing') return t.processing
+        if (summaryJob.status === 'completed') return t.completed
+        return t.failed
+    }, [summaryJob, t])
+
+    const summaryButtonLabel = useMemo(() => {
+        if (isQueueingSummary) return t.summaryQueueing
+        if (summaryJob?.status === 'queued') return t.summaryQueuedButton
+        if (summaryJob?.status === 'processing') return t.summaryProcessingButton
+        return t.generateSummary
+    }, [isQueueingSummary, summaryJob, t])
 
     return (
         <div className='space-y-6'>
@@ -231,47 +344,48 @@ export default function BookDetailPage() {
                     <div className='bg-white rounded-2xl shadow p-6 space-y-3'>
                         <h2 className='text-base font-bold text-gray-800'>{t.actionsTitle}</h2>
 
-                        <form action={summarizeDispatch}>
-                            <input type='hidden' name='book_id' value={id} />
-                            <button
-                                type='submit'
-                                disabled={isSummarizing || includedCount === 0}
-                                className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors'
-                            >
-                                {isSummarizing ? (
-                                    <>
-                                        <svg
-                                            className='animate-spin h-4 w-4'
-                                            viewBox='0 0 24 24'
-                                            fill='none'
-                                        >
-                                            <circle
-                                                className='opacity-25'
-                                                cx='12'
-                                                cy='12'
-                                                r='10'
-                                                stroke='currentColor'
-                                                strokeWidth='4'
-                                            />
-                                            <path
-                                                className='opacity-75'
-                                                fill='currentColor'
-                                                d='M4 12a8 8 0 018-8v8H4z'
-                                            />
-                                        </svg>
-                                        {t.summarizing}
-                                    </>
-                                ) : (
-                                    t.generateSummary
-                                )}
-                            </button>
-                        </form>
+                        <button
+                            onClick={handleGenerateSummary}
+                            disabled={isSummaryActive || isQueueingSummary || includedCount === 0}
+                            className='w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-colors'
+                        >
+                            {(isSummaryActive || isQueueingSummary) && (
+                                <svg className='animate-spin h-4 w-4' viewBox='0 0 24 24' fill='none'>
+                                    <circle
+                                        className='opacity-25'
+                                        cx='12'
+                                        cy='12'
+                                        r='10'
+                                        stroke='currentColor'
+                                        strokeWidth='4'
+                                    />
+                                    <path
+                                        className='opacity-75'
+                                        fill='currentColor'
+                                        d='M4 12a8 8 0 018-8v8H4z'
+                                    />
+                                </svg>
+                            )}
+                            {summaryButtonLabel}
+                        </button>
 
-                        {summarizeResult.message && (
+                        {summaryJob && (
+                            <div className='text-xs px-3 py-2 rounded-lg bg-blue-50 text-blue-700 border border-blue-100'>
+                                <p className='font-semibold'>
+                                    {t.summaryJobLabel}: {summaryStatusLabel}
+                                </p>
+                                <p>
+                                    {summaryJob.chapters_summarized}/{summaryJob.chapters_total}{' '}
+                                    {t.summaryProgressSuffix}
+                                </p>
+                            </div>
+                        )}
+
+                        {summaryMessage.message && (
                             <p
-                                className={`text-xs px-3 py-2 rounded-lg ${summarizeResult.status === 'error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-700'}`}
+                                className={`text-xs px-3 py-2 rounded-lg ${summaryMessage.status === 'error' ? 'bg-red-50 text-red-600' : summaryMessage.status === 'success' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'}`}
                             >
-                                {summarizeResult.message}
+                                {summaryMessage.message}
                             </p>
                         )}
 
