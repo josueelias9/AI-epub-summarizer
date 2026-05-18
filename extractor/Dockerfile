@@ -3,6 +3,7 @@ FROM python:3.11-slim
 
 
 WORKDIR /josue_app
+ENV PYTHONPATH=/josue_app
 
 COPY . .
 

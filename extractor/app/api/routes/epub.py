@@ -44,7 +44,9 @@ from src.infrastructure.epub.sources.local_source import LocalFileSource
 from src.infrastructure.epub.sources.upload_source import UploadedFileSource
 from src.infrastructure.export.marp_exporter import MarpExporter
 from src.infrastructure.repositories.postgres_repository import PostgresBookRepository
-from app.api.schemas.schemas import (
+from src.infrastructure.repositories.summary_job_repository import SummaryJobRepository
+from src.infrastructure.queue.rabbitmq import RabbitMQQueue
+from src.infrastructure.database.models import (
     BooksListResponse,
     ChaptersListResponse,
     DeleteBookResponse,
@@ -220,6 +222,8 @@ async def summarize_epub(
         "book_id": response.book_id,
         "chapters_summarized": response.chapters_summarized,
     }
+
+
 
 
 @router.post("/marp", response_model=MarpResponse)
