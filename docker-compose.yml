@@ -12,7 +12,9 @@ services:
       retries: 10
 
   extractor:
-    build: ./extractor
+    build:
+      context: .
+      dockerfile: ./extractor/Dockerfile
     container_name: extractor-container
     ports:
       - "8000:8000"
@@ -28,7 +30,9 @@ services:
         condition: service_healthy
 
   summary-worker:
-    build: ./extractor
+    build:
+      context: .
+      dockerfile: ./extractor/Dockerfile
     container_name: summary-worker-container
     command: python -m app.worker
     env_file:
@@ -45,7 +49,9 @@ services:
         condition: service_healthy
       
   extractor-init:
-    build: ./extractor
+    build:
+      context: .
+      dockerfile: ./extractor/Dockerfile
     command: bash scripts/prestart.sh
     env_file:
       - .env
